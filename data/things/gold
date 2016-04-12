@@ -1,0 +1,28 @@
+{
+ short_name="gold"
+ raw_name="gold"
+ tooltip="gold"
+ z_depth="wall_deco"
+ is_inactive
+ can_fall
+ is_treasure
+ is_stackable
+ hit_priority=1
+ is_carryable
+ bonus_gold_on_collect=10
+ d10000_chance_of_appearing=100
+ is_light_source
+ light_radius=3.0
+ light_tint="gold"
+ tiles={
+  tile={
+   tile="gold1"
+  }
+  tile={
+   tile="gold2"
+  }
+  tile={
+   tile="gold3"
+  }
+ }
+}

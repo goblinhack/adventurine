@@ -1,0 +1,22 @@
+{
+ short_name="ruby"
+ raw_name="gem3"
+ tooltip="ruby"
+ z_depth="wall_deco"
+ is_inactive
+ can_fall
+ is_treasure
+ is_stackable
+ hit_priority=1
+ is_carryable
+ bonus_gold_on_collect=450
+ d10000_chance_of_appearing=20
+ is_light_source
+ light_radius=3.0
+ light_tint="red"
+ tiles={
+  tile={
+   tile="gem3"
+  }
+ }
+}

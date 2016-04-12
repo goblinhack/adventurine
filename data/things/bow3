@@ -1,0 +1,27 @@
+{
+ short_name="bowmaster"
+ raw_name="bow3"
+ tooltip="bowmaster"
+ fires="arrow"
+ z_depth="obj"
+ cost=200
+ can_fall
+ is_treasure
+ is_weapon
+ sound_on_collect="pickup"
+ is_ranged_weapon
+ can_be_enchanted
+ hit_priority=0
+ is_carryable
+ weapon_fire_delay_hundredths=25
+ is_fragile
+ d10000_chance_of_appearing=10
+ is_collision_map_player_sized
+ weapon_carry_anim="bow1_anim"
+ weapon_swing_anim="weapon_swing1"
+ tiles={
+  tile={
+   tile="bow3"
+  }
+ }
+}

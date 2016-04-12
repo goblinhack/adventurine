@@ -1,0 +1,12 @@
+{
+ short_name="ladder_deco"
+ raw_name="ladder_deco1"
+ tooltip="ladder_deco1"
+ z_depth="ladder"
+ is_inactive
+ is_ladder_deco
+ is_ladder
+ tiles={
+  tile={ tile="ladder1-top" is_join_top }
+ }
+}

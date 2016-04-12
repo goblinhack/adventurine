@@ -1,0 +1,22 @@
+{
+ short_name="emerald"
+ raw_name="gem2"
+ tooltip="emerald"
+ z_depth="wall_deco"
+ is_inactive
+ can_fall
+ is_treasure
+ is_stackable
+ hit_priority=1
+ is_carryable
+ bonus_gold_on_collect=300
+ d10000_chance_of_appearing=50
+ is_light_source
+ light_radius=3.0
+ light_tint="green"
+ tiles={
+  tile={
+   tile="gem2"
+  }
+ }
+}
