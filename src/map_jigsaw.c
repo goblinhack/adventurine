@@ -4027,25 +4027,25 @@ void map_jigsaw_generate (levelp level,
     dg = (typeof(dg)) myzalloc(sizeof(*dg), __FUNCTION__);
 
     if (!frag_main) {
-        frag_main = generate_fragmap("data/map/jigsaw.map");
+        frag_main = generate_fragmap("adventurine-data/map/jigsaw.map");
     }
 
 #if 0
     if (!frag_room_corners) {
-        frag_room_corners = generate_fragmap("data/map/room_corners.map");
+        frag_room_corners = generate_fragmap("adventurine-data/map/room_corners.map");
     }
 
     if (!frag_outside_rooms) {
-        frag_outside_rooms = generate_fragmap("data/map/outside_rooms.map");
+        frag_outside_rooms = generate_fragmap("adventurine-data/map/outside_rooms.map");
     }
 
     if (!frag_outside_junk) {
-        frag_outside_junk = generate_fragmap("data/map/outside_junk.map");
+        frag_outside_junk = generate_fragmap("adventurine-data/map/outside_junk.map");
     }
 #endif
 
     if (!frag_monst) {
-        frag_monst = generate_fragmap("data/map/monst.map");
+        frag_monst = generate_fragmap("adventurine-data/map/monst.map");
     }
 
     int fail_count = 0;

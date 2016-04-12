@@ -1,0 +1,3 @@
+[submodule "adventurine-data"]
+	path = adventurine-data
+	url = git@github.com:goblinhack/adventurine-data.git

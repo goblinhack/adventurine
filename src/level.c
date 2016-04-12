@@ -229,7 +229,7 @@ levelp level_load (uint32_t level_no,
     if (!file_exists(dir_and_file)) {
         myfree(dir_and_file);
 
-        dir_and_file = dynprintf("data/levels/%d", level_no);
+        dir_and_file = dynprintf("adventurine-data/levels/%d", level_no);
     }
 
     LEVEL_LOG(level, "Level %s: loading", dir_and_file);

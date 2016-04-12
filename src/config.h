@@ -172,13 +172,13 @@
  */
 #undef ENABLE_GENERATE_TTF         // Edit RUNME to add -lSDL_ttf
 
-#define FIXED_FONT                  "data/ttf/monaco.ttf"
-#define VSMALL_FONT                 "data/ttf/monaco.ttf"
-#define SMALL_FONT                  "data/ttf/tekton.ttf"
-#define MED_FONT                    "data/ttf/tekton.ttf"
-#define LARGE_FONT                  "data/ttf/tekton.ttf"
-#define VLARGE_FONT                 "data/ttf/tekton.ttf"
-#define VVLARGE_FONT                "data/ttf/tekton.ttf"
+#define FIXED_FONT                  "adventurine-data/ttf/monaco.ttf"
+#define VSMALL_FONT                 "adventurine-data/ttf/monaco.ttf"
+#define SMALL_FONT                  "adventurine-data/ttf/tekton.ttf"
+#define MED_FONT                    "adventurine-data/ttf/tekton.ttf"
+#define LARGE_FONT                  "adventurine-data/ttf/tekton.ttf"
+#define VLARGE_FONT                 "adventurine-data/ttf/tekton.ttf"
+#define VVLARGE_FONT                "adventurine-data/ttf/tekton.ttf"
 
 #define VSMALL_FONT_SIZE            10
 #define SMALL_FONT_SIZE             12

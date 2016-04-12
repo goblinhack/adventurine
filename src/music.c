@@ -177,7 +177,7 @@ void music_play (const char *file,
 void music_play_game (uint32_t level_no)
 {
     static const char *music[] = {
-        "data/music/DST_ClockTower.ogg",
+        "adventurine-data/music/DST_ClockTower.ogg",
     };
 
     /*
@@ -191,27 +191,27 @@ void music_play_game (uint32_t level_no)
 
 void music_play_death (void)
 {
-    music_play("data/music/DST_ClockTower.ogg", "death", 22050 );
+    music_play("adventurine-data/music/DST_ClockTower.ogg", "death", 22050 );
 }
 
 void music_play_demo (void)
 {
-    music_play("data/music/DST_ClockTower.ogg", "battle", 22050 );
+    music_play("adventurine-data/music/DST_ClockTower.ogg", "battle", 22050 );
 }
 
 void music_play_intro (void)
 {
-    music_play("data/music/DST_ClockTower.ogg", "intro", 22050 );
+    music_play("adventurine-data/music/DST_ClockTower.ogg", "intro", 22050 );
 }
 
 void music_play_dead (void)
 {
-    music_play("data/music/DST_ClockTower.ogg", "dead", 22050 );
+    music_play("adventurine-data/music/DST_ClockTower.ogg", "dead", 22050 );
 }
 
 void music_play_game_over (void)
 {
-    music_play("data/music/DST_ClockTower.ogg", "game over", 22050 );
+    music_play("adventurine-data/music/DST_ClockTower.ogg", "game over", 22050 );
 }
 
 void music_halt (void)

@@ -16,7 +16,7 @@
 
 static uint8_t resource_init_1 (void *context)
 {
-    return (tex_load("data/gfx/adventurine.tga",
+    return (tex_load("adventurine-data/gfx/adventurine.tga",
                      "adventurine") != 0);
 }
 
@@ -67,13 +67,13 @@ static uint8_t resource_init_9 (void *context)
 
 static uint8_t resource_init_10 (void *context)
 {
-    return (tex_load("data/gfx/gravestone.tga",
+    return (tex_load("adventurine-data/gfx/gravestone.tga",
                      "gravestone") != 0);
 }
 
 static uint8_t resource_init_11 (void *context)
 {
-    return (tex_load_tiled_black_and_white("data/gfx/rock.tga",
+    return (tex_load_tiled_black_and_white("adventurine-data/gfx/rock.tga",
                                            "rock",
                                            "rock_black_and_white",
                                            1024, 1024) != 0);
@@ -81,13 +81,13 @@ static uint8_t resource_init_11 (void *context)
 
 static uint8_t resource_init_12 (void *context)
 {
-    return (tex_load("data/gfx/main_title.tga",
+    return (tex_load("adventurine-data/gfx/main_title.tga",
                      "main_title") != 0);
 }
 
 static uint8_t resource_init_13 (void *context)
 {
-    return (tex_load_tiled("data/gfx/explosion.tga",
+    return (tex_load_tiled("adventurine-data/gfx/explosion.tga",
                            "explosion",
                            1024, 1024) != 0);
 }
@@ -119,7 +119,7 @@ static uint8_t resource_init_18 (void *context)
 
 static uint8_t resource_init_19 (void *context)
 {
-    return (tex_load_tiled_black_and_white("data/gfx/sprites_large.tga",
+    return (tex_load_tiled_black_and_white("adventurine-data/gfx/sprites_large.tga",
                                            "sprites_large",
                                            "sprites_large_black_and_white",
                                            64, 64) != 0);
@@ -128,14 +128,14 @@ static uint8_t resource_init_19 (void *context)
 
 static uint8_t resource_init_20 (void *context)
 {
-    return (tex_load_tiled("data/gfx/sprites2.tga",
+    return (tex_load_tiled("adventurine-data/gfx/sprites2.tga",
                            "sprites2",
                            32, 32) != 0);
 }
 
 static uint8_t resource_init_21 (void *context)
 {
-    return (tex_load_tiled("data/gfx/sprites.tga",
+    return (tex_load_tiled("adventurine-data/gfx/sprites.tga",
                            "sprites",
                            32, 32) != 0);
 }
@@ -157,7 +157,7 @@ static uint8_t resource_init_24 (void *context)
 
 static uint8_t resource_init_25 (void *context)
 {
-    return (tex_load("data/gfx/button_black.tga",
+    return (tex_load("adventurine-data/gfx/button_black.tga",
                      "button_black") != 0);
 }
 
@@ -218,7 +218,7 @@ static uint8_t resource_init_36 (void *context)
 
 static uint8_t resource_init_37 (void *context)
 {
-    return (tex_load_tiled("data/gfx/powerup1.tga",
+    return (tex_load_tiled("adventurine-data/gfx/powerup1.tga",
                            "powerup1",
                            256, 256) != 0);
 }
@@ -230,7 +230,7 @@ static uint8_t resource_init_38 (void *context)
 
 static uint8_t resource_init_39 (void *context)
 {
-    return (tex_load_tiled("data/gfx/ring.tga",
+    return (tex_load_tiled("adventurine-data/gfx/ring.tga",
                            "ring_cloud",
                            2048, 1024) != 0);
 }
@@ -242,7 +242,7 @@ static uint8_t resource_init_40 (void *context)
 
 static uint8_t resource_init_41 (void *context)
 {
-    return (tex_load_tiled("data/gfx/teleport.tga",
+    return (tex_load_tiled("adventurine-data/gfx/teleport.tga",
                            "teleport",
                            1024, 1024) != 0);
 }
@@ -6586,7 +6586,7 @@ static uint8_t resource_init_last (void *context)
 
 uint8_t resource_init (void)
 {
-    if (tex_load("data/gfx/window_gothic_wide.tga", "gothic_wide") == 0) {
+    if (tex_load("adventurine-data/gfx/window_gothic_wide.tga", "gothic_wide") == 0) {
         ERR("tex init");
     }
 
