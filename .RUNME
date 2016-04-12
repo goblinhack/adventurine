@@ -142,7 +142,7 @@ else
     fi
 fi
 
-/bin/rm -f data/adventurine-hiscore.txt data/adventurine-config.txt
+/bin/rm -f adventurine-data/adventurine-hiscore.txt adventurine-data/adventurine-config.txt
 
 #
 # Make the ramdisk
@@ -151,7 +151,7 @@ RAMDISK_FILES=.ramdisk_files
 
 log_info "Creating ramdisk filelist"
 
-find data -type f | grep -v Resources | grep -v DS_Store | grep -v "\.ttf$" | grep -v "xcf" | grep -v "mp3" | grep -v "\.session" | grep -v "^\." > $RAMDISK_FILES
+find adventurine-data -type f | grep -v Resources | grep -v DS_Store | grep -v "\.ttf$" | grep -v "xcf" | grep -v "mp3" | grep -v "\.session" | grep -v "^\." > $RAMDISK_FILES
 if [ ! -s $ramdisk_files ]
 then
     cd src

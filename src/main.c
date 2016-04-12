@@ -310,7 +310,7 @@ static void find_exec_dir (void)
 }
 
 /*
- * Hunt down the data/ dir.
+ * Hunt down the adventurine-data/ dir.
  */
 static void find_data_dir (void)
 {

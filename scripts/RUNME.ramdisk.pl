@@ -52,6 +52,7 @@ foreach $f (@files) {
     my $struct = $f;
     $struct =~ s/\//_/g;
     $struct =~ s/\./_/g;
+    $struct =~ s/\-/_/g;
 
     my $size = -s $f;
 
@@ -125,6 +126,7 @@ for ($cnt = 1; $cnt < $max_cnt; $cnt++) {
     my $struct = $f;
     $struct =~ s/\//_/g;
     $struct =~ s/\./_/g;
+    $struct =~ s/\-/_/g;
 
     my $size = $sizes{$f};
     my $orig_size = $orig_sizes{$f};
@@ -155,6 +157,7 @@ for ($cnt = 1; $cnt < $max_cnt; $cnt++) {
     my $struct = $f;
     $struct =~ s/\//_/g;
     $struct =~ s/\./_/g;
+    $struct =~ s/\-/_/g;
 
     print OUT ".o/ramdisk_" . $cnt . ".o ";
 }
@@ -176,6 +179,7 @@ foreach $f (@files) {
     my $struct = $f;
     $struct =~ s/\//_/g;
     $struct =~ s/\./_/g;
+    $struct =~ s/\-/_/g;
 
     my $size = $sizes{$f};
     my $orig_size = $orig_sizes{$f};
@@ -196,6 +200,7 @@ foreach $f (@files) {
     my $struct = $f;
     $struct =~ s/\//_/g;
     $struct =~ s/\./_/g;
+    $struct =~ s/\-/_/g;
 
     my $filesize = -s "$file";
     my $size = $filesize;
@@ -220,6 +225,7 @@ foreach $f (@files) {
     my $struct = $f;
     $struct =~ s/\//_/g;
     $struct =~ s/\./_/g;
+    $struct =~ s/\-/_/g;
 
     printf OUT "    ramdisk_data[%d].data = ${struct}_start;\n", $cnt;
     printf OUT "    ramdisk_data[%d].len = (int32_t) (${struct}_end - ${struct}_start);\n", $cnt;

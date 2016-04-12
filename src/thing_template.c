@@ -212,7 +212,7 @@ tpp tp_load (uint16_t id, const char *name)
         ERR("thing template insert name [%s] failed", name);
     }
 
-    char *data_things_name = dynprintf("data/things/%s", name);
+    char *data_things_name = dynprintf("adventurine-data/things/%s", name);
     in = demarshal(data_things_name);
     if (!in) {
         DIE("cannot demarshal template name [%s] failed", data_things_name);

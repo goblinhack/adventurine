@@ -1396,7 +1396,7 @@ static void wid_map_load_levels (wid_map_ctx *ctx)
     while (ramfile->filename) {
         int level_no;
 
-        if (sscanf(ramfile->filename, "data/levels/%d", &level_no) != 2) {
+        if (sscanf(ramfile->filename, "adventurine-data/levels/%d", &level_no) != 2) {
             ramfile++;
             continue;
         }
