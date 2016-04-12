@@ -1,0 +1,18 @@
+{
+ short_name="entrance"
+ raw_name="entrance1"
+ tooltip="level entrance"
+ z_depth="floor2"
+ is_entrance
+ is_light_source
+ light_radius=3.0
+ blit_top_off=2
+ blit_bot_off=0
+ blit_left_off=1
+ blit_right_off=1
+ tiles={
+  tile={
+   tile="entrance1-3-2"
+  }
+ }
+}

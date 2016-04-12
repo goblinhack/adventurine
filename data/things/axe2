@@ -1,0 +1,27 @@
+{
+ short_name="steel axe"
+ raw_name="axe2"
+ tooltip="steel axe"
+ z_depth="obj"
+ cost=200
+ can_fall
+ is_treasure
+ is_weapon
+ is_melee_weapon
+ can_be_enchanted
+ hit_priority=0
+ is_carryable
+ weapon_fire_delay_hundredths=30
+ damage=8
+ swing_distance_from_player=6
+ is_collision_map_player_sized
+ d10000_chance_of_appearing=10
+ weapon_carry_anim="axe1_anim"
+ weapon_swing_anim="weapon_swing1"
+ tiles={
+  tile={
+   tile="axe2"
+   delay_ms=50
+  }
+ }
+}

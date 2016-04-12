@@ -1,0 +1,22 @@
+:reset
+:horiz-flip
+:fragment
++----------+
+|          |
+|   .....  |
+|   xxxxx  |
+|          |
+|          |
+|          |
+|          |
+|          |
+:alternative
++----------+
+|          |
+|     m    |
+|   xxxxx  |
+|          |
+|          |
+|          |
+|          |
+|          |

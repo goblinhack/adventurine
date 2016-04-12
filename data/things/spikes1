@@ -1,0 +1,33 @@
+{
+ short_name="spikes1"
+ raw_name="spikes1"
+ tooltip="spikes1"
+ z_depth="obj2"
+ is_inactive
+ is_spikes
+ hit_priority=9
+ damage=50
+ is_monst
+ is_not_light_blocking
+ can_be_hit_chance=5
+ tiles={
+  tile={
+   tile="spikes1-1"
+  }
+  tile={
+   tile="spikes1-2"
+  }
+  tile={
+   tile="spikes1-3"
+  }
+  tile={
+   tile="spikes1-4"
+  }
+  tile={
+   tile="spikes1-5"
+  }
+  tile={
+   tile="spikes1-6"
+  }
+ }
+}

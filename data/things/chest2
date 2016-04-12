@@ -1,0 +1,19 @@
+{
+ short_name="treasure chest"
+ raw_name="chest2"
+ tooltip="treasure chest"
+ z_depth="obj"
+ is_inactive
+ can_fall
+ is_treasure
+ is_stackable
+ hit_priority=1
+ is_carryable
+ bonus_gold_on_collect=50
+ d10000_chance_of_appearing=100
+ tiles={
+  tile={
+   tile="chest2"
+  }
+ }
+}

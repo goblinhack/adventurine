@@ -1,0 +1,19 @@
+{
+ short_name="light ember"
+ raw_name="ember"
+ tooltip="light ember"
+ z_depth="explosion"
+ is_light_source
+ light_radius=0.5
+ light_tint="darkblue"
+ is_dungeon_floor
+ is_hidden
+ is_inactive
+ d10000_chance_of_appearing=1000
+ tiles={
+  tile={
+   tile="torch1"
+   delay_ms=100
+  }
+ }
+}

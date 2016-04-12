@@ -1,0 +1,462 @@
+/*
+ * Copyright (C) 2011-2015 goblinhack@gmail.com
+ *
+ * See the README file for license info for license.
+ */
+
+#include "main.h"
+#include "thing.h"
+#include "player.h"
+#include "wid_menu.h"
+#include "time_util.h"
+#include "level.h"
+#include "thing_shop.h"
+#include "wid_game_map.h"
+#include "wid_game_quit.h"
+#include "color.h"
+#include "glapi.h"
+#include "ttf.h"
+#include "wid.h"
+#include "wid_textbox.h"
+
+thingp player;
+
+uint8_t player_init (void)
+{
+    return (true);
+}
+
+void player_fini (void)
+{
+    player = 0;
+}
+
+uint8_t player_move (levelp level)
+{
+    uint8_t right = 0;
+    uint8_t left  = 0;
+    uint8_t up    = 0;
+    uint8_t down  = 0;
+    uint8_t fire  = 0;
+    uint8_t jump  = 0;
+
+#if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION == 2 /* { */
+    {
+        uint8_t *state = SDL_GetKeyState(0);
+
+        right = state[SDLK_RIGHT] ? 1 : 0;
+        left  = state[SDLK_LEFT] ? 1 : 0;
+        up    = state[SDLK_UP] ? 1 : 0;
+        down  = state[SDLK_DOWN] ? 1 : 0;
+        fire  = state[SDLK_SPACE] ? 1 : 0;
+        jump  = state[SDLK_z] ? 1 : 0;
+    }
+#else /* } { */
+    {
+        const uint8_t *state = SDL_GetKeyboardState(0);
+
+        right = state[SDL_SCANCODE_RIGHT] ? 1 : 0;
+        left  = state[SDL_SCANCODE_LEFT] ? 1 : 0;
+        up    = state[SDL_SCANCODE_UP] ? 1 : 0;
+        down  = state[SDL_SCANCODE_DOWN] ? 1 : 0;
+        fire  = state[SDL_SCANCODE_SPACE] ? 1 : 0;
+        jump  = state[SDL_SCANCODE_Z] ? 1 : 0;
+#endif /* } */
+    }
+
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_UP]) {
+        up = true;
+    }
+
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_DOWN]) {
+        down = true;
+    }
+
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_LEFT]) {
+        left = true;
+    }
+
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_RIGHT]) {
+        right = true;
+    }
+
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_LEFT_FIRE]) {
+        fire = true;
+    } else if (sdl_joy_buttons[SDL_JOY_BUTTON_RIGHT_FIRE]) {
+        fire = true;
+    } else if (sdl_joy_buttons[SDL_JOY_BUTTON_A]) {
+        fire = true;
+    } else if (sdl_joy_buttons[SDL_JOY_BUTTON_X]) {
+        // TBD
+    }
+
+    if (sdl_joy_axes) {
+        if (sdl_joy_axes[3] > sdl_joy_deadzone) {
+            right = true;
+        }
+
+        if (sdl_joy_axes[3] < -sdl_joy_deadzone) {
+            left = true;
+        }
+
+        if (sdl_joy_axes[4] > sdl_joy_deadzone) {
+            down = true;
+        }
+
+        if (sdl_joy_axes[4] < -sdl_joy_deadzone) {
+            up = true;
+        }
+
+        if (sdl_joy_axes[0] > sdl_joy_deadzone) {
+            right = true;
+        }
+
+        if (sdl_joy_axes[0] < -sdl_joy_deadzone) {
+            left = true;
+        }
+
+        if (sdl_joy_axes[1] > sdl_joy_deadzone) {
+            down = true;
+        }
+
+        if (sdl_joy_axes[1] < -sdl_joy_deadzone) {
+            up = true;
+        }
+    }
+
+    if (!player) {
+        LOG("No player, cannot move");
+        return (false);
+    }
+
+    if (wid_menu_visible) {
+        /*
+         * Noisy
+         *
+        LOG("Menu present, ignore moves");
+         */
+        return (false);
+    }
+
+    if (!up && !down && !left && !right && !fire && !jump) {
+        return (false);
+    }
+
+    if (thing_is_dead(player)) {
+        return (false);
+    }
+
+    /*
+     * If no longer visible it may mean we have finished the level and are 
+     * waiting for others to finish.
+     */
+    if (!thing_is_visible(level, player)) {
+        LOG("Player is not visible, cannot move");
+        return (false);
+    }
+
+    player_wid_update(level);
+
+    /*
+     * Check if we are allowed to fire our gun again so soon.
+     */
+    if (fire) {
+        tpp weapon = thing_weapon(player);
+
+        if (!weapon) {
+            THING_LOG(player, "Tried to fire but no weapon");
+            fire = 0;
+        }
+
+        if (fire) {
+            static uint32_t last_fired = 0;
+
+            uint32_t delay = tp_get_weapon_fire_delay_hundredths(weapon);
+            
+            if (!time_have_x_hundredths_passed_since(delay, last_fired)) {
+                fire = 0;
+
+                if (!up && !down && !left && !right && !jump) {
+                    return (false);
+                }
+            }
+
+            if (fire) {
+                last_fired = time_get_time_ms();
+            }
+        }
+    }
+
+    if (up) {
+        if (!thing_overlaps(level, player, player->x, player->y -0.5, THING_LADDER1) &&
+            !thing_overlaps(level, player, player->x, player->y,      THING_LADDER1)) {
+            up = 0;
+        }
+    }
+
+    if (down) {
+        player->momentum = 0;
+
+        if (!thing_overlaps(level, player, player->x, player->y + 0.5, THING_LADDER1)) {
+            up = 0;
+        }
+    }
+
+    static uint32_t last_moved = 0;
+    static uint32_t last_hit_obstacle = 0;
+    static uint32_t last_jumped = 0;
+
+    if (!time_have_x_hundredths_passed_since(2, last_moved)) {
+        double x = player->x;
+        double y = player->y;
+
+        thing_move(level, player, x, y, false, false, false, false, fire);
+        return (false);
+    }
+
+    last_moved = time_get_time_ms();
+
+    double x = player->x;
+    double y = player->y;
+
+    double max_momentum = 0.5;
+    double move_momentum = 0.012;
+    double jump_speed = 0.1;
+    double wall_friction = 0.95;
+
+    /*
+     * run?
+     */
+    if (sdl_shift_held) {
+        max_momentum = 1.0;
+        move_momentum = 0.020;
+        jump_speed = 0.15;
+    }
+
+    /*
+     * Don't move too fast either way as we build up speed
+     */
+    if (left) {
+        player->momentum -= move_momentum;
+        if (player->momentum <= -max_momentum) {
+            player->momentum = -max_momentum;
+        }
+    }
+
+    if (right) {
+        player->momentum += move_momentum;
+        if (player->momentum >= max_momentum) {
+            player->momentum = max_momentum;
+        }
+    }
+
+    /*
+     * Don't allow too frequent jumps
+     */
+    if (jump) {
+        if (!time_have_x_hundredths_passed_since(15, last_jumped)) {
+            jump = 0;
+        }
+    }
+
+    if (jump) {
+        if (last_hit_obstacle &&
+            !time_have_x_hundredths_passed_since(15, last_hit_obstacle)) {
+
+            /*
+             * Allow the player to cling onto and jump when they hit a ledge 
+             * as long as not falling too fast
+             */
+            if (player->fall_speed < 0.50) {
+                if (!player->jump_speed) {
+                    player->jump_speed = jump_speed;
+                    last_jumped = time_get_time_ms();
+                }
+            }
+        }
+
+        /*
+         * Else if not falling, allow the jump
+         */
+        if (!player->fall_speed) {
+            if (!player->jump_speed) {
+                player->jump_speed = jump_speed;
+                last_jumped = time_get_time_ms();
+            }
+        }
+    }
+
+    /*
+     * If we hit a side wall when falling, slow the fall.
+     */
+    if (thing_hit_solid_obstacle(level, player, x + player->momentum, y)) {
+        last_hit_obstacle = time_get_time_ms();
+
+        if (player->fall_speed) {
+            player->fall_speed *= wall_friction;
+        }
+
+        player->momentum = 0;
+    }
+
+    double lr_delta = player->momentum;
+    double ud_delta = 0.1;
+
+    x += lr_delta;
+    y -= (double)up * ud_delta;
+    y += (double)down * ud_delta;
+
+    thing_move(level, player, x, y, up, down, left, right, fire);
+
+    /*
+     * If no key then we allow the console.
+     */
+    return (up || down || left || right || fire);
+}
+
+uint8_t player_key (widp w, const SDL_KEYSYM *key)
+{
+    levelp level = &game.level;
+
+    if (wid_menu_visible) {
+        return (false);
+    }
+
+    if (!player) {
+        return (false);
+    }
+
+    {
+        switch (key->sym) {
+        case 'z':
+            switch (key->mod) {
+                case KMOD_LCTRL:
+                case KMOD_RCTRL:
+                    debug = !debug;
+                    CON("debug %d", debug);
+                    break;
+            }
+            return (true);
+
+        case 'p':
+
+            if (player->in_shop_owned_by_thing_id) {
+                shop_pay_for_items(level, player);
+            } else {
+                MSG_SHOUT_AT(INFO, player, 0, 0, "I'm not in a shop");
+            }
+            break;
+
+        case 'q':
+            if (level && level->is_test_level) {
+                wid_game_map_go_back_to_editor();
+                return (true);
+            }
+
+            wid_game_quit_visible();
+            return (true);
+
+        case SDLK_RETURN:
+        case ' ':
+        case '`':
+            return (false);
+
+        default:
+            return (false);
+        }
+    }
+
+    return (true);
+}
+
+uint8_t player_joy (widp w, int x, int y)
+{
+    if (wid_menu_visible) {
+        return (false);
+    }
+
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_A]) {
+        SDL_KEYSYM key = {0};
+        key.sym = 'p';
+        return (player_key(w, &key));
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_B]) {
+        SDL_KEYSYM key = {0};
+        key.sym = 'q';
+        player_key(w, &key);
+        return (true);
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_X]) {
+        SDL_KEYSYM key = {0};
+        key.sym = 'd';
+        return (player_key(w, &key));
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_Y]) {
+        SDL_KEYSYM key = {0};
+        key.sym = '\t';
+        return (player_key(w, &key));
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_TOP_LEFT]) {
+        SDL_KEYSYM key = {0};
+        key.mod = KMOD_SHIFT;
+        key.sym = SDLK_LEFT;
+        return (player_key(w, &key));
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_TOP_RIGHT]) {
+        SDL_KEYSYM key = {0};
+        key.mod = KMOD_SHIFT;
+        key.sym = SDLK_RIGHT;
+        return (player_key(w, &key));
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_LEFT_STICK_DOWN]) {
+        SDL_KEYSYM key = {0};
+        key.mod = KMOD_SHIFT;
+        key.sym = SDLK_LEFT;
+        return (player_key(w, &key));
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_RIGHT_STICK_DOWN]) {
+        SDL_KEYSYM key = {0};
+        key.mod = KMOD_SHIFT;
+        key.sym = SDLK_RIGHT;
+        return (player_key(w, &key));
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_START]) {
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_XBOX]) {
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_BACK]) {
+        SDL_KEYSYM key = {0};
+        key.sym = 'q';
+        player_key(w, &key);
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_UP]) {
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_DOWN]) {
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_LEFT]) {
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_RIGHT]) {
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_LEFT_FIRE]) {
+    }
+    if (sdl_joy_buttons[SDL_JOY_BUTTON_RIGHT_FIRE]) {
+    }
+    return (true);
+}
+
+void player_wid_update (levelp level)
+{
+    char tmp[20];
+    snprintf(tmp, sizeof(tmp), "%07u", player->score);
+
+    if (game.wid_score_textbox) {
+        wid_destroy_nodelay(&game.wid_score_textbox);
+        game.wid_score_textbox = 0;
+    }
+
+    game.wid_score_textbox = wid_textbox(game.wid_map,
+                                           &game.wid_score_text, tmp,
+                                           0.5, 0.5, med_font);
+
+//    wid_set_no_shape(game.wid_score_textbox);
+}

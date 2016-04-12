@@ -1,0 +1,35 @@
+
+Left/Right - Move
+Up         - Look up / Climb
+Down       - Look down / Crouch / Climb / Run (If down-for-running is enabled)
+X          - Action
+Z          - Jump
+C          - Cycle held item, Bombs, Rope
+Shift      - Run
+A          - Bomb Shortcut
+S          - Rope Shortcut
+P          - Purchase / Bet
+Esc        - Pause / Menu (Quit Game)
+F2         - Open level editor (Title screen only)
+F3         - Open level browser (Title screen only)
+F4         - Toggle Fullscreen
+F9         - Take Screenshot
+M          - Toggle Music
+
+    USB
+                 |
+       LT        |       RT     Left Trigger  - Bomb Shortcut
+                 |              Left Bumper   - Run
+       ___LB     |     RB___    Right Trigger - Rope Shortcut
+          /     \____=____/     \   Right Bumper  - Purchase/Bet
+         .                       .  D-Pad         - Move
+         |   |   9      10   4   |  Button 10     - Pause/Menu (Quit Game)
+         |  = =             3 2  |  Button 1      - Whip, Throw Item, Use Item
+         |   |               1   |  Button 2      - Jump
+         |                       |  Button 3      - Cycle Whip, Item, Bombs, Rope
+         |      LA       RA      |  Button 4      - Flare
+         |      ___________      |  Left Analog   - Move
+         '     /           \     ' 
+          \___/             \___/
+
+
