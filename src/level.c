@@ -114,9 +114,7 @@ void level_destroy (levelp *plevel, uint8_t keep_player)
      */
     things_level_destroyed(level, keep_player);
 
-    if (level->title) {
-        level->title[0] = 0;
-    }
+    level->title[0] = 0;
 
     *plevel = 0;
 
@@ -1228,7 +1226,7 @@ void marshal_level (marshal_p ctx, levelp level)
 
     PUT_BRA(ctx);
 
-    if (!level->title) {
+    if (!level->title[0]) {
         PUT_NAMED_STRING(ctx, "title", "unnamed level");
     } else {
         PUT_NAMED_STRING(ctx, "title", level->title);

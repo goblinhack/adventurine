@@ -61,8 +61,8 @@ uint8_t player_move (levelp level)
         down  = state[SDL_SCANCODE_DOWN] ? 1 : 0;
         fire  = state[SDL_SCANCODE_SPACE] ? 1 : 0;
         jump  = state[SDL_SCANCODE_Z] ? 1 : 0;
-#endif /* } */
     }
+#endif /* } */
 
     if (sdl_joy_buttons[SDL_JOY_BUTTON_UP]) {
         up = true;
@@ -334,6 +334,8 @@ uint8_t player_key (widp w, const SDL_KEYSYM *key)
                 case KMOD_RCTRL:
                     debug = !debug;
                     CON("debug %d", debug);
+                    break;
+                default:
                     break;
             }
             return (true);
