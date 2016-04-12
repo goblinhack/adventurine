@@ -8,6 +8,8 @@
 .|.  .||.'|..'||.   '|    '|...'.||. ||. '|.' '|..'|..||.   .||..||. ||. '|...' 
                                                                                 
 
+A collect the gems platformer mining game.
+
 ```
 
 To build:
