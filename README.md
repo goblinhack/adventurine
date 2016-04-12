@@ -14,7 +14,7 @@ A collect the gems platformer mining game.
 
 To build:
 
-    git clone https://github.com/goblinhack/adventurine.git
+    git clone --recursive https://github.com/goblinhack/adventurine.git
 
     Linux:
         ./RUNME
