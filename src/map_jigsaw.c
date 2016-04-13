@@ -915,10 +915,7 @@ static int32_t jigpiece_char_is_suitable_for_exit (char c)
 
 static int32_t jigpiece_char_is_suitable_for_exit_base (char c)
 {
-    return (c == MAP_WALL)              || 
-           (c == MAP_WALL_RANDOM)       ||
-           (c == MAP_OBSTACLE_RANDOM)   ||
-           (c == MAP_OBSTACLE);
+    return (c == MAP_WALL);
 }
 
 /*
@@ -2482,12 +2479,19 @@ maze_replace_room_char (char new_char)
         if (jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx    , cy)) &&
             jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx - 1, cy)) &&
             jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx + 1, cy)) &&
+            jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx - 2, cy)) &&
+            jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx + 2, cy)) &&
+            jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx - 2, cy - 1)) &&
+            jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx + 2, cy - 1)) &&
             jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx    , cy - 1)) &&
             jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx - 1, cy - 1)) &&
             jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx + 1, cy - 1)) &&
             jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx    , cy - 2)) &&
             jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx - 1, cy - 2)) &&
             jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx + 1, cy - 2)) &&
+            jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx    , cy - 3)) &&
+            jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx - 1, cy - 3)) &&
+            jigpiece_char_is_suitable_for_exit(map_jigsaw_buffer_getchar(cx + 1, cy - 3)) &&
             jigpiece_char_is_suitable_for_exit_base(map_jigsaw_buffer_getchar(cx    , cy + 1)) &&
             jigpiece_char_is_suitable_for_exit_base(map_jigsaw_buffer_getchar(cx - 1, cy + 1)) &&
             jigpiece_char_is_suitable_for_exit_base(map_jigsaw_buffer_getchar(cx + 1, cy + 1))) {
