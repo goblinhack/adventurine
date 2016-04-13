@@ -798,5 +798,6 @@ void wid_game_map_wid_destroy (int keep_player)
         LOG("Destroy game window");
 
         wid_destroy(&game.wid_map);
+        game.wid_score_textbox = 0;
     }
 }

@@ -388,7 +388,6 @@ widp wid_popup (const char *text, const char *title,
             row++;
             br.x = maxw;
             br.y = maxh / 2;
-                h += maxh/2;
 
             child = wid_new_container(wid_popup_container,
                                           "wid popup container3");
@@ -417,7 +416,7 @@ widp wid_popup (const char *text, const char *title,
             wid_set_tl_br(child, tl, br);
             wid_set_text(child, n->line);
             wid_set_font(child, body_font);
-            wid_set_text_outline(child, false);
+            wid_set_text_outline(child, true);
 
             /*
              * .5 line spacing for single newlines.

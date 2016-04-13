@@ -17,6 +17,7 @@
 #include "glapi.h"
 #include "ttf.h"
 #include "wid.h"
+#include "wid_popup.h"
 #include "wid_textbox.h"
 
 thingp player;
@@ -449,6 +450,7 @@ uint8_t player_joy (widp w, int x, int y)
 void player_wid_update (levelp level)
 {
     char tmp[20];
+
     snprintf(tmp, sizeof(tmp), "%07u", player->score);
 
     if (game.wid_score_textbox) {
@@ -456,9 +458,20 @@ void player_wid_update (levelp level)
         game.wid_score_textbox = 0;
     }
 
-    game.wid_score_textbox = wid_textbox(game.wid_map,
-                                           &game.wid_score_text, tmp,
-                                           0.5, 0.5, med_font);
+    game.wid_score_textbox = wid_popup(tmp,
+                  "score",         /* title */
+                  0.5f, 0.08,      /* x,y postition in percent */
+                  small_font,      /* title font */
+                  large_font,      /* body font */
+                  0,               /* button font */
+                  0);              /* number args */
+    wid_move_end(game.wid_score_textbox);
+    wid_set_no_shape(game.wid_score_textbox);
+#if 0
+    wid_destroy_in(w, 10000);
+
+    wid_game_map_visible();
 
 //    wid_set_no_shape(game.wid_score_textbox);
+#endif
 }

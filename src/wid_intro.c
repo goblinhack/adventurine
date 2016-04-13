@@ -365,6 +365,7 @@ static uint8_t wid_menu_quick_start_selected (widp w,
 {
     if (wid_change_level_timer) {
         action_timer_destroy(&wid_timers, wid_change_level_timer);
+        wid_change_level_timer = 0;
     }
 
     wid_intro_menu_destroy();

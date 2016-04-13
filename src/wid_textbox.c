@@ -205,19 +205,3 @@ widp wid_textbox_fixed_width (widp parent,
 {
     return (wid_textbox_internal(parent, textbox, text, x, y, font, true));
 }
-
-widp wid_textbox_simple (widp parent,
-                         widp *textbox,
-                         const char *text, float x, float y)
-{
-    widp w;
-
-    w = wid_textbox(parent,
-                    textbox,
-                    text,           /* body text */
-                    0.5f, 0.5f,     /* x,y postition in percent */
-                    0               /* body font */
-                    );
-
-    return (w);
-}
