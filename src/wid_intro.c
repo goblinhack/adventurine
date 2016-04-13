@@ -33,6 +33,7 @@
 static widp wid_intro;
 static widp wid_intro_menu;
 static widp wid_intro_title;
+static timerp wid_change_level_timer;
 
 static uint8_t wid_intro_is_hidden;
 static uint8_t wid_intro_is_visible;
@@ -185,6 +186,8 @@ void wid_intro_hide (void)
 
 void wid_intro_visible (void)
 {
+    wid_game_map_fini();
+
     music_halt();
 
     if (!wid_intro || wid_intro_is_visible) {
@@ -360,6 +363,10 @@ static uint8_t wid_menu_quick_start_selected (widp w,
                                               int32_t x, int32_t y,
                                               uint32_t button)
 {
+    if (wid_change_level_timer) {
+        action_timer_destroy(&wid_timers, wid_change_level_timer);
+    }
+
     wid_intro_menu_destroy();
     wid_intro_hide();
 
@@ -448,6 +455,21 @@ static void wid_version_make_visible (void *context)
     wid_game_map_visible();
 }
 
+static void wid_change_level (void *context)
+{
+    wid_game_map_fini();
+    wid_game_map_visible();
+
+    wid_change_level_timer = action_timer_create(
+        &wid_timers,
+        (action_timer_callback)wid_change_level,
+        (action_timer_destroy_callback)0,
+        0, /* context */
+        "change level",
+        5000,
+        0 /* jitter */);
+}
+
 static void wid_intro_menu_create (void)
 {
     wid_destroy_delay_ms = 500;
@@ -462,7 +484,7 @@ static void wid_intro_menu_create (void)
                  vlarge_font,
                  0, // on_update
                  0.5, /* x */
-                 0.5, /* y */
+                 0.55, /* y */
                  1, /* columns */
                  saved_focus, /* focus */
                  7, /* items */
@@ -489,6 +511,15 @@ static void wid_intro_menu_create (void)
             0, /* context */
             "init game version",
             500,
+            0 /* jitter */);
+
+        wid_change_level_timer = action_timer_create(
+            &wid_timers,
+            (action_timer_callback)wid_change_level,
+            (action_timer_destroy_callback)0,
+            0, /* context */
+            "change level",
+            5000,
             0 /* jitter */);
     }
 }

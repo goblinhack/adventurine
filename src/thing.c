@@ -725,9 +725,14 @@ static void thing_dead_ (levelp level, thingp t, char *reason)
      * Move the weapon behind the poor thing.
      */
     thing_set_weapon_placement(level, t);
+
+    myfree(reason);
 }
 
-void thing_dead (levelp level, thingp t, thingp killer, const char *reason, ...)
+void thing_dead (levelp level, 
+                 thingp t, 
+                 thingp killer, 
+                 const char *reason, ...)
 {
     /*
      * If in a shop, this might be the shopkeeper.
