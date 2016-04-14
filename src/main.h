@@ -416,6 +416,8 @@ struct game_ {
     widp wid_vert_scroll;
     widp wid_score_text;
     widp wid_score_textbox;
+    widp wid_gold_text;
+    widp wid_gold_textbox;
 
     int32_t video_pix_width;
     int32_t video_pix_height;

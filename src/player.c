@@ -449,31 +449,37 @@ uint8_t player_joy (widp w, int x, int y)
 
 void player_wid_update (levelp level)
 {
-    char tmp[20];
+    static char tmp[MAXSTR];
 
-    snprintf(tmp, sizeof(tmp), "%07u", player->score);
+    player_wid_destroy(level);
 
-    if (game.wid_score_textbox) {
-        wid_destroy_nodelay(&game.wid_score_textbox);
-        game.wid_score_textbox = 0;
+    {
+        snprintf(tmp, sizeof(tmp), "%07u", player->score);
+
+        game.wid_score_textbox = wid_popup(tmp,
+                    "score",         /* title */
+                    0.9f, 0.08,      /* x,y postition in percent */
+                    small_font,      /* title font */
+                    large_font,      /* body font */
+                    0,               /* button font */
+                    0);              /* number args */
+        wid_move_end(game.wid_score_textbox);
+        wid_set_no_shape(game.wid_score_textbox);
     }
 
-    game.wid_score_textbox = wid_popup(tmp,
-                  "score",         /* title */
-                  0.5f, 0.08,      /* x,y postition in percent */
-                  small_font,      /* title font */
-                  large_font,      /* body font */
-                  0,               /* button font */
-                  0);              /* number args */
-    wid_move_end(game.wid_score_textbox);
-    wid_set_no_shape(game.wid_score_textbox);
-#if 0
-    wid_destroy_in(w, 10000);
+    {
+        snprintf(tmp, sizeof(tmp), "%%%%fg=gold$$%%%%fg=white$%u", player->gold);
 
-    wid_game_map_visible();
-
-//    wid_set_no_shape(game.wid_score_textbox);
-#endif
+        game.wid_gold_textbox = wid_popup(tmp,
+                    "gold",         /* title */
+                    0.2f, 0.08,      /* x,y postition in percent */
+                    small_font,      /* title font */
+                    large_font,      /* body font */
+                    0,               /* button font */
+                    0);              /* number args */
+        wid_move_end(game.wid_gold_textbox);
+        wid_set_no_shape(game.wid_gold_textbox);
+    }
 }
 
 void player_wid_destroy (levelp level)
@@ -481,6 +487,11 @@ void player_wid_destroy (levelp level)
     if (game.wid_score_textbox) {
         wid_destroy_nodelay(&game.wid_score_textbox);
         game.wid_score_textbox = 0;
+    }
+
+    if (game.wid_gold_textbox) {
+        wid_destroy_nodelay(&game.wid_gold_textbox);
+        game.wid_gold_textbox = 0;
     }
 }
 
