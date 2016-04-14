@@ -14,6 +14,7 @@
 #include "wid_hiscore.h"
 #include "thing_shop.h"
 #include "thing_tile.h"
+#include "player.h"
 
 int things_total;
 int monst_things_total;
@@ -664,6 +665,8 @@ void thing_destroy (levelp level, thingp t, const char *why)
      * Record that the client player may have died so we do not disconnect.
      */
     if (t == player) {
+        player_wid_destroy(level);
+
         player = 0;
     }
 
@@ -816,14 +819,6 @@ void thing_dead (levelp level,
     }
 
     thing_set_is_dead(t, true);
-
-    /*
-     * If this is a dead player, then rethink AI targets.
-     */
-    if (thing_is_joinable(t) ||
-        thing_is_player(t)) {
-        level_set_needs_updating(level, true);
-    }
 
     /*
      * Bounty for the killer?

@@ -125,36 +125,12 @@ typedef struct level_t_ {
      */
     uint8_t is_editor:1;
     uint8_t is_map_editor:1;
-
-    /*
-     * Walls or doors modified implies AI rethinking
-     */
-    uint8_t needs_updating:1;
-
-    /*
-     * Death...
-     */
-    uint8_t death_is_coming_soon:1;
-    uint8_t death_is_coming:1;
+    uint8_t is_paused:1;
 
     /*
      * Usually level TEST_LEVEL
      */
     uint8_t is_test_level:1;
-
-    uint8_t is_zzz1:1;
-    uint8_t is_zzz2:1;
-    uint8_t is_zzz3:1;
-    uint8_t is_zzz4:1;
-    uint8_t is_zzz5:1;
-    uint8_t is_zzz6:1;
-    uint8_t is_zzz7:1;
-    uint8_t is_zzz8:1;
-    uint8_t is_zzz9:1;
-    uint8_t is_zzz10:1;
-    uint8_t is_zzz11:1;
-    uint8_t is_zzz12:1;
-    uint8_t is_zzz13:1;
 
     /*
      * Some walls have changed. Need to redo AI algorithims.
@@ -183,6 +159,8 @@ levelp level_load_new(int level_no);
 levelp level_load(uint32_t,
                   int is_editor, 
                   int is_map_editor);
+void level_pause(levelp);
+void level_resume(levelp);
 levelp level_load_random(uint32_t level, 
                          int is_editor, 
                          int is_map_editor);
@@ -205,42 +183,6 @@ void level_set_seed(levelp, uint32_t val);
 const char *level_get_logname(levelp);
 uint32_t level_get_tick_started(levelp);
 void level_set_tick_started(levelp, uint32_t val);
-uint8_t level_needs_updating(levelp);
-void level_set_needs_updating(levelp, uint8_t val);
-uint8_t level_death_is_coming(levelp);
-void level_set_death_is_coming(levelp, uint8_t val);
-uint8_t level_death_is_coming_soon(levelp);
-void level_set_death_is_coming_soon(levelp, uint8_t val);
-uint8_t level_is_zzz1(levelp);
-void level_set_is_zzz1(levelp, uint8_t val);
-uint8_t level_is_zzz2(levelp);
-void level_set_is_zzz2(levelp, uint8_t val);
-uint8_t level_is_zzz3(levelp);
-void level_set_is_zzz3(levelp, uint8_t val);
-uint8_t level_is_zzz4(levelp);
-void level_set_is_zzz4(levelp, uint8_t val);
-uint8_t level_is_zzz5(levelp);
-void level_set_is_zzz5(levelp, uint8_t val);
-uint8_t level_is_zzz6(levelp);
-void level_set_is_zzz6(levelp, uint8_t val);
-uint8_t level_is_zzz7(levelp);
-void level_set_is_zzz7(levelp, uint8_t val);
-uint8_t level_is_zzz8(levelp);
-void level_set_is_zzz8(levelp, uint8_t val);
-uint8_t level_is_zzz9(levelp);
-void level_set_is_zzz9(levelp, uint8_t val);
-uint8_t level_is_zzz10(levelp);
-void level_set_is_zzz10(levelp, uint8_t val);
-uint8_t level_is_zzz11(levelp);
-void level_set_is_zzz11(levelp, uint8_t val);
-uint8_t level_is_zzz12(levelp);
-void level_set_is_zzz12(levelp, uint8_t val);
-uint8_t level_is_zzz13(levelp);
-void level_set_is_zzz13(levelp, uint8_t val);
-uint8_t level_zzz16(levelp);
-void level_set_zzz16(levelp, uint8_t val);
-uint8_t level_is_exit_open(levelp);
-void level_set_is_exit_open(levelp, uint8_t val);
 uint8_t level_is_editor(levelp);
 void level_set_is_editor(levelp, uint8_t val);
 uint8_t level_is_map_editor(levelp);

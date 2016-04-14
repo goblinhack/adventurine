@@ -16,5 +16,6 @@ uint8_t player_move(levelp level);
 uint8_t player_key(widp w, const SDL_KEYSYM *key);
 uint8_t player_joy(widp w, int x, int y);
 void player_wid_update(levelp);
+void player_wid_destroy(levelp);
 
 #endif

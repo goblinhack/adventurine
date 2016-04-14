@@ -475,3 +475,12 @@ void player_wid_update (levelp level)
 //    wid_set_no_shape(game.wid_score_textbox);
 #endif
 }
+
+void player_wid_destroy (levelp level)
+{
+    if (game.wid_score_textbox) {
+        wid_destroy_nodelay(&game.wid_score_textbox);
+        game.wid_score_textbox = 0;
+    }
+}
+

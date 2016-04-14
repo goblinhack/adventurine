@@ -439,10 +439,10 @@ static int dmap_generate_for_player_target (levelp level, int force)
         static uint32_t dmap_checksum;
 
         /*
-        * Only reprocess the djkstra map if something has changed on the map
-        * We use a checksum of the goals to indicate this with reasonable 
-        * certainty.
-        */
+         * Only reprocess the djkstra map if something has changed on the map
+         * We use a checksum of the goals to indicate this with reasonable 
+         * certainty.
+         */
         uint32_t checksum = dmap_generate_for_player_target_set_goals(true /* test */, 0);
 
         if (dmap_checksum == checksum) {

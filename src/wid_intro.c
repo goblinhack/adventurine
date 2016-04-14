@@ -371,6 +371,9 @@ static uint8_t wid_menu_quick_start_selected (widp w,
     wid_intro_menu_destroy();
     wid_intro_hide();
 
+    levelp level = &game.level;
+    level_resume(level);
+
     return (true);
 }
 
