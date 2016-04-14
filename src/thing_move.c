@@ -51,7 +51,6 @@ int thing_move (levelp level,
                 y = t->y;
             }
         }
-
     }
 
     thing_move_set_dir(level, t, &x, &y, up, down, left, right);
@@ -93,7 +92,7 @@ int thing_move (levelp level,
 
     thing_handle_collisions(level, t);
 
-    return (true);
+    return (rc);
 }
 
 /*
