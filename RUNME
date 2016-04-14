@@ -34,6 +34,8 @@ cat <<%%
 
 . ./scripts/common.sh
 
+ln -sf adventurine-data data
+
 LOG=./build.log
 MAINTAINER=goblinhack@gmail.com
 

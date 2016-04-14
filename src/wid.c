@@ -7671,11 +7671,7 @@ static void wid_light_add (widp w, fpoint at, double strength, color c)
      * Do a quick dmap check so that lights that are enclosed in a room do not 
      * shine
      */
-    if (thing_is_ethereal(t)) {
-        /*
-         * Death is always lit...
-         */
-    } else if (player && 
+    if (player && 
                !thing_is_player_or_owned_by_player(level, t)) {
         int sx, sy;
 
@@ -9435,15 +9431,6 @@ static void wid_display (widp w,
                                      */
                                     lit = 0;
                                 } else if (thing_is_light_source(t)) {
-                                    /*
-                                     * Do a quick dmap check so that lights 
-                                     * that are enclosed in a room do not 
-                                     * shine
-                                     */
-                                    if (thing_is_ethereal(t)) {
-                                        lit = 1;
-                                    }
-
                                     if (thing_is_monst(t)       ||
                                         thing_is_lava(t)        ||
                                         thing_is_projectile(t)  ||
