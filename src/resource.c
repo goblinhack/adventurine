@@ -5481,8 +5481,8 @@ static uint8_t resource_init_last (void *context)
         "cash1",
         0,
         "chest1",
-        "torch1",
-        "torches",
+        0,
+        0,
         "rope1-pile",
         "rope1-bot",
         // --------------------------------------------------------------------
@@ -5614,11 +5614,11 @@ static uint8_t resource_init_last (void *context)
         "bridge1-3-1",
         "bridge1-3-2",
         "bridge1-3-3",
-        0,
-        0,
-        0,
-        0,
-        0,
+        "icon-torch",
+        "icon-rope",
+        "icon-life",
+        "icon-key",
+        "icon-bomb",
         0,
         0,
         // --------------------------------------------------------------------
@@ -6586,10 +6586,6 @@ static uint8_t resource_init_last (void *context)
 
 uint8_t resource_init (void)
 {
-    if (tex_load("adventurine-data/gfx/window_gothic_wide.tga", "gothic_wide") == 0) {
-        ERR("tex init");
-    }
-
     action_init_fn_create(&init_fns,
                           (action_init_fn_callback)resource_init_1,
                           0, "resource_init_1");

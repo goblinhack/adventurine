@@ -7973,7 +7973,10 @@ static void wid_display_fast (widp w,
     glcolor(col_tile);
 
     if (unlikely(!tile)) {
-        DIE("wid %s has no tile", wid_logname(w));
+        /*
+         * light ember.
+         */
+        return;
     }
 
     if (unlikely(black_and_white)) {

@@ -465,7 +465,7 @@ wid_game_map_replace_tile (levelp level,
     int z = tp_get_z_depth(tp);
     tree_rootp thing_tiles;
     const char *tilename;
-    tilep tile;
+    tilep tile = 0;
     widp child;
     int ix = x;
     int iy = y;
@@ -615,29 +615,26 @@ wid_game_map_replace_tile (levelp level,
     }
 
     thing_tiles = tp_get_tiles(tp);
-    if (!thing_tiles) {
-        ERR("thing template [%s] has no tiles", tp_short_name(tp));
-        return (0);
-    }
+    if (thing_tiles) {
+        thing_tilep thing_tile;
 
-    thing_tilep thing_tile;
+        /*
+        * Get the first anim tile.
+        */
+        thing_tile = (typeof(thing_tile)) tree_root_get_random(thing_tiles);
 
-    /*
-     * Get the first anim tile.
-     */
-    thing_tile = (typeof(thing_tile)) tree_root_get_random(thing_tiles);
+        /*
+        * Find the real tile that corresponds to this name.
+        */
+        tilename = thing_tile_name(thing_tile);
+        tile = tile_find(tilename);
 
-    /*
-     * Find the real tile that corresponds to this name.
-     */
-    tilename = thing_tile_name(thing_tile);
-    tile = tile_find(tilename);
-
-    if (!tile) {
-        DIE("tile name %s from thing %s not found",
+        if (!tile) {
+            DIE("tile name %s from thing %s not found",
             tilename,
             tp_short_name(tp));
-        return (0);
+            return (0);
+        }
     }
 
     /*
@@ -680,7 +677,9 @@ wid_game_map_replace_tile (levelp level,
     }
 
     wid_set_thing(child, level, t);
-    wid_set_tile(child, tile);
+    if (tile) {
+        wid_set_tile(child, tile);
+    }
 
     /*
      * "paint" the thing.

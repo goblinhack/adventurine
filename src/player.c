@@ -484,6 +484,20 @@ void player_wid_update (levelp level)
         wid_move_end(game.wid_gold_textbox);
         wid_set_no_shape(game.wid_gold_textbox);
     }
+
+    {
+        snprintf(tmp, sizeof(tmp), "%%%%tile=icon-rope$%%%%fg=white$%u", player->torches);
+
+        game.wid_torches_textbox = wid_popup(tmp,
+                    "",         /* title */
+                    0.2f, 0.08,      /* x,y postition in percent */
+                    small_font,      /* title font */
+                    large_font,      /* body font */
+                    0,               /* button font */
+                    0);              /* number args */
+        wid_move_end(game.wid_torches_textbox);
+        wid_set_no_shape(game.wid_torches_textbox);
+    }
 }
 
 void player_wid_destroy (levelp level)
@@ -497,5 +511,29 @@ void player_wid_destroy (levelp level)
         wid_destroy_nodelay(&game.wid_gold_textbox);
         game.wid_gold_textbox = 0;
     }
-}
 
+    if (game.wid_torches_textbox) {
+        wid_destroy_nodelay(&game.wid_torches_textbox);
+        game.wid_torches_textbox = 0;
+    }
+
+    if (game.wid_ropes_textbox) {
+        wid_destroy_nodelay(&game.wid_ropes_textbox);
+        game.wid_ropes_textbox = 0;
+    }
+
+    if (game.wid_bombs_textbox) {
+        wid_destroy_nodelay(&game.wid_bombs_textbox);
+        game.wid_bombs_textbox = 0;
+    }
+
+    if (game.wid_life_textbox) {
+        wid_destroy_nodelay(&game.wid_life_textbox);
+        game.wid_life_textbox = 0;
+    }
+
+    if (game.wid_keys_textbox) {
+        wid_destroy_nodelay(&game.wid_keys_textbox);
+        game.wid_keys_textbox = 0;
+    }
+}

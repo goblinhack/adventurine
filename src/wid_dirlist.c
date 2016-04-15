@@ -944,7 +944,6 @@ widp wid_dirlist (const char *dir,
     wid_update(wid_dirlist_window);
     wid_focus_lock(wid_dirlist_window);
 
-    wid_set_tex(wid_dirlist_window, 0, "window_gothic");
     wid_set_square(wid_dirlist_window);
 
     wid_move_to_pct_centered(wid_dirlist_window, 0.5, 0.5 - 1.0);
