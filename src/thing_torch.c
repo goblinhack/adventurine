@@ -11,8 +11,8 @@
 
 void thing_torch_update_count (levelp level, thingp t, int force)
 {
-    if (force || time_have_x_ticks_passed_since(300, t->tick_torch)) {
-        t->tick_torch = game.tick;
+    if (force || time_have_x_ticks_passed_since(30 * TICKS_PER_SEC, t->tick_torch)) {
+        t->tick_torch = game.tick; 
 
         /*
          * Use up one torch unit.

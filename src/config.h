@@ -23,6 +23,8 @@
 #undef ENABLE_MAP_DEBUG           // Debug AI by printing the map
 #undef ENABLE_WID_DEBUG           // Widget debug
 
+#define TICKS_PER_SEC             100
+
 /*
  * Keep loading files simple and in the dir we expect.
  */

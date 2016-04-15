@@ -451,6 +451,10 @@ void player_wid_update (levelp level)
 {
     static char tmp[MAXSTR];
 
+    if (!player) {
+        return;
+    }
+
     player_wid_destroy(level);
 
     {

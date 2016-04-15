@@ -330,8 +330,6 @@ int thing_tick_all (levelp level)
         }
     }
 
-    game.tick++;
-
 #ifdef ENABLE_MAP_SANITY
     thing_map_sanity();
 #endif
