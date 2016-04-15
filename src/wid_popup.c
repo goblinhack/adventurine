@@ -585,7 +585,6 @@ widp wid_popup_error (const char *text)
 
     wid_set_on_key_down(w, wid_popup_error_key_event);
 
-    wid_set_tex(w, 0, "gothic_wide");
     wid_set_square(w);
 
     wid_set_color(w, WID_COLOR_BG, BLACK);
@@ -634,7 +633,6 @@ widp wid_popup_ok (const char *text)
 
     wid_set_on_key_down(w, wid_popup_ok_key_event);
 
-    wid_set_tex(w, 0, "gothic_wide");
     wid_set_square(w);
 
     wid_set_color(w, WID_COLOR_BG, BLACK);

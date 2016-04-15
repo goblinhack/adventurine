@@ -366,7 +366,7 @@ static uint8_t wid_menu_quick_start_selected (widp w,
     /*
      * Check the level is ready
      */
-    if (!game.level.is_paused) {
+    if (!game.level.is_ready) {
         return (true);
     }
 

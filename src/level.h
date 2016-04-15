@@ -126,6 +126,7 @@ typedef struct level_t_ {
     uint8_t is_editor:1;
     uint8_t is_map_editor:1;
     uint8_t is_paused:1;
+    uint8_t is_ready:1;
 
     /*
      * Usually level TEST_LEVEL

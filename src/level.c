@@ -119,6 +119,8 @@ void level_destroy (levelp *plevel, uint8_t keep_player)
 
     *plevel = 0;
 
+    memset(level, 0, sizeof(*level));
+
     oldptr(level);
 
     level = 0;
@@ -204,6 +206,9 @@ levelp level_load_new (int level_no)
     }
 
     level_update_slow(level);
+
+    level->is_ready = true;
+CON("level is ready %d",level->is_ready);
 
     return (level);
 }

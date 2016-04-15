@@ -488,15 +488,21 @@ void player_wid_update (levelp level)
     {
         snprintf(tmp, sizeof(tmp), "%%%%tile=icon-torches$%%%%fg=white$%u", player->torches);
 
-        game.wid_torches_textbox = wid_popup(tmp,
-                    "",         /* title */
-                    0.05, 0.18,      /* x,y postition in percent */
-                    small_font,      /* title font */
-                    large_font,      /* body font */
-                    0,               /* button font */
-                    0);              /* number args */
-        wid_move_end(game.wid_torches_textbox);
-        wid_set_no_shape(game.wid_torches_textbox);
+        {
+            game.wid_torches_icon = wid_new_window("icon-torches");
+            fpoint tl = { 0.0, 0.0 };
+            fpoint br = { 0.06, 0.08 };
+            wid_set_tl_br_pct(game.wid_torches_icon, tl, br);
+            wid_set_tilename(game.wid_torches_icon, "icon-torches");
+            wid_set_no_shape(game.wid_torches_icon);
+            wid_raise(game.wid_torches_icon);
+            wid_set_color(game.wid_torches_icon, WID_COLOR_BG, COLOR_NONE);
+            wid_set_color(game.wid_torches_icon, WID_COLOR_TL, COLOR_NONE);
+            wid_set_color(game.wid_torches_icon, WID_COLOR_BR, COLOR_NONE);
+            wid_set_do_not_lower(game.wid_torches_icon, true);
+            wid_move_to_pct_centered(game.wid_torches_icon, 0.1, 0.1);
+        }
+
     }
 
     {

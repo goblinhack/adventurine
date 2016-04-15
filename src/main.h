@@ -418,6 +418,7 @@ struct game_ {
     widp wid_score_textbox;
     widp wid_gold_text;
     widp wid_gold_textbox;
+    widp wid_torches_icon;
     widp wid_torches_text;
     widp wid_torches_textbox;
     widp wid_ropes_text;
