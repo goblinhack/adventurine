@@ -126,13 +126,11 @@ void level_destroy (levelp *plevel, uint8_t keep_player)
 
 void level_pause (levelp level)
 {
-CON("pause");
     level->is_paused = true;
 }
 
 void level_resume (levelp level)
 {
-CON("resume");
     level->is_paused = false;
 
     player_wid_update(level);
@@ -206,8 +204,6 @@ levelp level_load_new (int level_no)
     }
 
     level_update_slow(level);
-
-    level_pause(level);
 
     return (level);
 }
