@@ -426,6 +426,7 @@ typedef struct thing_ {
     int32_t score;
     int32_t keys;
     int32_t torches;
+    int32_t ropes;
     int32_t bombs;
 
     /*-------------------------------------------------------------------

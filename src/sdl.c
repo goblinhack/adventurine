@@ -1397,8 +1397,6 @@ void sdl_loop (void)
         int32_t timestamp_now = time_update_time_milli();
 
         if (timestamp_now - timestamp_then > 10) {
-            game.tick += max((timestamp_now - timestamp_then) / 10, 1);
-
             if (sdl_do_screenshot) {
                 sdl_do_screenshot = 0;
                 sdl_screenshot_();

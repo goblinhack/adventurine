@@ -297,7 +297,7 @@ tilep string2tile (const char **s)
 
     target = (typeof(target)) tree_find(tiles, &find.tree.node);
     if (!target) {
-        ERR("unknown tile [%s]", tmp);
+        DIE("unknown tile [%s]", tmp);
     }
 
     return (target);

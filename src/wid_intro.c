@@ -363,6 +363,13 @@ static uint8_t wid_menu_quick_start_selected (widp w,
                                               int32_t x, int32_t y,
                                               uint32_t button)
 {
+    /*
+     * Check the level is ready
+     */
+    if (!game.level.is_paused) {
+        return (true);
+    }
+
     if (wid_change_level_timer) {
         action_timer_destroy(&wid_timers, wid_change_level_timer);
         wid_change_level_timer = 0;

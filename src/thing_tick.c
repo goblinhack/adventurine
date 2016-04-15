@@ -314,21 +314,15 @@ int thing_tick_all (levelp level)
         return (false);
     }
 
-    static uint32_t last_level_tick;
 
     /*
-     * Not too slow or shop items show prices too quickly.
+     * Do per tick stuff for the level
      */
-    if (time_have_x_secs_passed_since(1, last_level_tick)) {
-        last_level_tick = time_get_time_ms();
-
-        /*
-         * Do per tick stuff for the level
-         */
-        if (!level_tick(level)) {
-            return (false);
-        }
+    if (!level_tick(level)) {
+        return (false);
     }
+
+    game.tick++;
 
 #ifdef ENABLE_MAP_SANITY
     thing_map_sanity();
