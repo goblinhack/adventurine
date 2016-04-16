@@ -469,7 +469,7 @@ void player_wid_update (levelp level)
 
         game.wid_score_textbox = wid_popup(tmp,
                     "score",         /* title */
-                    0.9f, 0.08,      /* x,y postition in percent */
+                    0.92f, 0.08,      /* x,y postition in percent */
                     small_font,      /* title font */
                     vlarge_font,      /* body font */
                     0,               /* button font */
@@ -492,87 +492,153 @@ void player_wid_update (levelp level)
         wid_set_no_shape(game.wid_gold_textbox);
     }
 
+    /*
+     * Health and torches and ropes
+     */
     {
+        double y1 = 0.07;
+        double y2 = 0.09;
+        double dx = 0.02;
+        fpoint tl = { 0.0, 0.0 };
+        fpoint br = { 0.06, 0.08 };
+        fpoint br2 = { 0.25, 0.18 };
+
         {
-            game.wid_torches_icon = wid_new_window("icon-torches");
-            fpoint tl = { 0.0, 0.0 };
-            fpoint br = { 0.06, 0.08 };
-            wid_set_tl_br_pct(game.wid_torches_icon, tl, br);
-            wid_set_tilename(game.wid_torches_icon, "icon-torches");
-            wid_set_no_shape(game.wid_torches_icon);
-            wid_set_do_not_lower(game.wid_torches_icon, true);
-            wid_move_to_pct_centered(game.wid_torches_icon, 0.05, 0.15);
+            double x1 = 0.05;
+
+            {
+                game.wid_hp_icon = wid_new_window("icon-hp");
+                wid_set_tl_br_pct(game.wid_hp_icon, tl, br);
+                wid_set_tilename(game.wid_hp_icon, "icon-hp");
+                wid_set_no_shape(game.wid_hp_icon);
+                wid_set_do_not_lower(game.wid_hp_icon, true);
+                wid_move_to_pct_centered(game.wid_hp_icon, x1, y1);
+            }
+            {
+                game.wid_hp_text = wid_new_window("text-hp");
+                wid_set_tl_br_pct(game.wid_hp_text, tl, br2);
+                wid_set_no_shape(game.wid_hp_text);
+                wid_set_do_not_lower(game.wid_hp_text, true);
+                wid_move_to_pct_centered(game.wid_hp_text, x1 + dx, y2);
+
+                wid_set_font(game.wid_hp_text, vlarge_font);
+                snprintf(tmp, sizeof(tmp), "x %u", player->hp);
+                wid_set_text(game.wid_hp_text, tmp);
+                wid_set_text_outline(game.wid_hp_text, true);
+            }
         }
+
         {
-            game.wid_torches_text = wid_new_window("text-torches");
-            fpoint tl = { 0.0, 0.0 };
-            fpoint br = { 0.06, 0.08 };
-            wid_set_tl_br_pct(game.wid_torches_text, tl, br);
-            wid_set_no_shape(game.wid_torches_text);
-            wid_set_do_not_lower(game.wid_torches_text, true);
-            wid_move_to_pct_centered(game.wid_torches_text, 0.09, 0.17);
+            double x1 = 0.12;
 
-            wid_set_font(game.wid_torches_text, vlarge_font);
-            snprintf(tmp, sizeof(tmp), "%u", player->torches);
-            wid_set_text(game.wid_torches_text, tmp);
+            {
+                game.wid_torches_icon = wid_new_window("icon-torches");
+                wid_set_tl_br_pct(game.wid_torches_icon, tl, br);
+                wid_set_tilename(game.wid_torches_icon, "icon-torches");
+                wid_set_no_shape(game.wid_torches_icon);
+                wid_set_do_not_lower(game.wid_torches_icon, true);
+                wid_move_to_pct_centered(game.wid_torches_icon, x1, y1);
+            }
+            {
+                game.wid_torches_text = wid_new_window("text-torches");
+                wid_set_tl_br_pct(game.wid_torches_text, tl, br2);
+                wid_set_no_shape(game.wid_torches_text);
+                wid_set_do_not_lower(game.wid_torches_text, true);
+                wid_move_to_pct_centered(game.wid_torches_text, x1 + dx, y2);
+
+                wid_set_font(game.wid_torches_text, vlarge_font);
+                snprintf(tmp, sizeof(tmp), "x %u", player->torches);
+                wid_set_text(game.wid_torches_text, tmp);
+                wid_set_text_outline(game.wid_hp_text, true);
+            }
+        }
+
+        {
+            double x1 = 0.19;
+
+            {
+                game.wid_ropes_icon = wid_new_window("icon-ropes");
+                wid_set_tl_br_pct(game.wid_ropes_icon, tl, br);
+                wid_set_tilename(game.wid_ropes_icon, "icon-ropes");
+                wid_set_no_shape(game.wid_ropes_icon);
+                wid_set_do_not_lower(game.wid_ropes_icon, true);
+                wid_move_to_pct_centered(game.wid_ropes_icon, x1, y1);
+            }
+            {
+                game.wid_ropes_text = wid_new_window("text-ropes");
+                wid_set_tl_br_pct(game.wid_ropes_text, tl, br2);
+                wid_set_no_shape(game.wid_ropes_text);
+                wid_set_do_not_lower(game.wid_ropes_text, true);
+                wid_move_to_pct_centered(game.wid_ropes_text, x1 + dx, y2);
+
+                wid_set_font(game.wid_ropes_text, vlarge_font);
+                snprintf(tmp, sizeof(tmp), "x %u", player->ropes);
+                wid_set_text(game.wid_ropes_text, tmp);
+                wid_set_text_outline(game.wid_hp_text, true);
+            }
         }
     }
 
-    return;
+    /*
+     * Bombs and keys
+     */
     {
-        snprintf(tmp, sizeof(tmp), "%%%%tile=icon-bombs$%%%%fg=white$%u", player->bombs);
+        double y1 = 0.15;
+        double y2 = 0.17;
+        double dx = 0.02;
+        fpoint tl = { 0.0, 0.0 };
+        fpoint br = { 0.06, 0.08 };
+        fpoint br2 = { 0.25, 0.18 };
 
-        game.wid_bombs_textbox = wid_popup(tmp,
-                    "",         /* title */
-                    0.85, 0.28,      /* x,y postition in percent */
-                    small_font,      /* title font */
-                    vlarge_font,      /* body font */
-                    0,               /* button font */
-                    0);              /* number args */
-        wid_move_end(game.wid_bombs_textbox);
-        wid_set_no_shape(game.wid_bombs_textbox);
-    }
+        {
+            double x1 = 0.88;
 
-    {
-        snprintf(tmp, sizeof(tmp), "%%%%tile=icon-keys$%%%%fg=white$%u", player->keys);
+            {
+                game.wid_keys_icon = wid_new_window("icon-keys");
+                wid_set_tl_br_pct(game.wid_keys_icon, tl, br);
+                wid_set_tilename(game.wid_keys_icon, "icon-keys");
+                wid_set_no_shape(game.wid_keys_icon);
+                wid_set_do_not_lower(game.wid_keys_icon, true);
+                wid_move_to_pct_centered(game.wid_keys_icon, x1, y1);
+            }
+            {
+                game.wid_keys_text = wid_new_window("text-keys");
+                wid_set_tl_br_pct(game.wid_keys_text, tl, br2);
+                wid_set_no_shape(game.wid_keys_text);
+                wid_set_do_not_lower(game.wid_keys_text, true);
+                wid_move_to_pct_centered(game.wid_keys_text, x1 + dx, y2);
 
-        game.wid_keys_textbox = wid_popup(tmp,
-                    "",         /* title */
-                    0.85, 0.38,      /* x,y postition in percent */
-                    small_font,      /* title font */
-                    vlarge_font,      /* body font */
-                    0,               /* button font */
-                    0);              /* number args */
-        wid_move_end(game.wid_keys_textbox);
-        wid_set_no_shape(game.wid_keys_textbox);
-    }
+                wid_set_font(game.wid_keys_text, vlarge_font);
+                snprintf(tmp, sizeof(tmp), "x %u", player->keys);
+                wid_set_text(game.wid_keys_text, tmp);
+                wid_set_text_outline(game.wid_keys_text, true);
+            }
+        }
 
-    {
-        snprintf(tmp, sizeof(tmp), "%%%%tile=icon-hp$%%%%fg=white$%u", player->hp);
+        {
+            double x1 = 0.95;
 
-        game.wid_life_textbox = wid_popup(tmp,
-                    "",         /* title */
-                    0.05, 0.08,      /* x,y postition in percent */
-                    small_font,      /* title font */
-                    vlarge_font,      /* body font */
-                    0,               /* button font */
-                    0);              /* number args */
-        wid_move_end(game.wid_life_textbox);
-        wid_set_no_shape(game.wid_life_textbox);
-    }
+            {
+                game.wid_bombs_icon = wid_new_window("icon-bombs");
+                wid_set_tl_br_pct(game.wid_bombs_icon, tl, br);
+                wid_set_tilename(game.wid_bombs_icon, "icon-bombs");
+                wid_set_no_shape(game.wid_bombs_icon);
+                wid_set_do_not_lower(game.wid_bombs_icon, true);
+                wid_move_to_pct_centered(game.wid_bombs_icon, x1, y1);
+            }
+            {
+                game.wid_bombs_text = wid_new_window("text-bombs");
+                wid_set_tl_br_pct(game.wid_bombs_text, tl, br2);
+                wid_set_no_shape(game.wid_bombs_text);
+                wid_set_do_not_lower(game.wid_bombs_text, true);
+                wid_move_to_pct_centered(game.wid_bombs_text, x1 + dx, y2);
 
-    {
-        snprintf(tmp, sizeof(tmp), "%%%%tile=icon-ropes$%%%%fg=white$%u", player->ropes);
-
-        game.wid_ropes_textbox = wid_popup(tmp,
-                    "",         /* title */
-                    0.05, 0.28,      /* x,y postition in percent */
-                    small_font,      /* title font */
-                    vlarge_font,      /* body font */
-                    0,               /* button font */
-                    0);              /* number args */
-        wid_move_end(game.wid_ropes_textbox);
-        wid_set_no_shape(game.wid_ropes_textbox);
+                wid_set_font(game.wid_bombs_text, vlarge_font);
+                snprintf(tmp, sizeof(tmp), "x %u", player->bombs);
+                wid_set_text(game.wid_bombs_text, tmp);
+                wid_set_text_outline(game.wid_hp_text, true);
+            }
+        }
     }
 }
 
@@ -588,28 +654,47 @@ void player_wid_destroy (levelp level)
         game.wid_gold_textbox = 0;
     }
 
-    if (game.wid_torches_textbox) {
-        wid_destroy_nodelay(&game.wid_torches_textbox);
-        game.wid_torches_textbox = 0;
+
+    if (game.wid_torches_icon) {
+        wid_destroy_nodelay(&game.wid_torches_icon);
+        game.wid_torches_icon = 0;
     }
 
-    if (game.wid_ropes_textbox) {
-        wid_destroy_nodelay(&game.wid_ropes_textbox);
-        game.wid_ropes_textbox = 0;
+    if (game.wid_torches_text) {
+        wid_destroy_nodelay(&game.wid_torches_text);
+        game.wid_torches_text = 0;
     }
 
-    if (game.wid_bombs_textbox) {
-        wid_destroy_nodelay(&game.wid_bombs_textbox);
-        game.wid_bombs_textbox = 0;
+
+    if (game.wid_hp_icon) {
+        wid_destroy_nodelay(&game.wid_hp_icon);
+        game.wid_hp_icon = 0;
     }
 
-    if (game.wid_life_textbox) {
-        wid_destroy_nodelay(&game.wid_life_textbox);
-        game.wid_life_textbox = 0;
+    if (game.wid_hp_text) {
+        wid_destroy_nodelay(&game.wid_hp_text);
+        game.wid_hp_text = 0;
     }
 
-    if (game.wid_keys_textbox) {
-        wid_destroy_nodelay(&game.wid_keys_textbox);
-        game.wid_keys_textbox = 0;
+
+    if (game.wid_bombs_icon) {
+        wid_destroy_nodelay(&game.wid_bombs_icon);
+        game.wid_bombs_icon = 0;
+    }
+
+    if (game.wid_bombs_text) {
+        wid_destroy_nodelay(&game.wid_bombs_text);
+        game.wid_bombs_text = 0;
+    }
+
+
+    if (game.wid_keys_icon) {
+        wid_destroy_nodelay(&game.wid_keys_icon);
+        game.wid_keys_icon = 0;
+    }
+
+    if (game.wid_keys_text) {
+        wid_destroy_nodelay(&game.wid_keys_text);
+        game.wid_keys_text = 0;
     }
 }

@@ -414,21 +414,27 @@ struct game_ {
     widp wid_grid;
     widp wid_horiz_scroll;
     widp wid_vert_scroll;
+
     widp wid_score_text;
     widp wid_score_textbox;
+
     widp wid_gold_text;
     widp wid_gold_textbox;
+
+    widp wid_hp_text;
+    widp wid_hp_icon;
+
     widp wid_torches_icon;
     widp wid_torches_text;
-    widp wid_torches_textbox;
+
     widp wid_ropes_text;
-    widp wid_ropes_textbox;
-    widp wid_keys_text;
-    widp wid_keys_textbox;
-    widp wid_life_text;
-    widp wid_life_textbox;
+    widp wid_ropes_icon;
+
     widp wid_bombs_text;
-    widp wid_bombs_textbox;
+    widp wid_bombs_icon;
+
+    widp wid_keys_text;
+    widp wid_keys_icon;
 
     int32_t video_pix_width;
     int32_t video_pix_height;

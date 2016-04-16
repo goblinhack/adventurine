@@ -1551,7 +1551,7 @@ void sdl_loop (void)
 
                 ttf_puts(small_font, fps_text, 
                          0.02 * (double) game.video_pix_width,
-                         0.03 * (double) game.video_pix_height,
+                         0.97 * (double) game.video_pix_height,
                          1.0, 1.0, true);
             }
         }
