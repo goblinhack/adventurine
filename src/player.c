@@ -449,6 +449,13 @@ uint8_t player_joy (widp w, int x, int y)
 
 void player_wid_update (levelp level)
 {
+    static uint32_t last_tick;
+    if (!time_have_x_tenths_passed_since(1, last_tick)) {
+        return;
+    }
+
+    last_tick = time_get_time_ms();
+
     static char tmp[MAXSTR];
 
     if (!player) {
@@ -550,15 +557,15 @@ void player_wid_update (levelp level)
     {
         snprintf(tmp, sizeof(tmp), "%%%%tile=icon-ropes$%%%%fg=white$%u", player->ropes);
 
-        game.wid_life_textbox = wid_popup(tmp,
+        game.wid_ropes_textbox = wid_popup(tmp,
                     "",         /* title */
                     0.05, 0.48,      /* x,y postition in percent */
                     small_font,      /* title font */
                     large_font,      /* body font */
                     0,               /* button font */
                     0);              /* number args */
-        wid_move_end(game.wid_life_textbox);
-        wid_set_no_shape(game.wid_life_textbox);
+        wid_move_end(game.wid_ropes_textbox);
+        wid_set_no_shape(game.wid_ropes_textbox);
     }
 }
 

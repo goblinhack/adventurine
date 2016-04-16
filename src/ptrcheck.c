@@ -329,6 +329,9 @@ static ptrcheck *ptrcheck_verify_pointer (const void *ptr,
     if (e) {
         context = e->context;
 
+#ifdef ENABLE_PTRCHECK_NO_HISTORY
+        return (context);
+#endif
         if (dont_store) {
             return (context);
         }

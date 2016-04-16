@@ -2049,8 +2049,6 @@ thingp wid_get_thing (widp w)
 
 levelp wid_get_level (widp w)
 {
-    fast_verify(w);
-
     return (w->level);
 }
 
@@ -2229,22 +2227,21 @@ void wid_set_thing (widp w, levelp level, thingp t)
     wid_set_z_depth(w, thing_z_depth(t));
 
     tiles = thing_tile_tiles(t);
-    if (!tiles) {
-        return;
+    if (tiles) {
+        /*
+         * Get the first tile and not random on purpose as animations will
+         * use the first tile as a center. If the widget is remade again and
+         * again then the tile will appear to wobble as a new center is 
+         * chosen.* i.e. the inventory screen with a torch.
+         */
+        tile = (typeof(tile)) tree_root_first(tiles);
+        if (!tile) {
+            return;
+        }
+
+        wid_set_tilename(w, thing_tile_name(tile));
     }
 
-    /*
-     * Get the first tile and not random on purpose as animations will
-     * use the first tile as a center. If the widget is remade again and
-     * again then the tile will appear to wobble as a new center is chosen.
-     * i.e. the inventory screen with a torch.
-     */
-    tile = (typeof(tile)) tree_root_first(tiles);
-    if (!tile) {
-        return;
-    }
-
-    wid_set_tilename(w, thing_tile_name(tile));
     wid_set_name(w, thing_name(t));
 
     thing_set_wid(level, t, w);
@@ -7664,7 +7661,7 @@ static void wid_light_init (void)
 
 static void wid_light_add (widp w, fpoint at, double strength, color c)
 {
-    thingp t = wid_get_thing(w);
+    thingp t = w->thing;
     levelp level = wid_get_level(w);
 
     /*
@@ -8087,7 +8084,7 @@ static void wid_light_calculate_for_single_obstacle (widp w,
     int32_t obry;
     widp p;
 
-    thingp t = wid_get_thing(w);
+    thingp t = w->thing;
     if (!t) {
         return;
     }
@@ -8392,7 +8389,7 @@ static void wid_lighting_calculate (widp w,
     int16_t miny;
 
     widp light_wid = light->w;
-    thingp t = wid_get_thing(light_wid);
+    thingp t = light_wid->thing;
     if (!t) {
         return;
     }
@@ -8503,7 +8500,7 @@ static void wid_lighting_render (widp w,
     int16_t miny;
 
     widp light_wid = light->w;
-    thingp t = wid_get_thing(light_wid);
+    thingp t = light_wid->thing;
     if (!t) {
         return;
     }
@@ -8644,7 +8641,7 @@ static void wid_lighting_debug (widp w,
     int16_t miny;
 
     widp light_wid = light->w;
-    thingp t = wid_get_thing(light_wid);
+    thingp t = light_wid->thing;
     if (!t) {
         return;
     }
@@ -9416,7 +9413,7 @@ static void wid_display (widp w,
                                             tree_prev_tree_wid_compare_func_fast) {
 
                             widp w = node->wid;
-                            thingp t = wid_get_thing(w);
+                            thingp t = w->thing;
                             levelp level = wid_get_level(w);
 
 #ifdef LIGHT_ALL_UNDER_LIGHT_SOURCE

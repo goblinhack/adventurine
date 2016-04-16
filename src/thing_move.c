@@ -254,27 +254,30 @@ static void thing_wid_move (levelp level,
          * Player has left the level?
          */
         THING_LOG(t, "Trying to move but has no widget");
+        DIE("bug");
         return;
     }
 
     tilep tile = wid_get_tile(w);
-    double tw = tile_get_width(tile);
-    double th = tile_get_height(tile);
-    double scale_x = tw / TILE_WIDTH; 
-    double scale_y = th / TILE_HEIGHT; 
+    if (tile) {
+        double tw = tile_get_width(tile);
+        double th = tile_get_height(tile);
+        double scale_x = tw / TILE_WIDTH; 
+        double scale_y = th / TILE_HEIGHT; 
 
-    double tile_width = game.tile_width;
-    double tile_height = game.tile_height;
+        double tile_width = game.tile_width;
+        double tile_height = game.tile_height;
 
-    if (scale_x > 1) {
-        tile_width *= scale_x;
-        tile_height *= scale_y;
+        if (scale_x > 1) {
+            tile_width *= scale_x;
+            tile_height *= scale_y;
+        }
+
+        br.x += tile_width / 2.0;
+        br.y += tile_height / 2.0;
+        tl.x -= tile_width / 2.0;
+        tl.y -= tile_height / 2.0;
     }
-
-    br.x += tile_width / 2.0;
-    br.y += tile_height / 2.0;
-    tl.x -= tile_width / 2.0;
-    tl.y -= tile_height / 2.0;
 
     /*
      * Now the tile itself has a shadow that is 1/4 of the pixels.

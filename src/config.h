@@ -6,11 +6,9 @@
 
 #pragma once
 
-#undef ENABLE_CONSOLE
-#undef ENABLE_LOGFILE             // Log stdout and err to a file
-
 #undef ENABLE_LEAKCHECK           // Memory leak check
 #undef ENABLE_PTRCHECK            // Check validity of pointers too
+#undef ENABLE_PTRCHECK_NO_HISTORY // Slower
 #undef ENABLE_WID_PTRCHECK        // Check validity of pointers too
 #undef ENABLE_THING_SANITY        // Check what things carry
 
@@ -22,6 +20,7 @@
 #undef ENABLE_DEMARSHAL_DEBUG     // Demarshalling, prints structures
 #undef ENABLE_MAP_DEBUG           // Debug AI by printing the map
 #undef ENABLE_WID_DEBUG           // Widget debug
+#undef ENABLE_CONSOLE
 
 #define TICKS_PER_SEC             100
 

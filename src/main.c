@@ -451,18 +451,6 @@ int32_t main (int32_t argc, char *argv[])
     LOG_STDOUT = fopen("stdout.txt", "w+");
     LOG_STDERR = fopen("stderr.txt", "w+");
 
-#ifdef ENABLE_LOGFILE
-#ifndef __IPHONE_OS_VERSION_MIN_REQUIRED
-    if (!freopen("stdout.txt", "w", MY_STDOUT)) {
-	WARN("Failed to open MY_STDOUT.txt");
-    }
-
-    if (!freopen("stderr.txt", "w", MY_STDERR)) {
-	WARN("Failed to open MY_STDERR.txt");
-    }
-#endif
-#endif
-
     ramdisk_init();
 
     ARGV = argv;

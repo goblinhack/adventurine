@@ -208,7 +208,6 @@ levelp level_load_new (int level_no)
     level_update_slow(level);
 
     level->is_ready = true;
-CON("level is ready %d",level->is_ready);
 
     return (level);
 }
@@ -385,7 +384,6 @@ static void level_set_walls (levelp level)
     if (!level) {
         return;
     }
-
 
     int i;
     for (i = 0; i < DMAP_MAP_MAX; i++) {
@@ -605,6 +603,13 @@ int level_tick (levelp level)
     if (!level) {
         return (false);
     }
+
+    static uint32_t last_tick;
+    if (!time_have_x_tenths_passed_since(1, last_tick)) {
+        return (true);
+    }
+
+    last_tick = time_get_time_ms();
 
     level_update_incremental(level);
 

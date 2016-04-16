@@ -258,6 +258,9 @@ static uint8_t things_overlap (const thingp A,
 
     if (thing_is_wall(A) || thing_is_door(A)) {
         tilep tileA = wid_get_tile(Aw);
+        if (!tileA) {
+            return (false);
+        }
 
         Apx1 = tileA->px1;
         Apx2 = tileA->px2;
@@ -287,6 +290,9 @@ static uint8_t things_overlap (const thingp A,
          * Just use pixel and alpha values.
          */
         tilep tileA = wid_get_tile(Aw);
+        if (!tileA) {
+            return (false);
+        }
 
         Apx1 = tileA->px1;
         Apx2 = tileA->px2;
@@ -296,6 +302,9 @@ static uint8_t things_overlap (const thingp A,
 
     if (thing_is_wall(B) || thing_is_door(B)) {
         tilep tileB = wid_get_tile(Bw);
+        if (!tileB) {
+            return (false);
+        }
 
         Bpx1 = tileB->px1;
         Bpx2 = tileB->px2;
@@ -325,6 +334,9 @@ static uint8_t things_overlap (const thingp A,
          * Just use pixel and alpha values.
          */
         tilep tileB = wid_get_tile(Bw);
+        if (!tileB) {
+            return (false);
+        }
 
         Bpx1 = tileB->px1;
         Bpx2 = tileB->px2;
@@ -1031,6 +1043,13 @@ uint8_t thing_hit_solid_obstacle (levelp level,
             }
 
             /*
+             * Light embers
+             */
+            if (thing_is_hidden(it)) {
+                continue;
+            }
+
+            /*
              * Allow things like death to walk unharmed through walls.
              */
             if (thing_is_ethereal(it)) {
@@ -1274,6 +1293,14 @@ uint8_t thing_hit_any_obstacle (levelp level, thingp t, double nx, double ny)
              * Allow dead ghosts to walk over each other!
              */
             if (thing_is_dead(it)) {
+                wid_it = wid_next;
+                continue;
+            }
+
+            /*
+             * Light embers.
+             */
+            if (thing_is_hidden(it)) {
                 wid_it = wid_next;
                 continue;
             }
