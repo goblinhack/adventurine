@@ -7,10 +7,10 @@
 #pragma once
 
 #undef ENABLE_LEAKCHECK           // Memory leak check
-#undef ENABLE_PTRCHECK            // Check validity of pointers too
-#undef ENABLE_PTRCHECK_NO_HISTORY // Slower
-#undef ENABLE_WID_PTRCHECK        // Check validity of pointers too
-#undef ENABLE_THING_SANITY        // Check what things carry
+#define ENABLE_PTRCHECK           // Check validity of pointers too
+#define ENABLE_PTRCHECK_HISTORY   // Slower
+#define ENABLE_WID_PTRCHECK       // Check validity of pointers too
+#define ENABLE_THING_SANITY       // Check what things carry
 
 #undef ENABLE_MAZE_DEBUG          // Print it as generating
 #undef ENABLE_MAP_SANITY          // Extra map checks
@@ -184,8 +184,8 @@
 #define VSMALL_FONT_SIZE            10
 #define SMALL_FONT_SIZE             12
 #define FIXED_FONT_SIZE             14
-#define MED_FONT_SIZE               16
-#define LARGE_FONT_SIZE             18
+#define MED_FONT_SIZE               20
+#define LARGE_FONT_SIZE             20
 #define VLARGE_FONT_SIZE            20
 #define VVLARGE_FONT_SIZE           28
 #define MAX_FONT_SIZE               60

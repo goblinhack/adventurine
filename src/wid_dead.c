@@ -50,7 +50,7 @@ void wid_dead_visible (const char *name,
 
 static void wid_dead_destroy (void)
 {
-    wid_game_map_hide();
+    wid_game_map_fini();
 
     level_finished_all();
 
@@ -65,7 +65,7 @@ static void wid_dead_replay_callback_yes (widp wid)
     wid_destroy(&wid_replay_game_yes_no);
     wid_dead_destroy();
 
-    wid_game_map_visible();
+    wid_game_map_init();
 }
 
 static void wid_dead_replay_callback_no (widp wid)

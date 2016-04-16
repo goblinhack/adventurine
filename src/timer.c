@@ -45,6 +45,10 @@ static void action_timer_free (timerp p)
 {
     verify(p);
 
+    LOG("%p: Final free of action timer (%s)",
+        p,
+        p->logname);
+
     if (p->destroy_callback) {
         (p->destroy_callback)(p->context);
     }
@@ -59,6 +63,10 @@ static void action_timer_free (timerp p)
 void action_timer_destroy (tree_rootp *t, timerp p)
 {
     verify(p);
+
+    LOG("%p: Destroy action timer (%s) destroyed",
+        p,
+        p->logname);
 
     if (!t) {
         return;
@@ -117,7 +125,8 @@ timerp action_timer_create (tree_rootp *root,
         ERR("Action collect timer failed");
     }
 
-    LOG("Action timer (%s) created, fires in %3.2f secs",
+    LOG("%p: Action timer (%s) created, fires in %3.2f secs",
+        t,
         name,
         ((float)(t->expires_when - time_get_time_ms())) /
         (float)ONESEC);

@@ -35,6 +35,7 @@ static widp wid_intro_menu;
 static widp wid_intro_title;
 static timerp wid_change_level_timer;
 
+static void wid_change_level(void *context);
 static uint8_t wid_intro_is_hidden;
 static uint8_t wid_intro_is_visible;
 static uint8_t wid_intro_init_done;
@@ -90,7 +91,7 @@ static void wid_intro_help_create (void)
                 0.5, /* y */
                 2, /* columns */
                 3, /* focus */
-                7, /* items */
+                6, /* items */
 
                 /*
                  * Column widths
@@ -189,13 +190,6 @@ void wid_intro_visible (void)
     wid_game_map_fini();
 
     music_halt();
-
-    if (!wid_intro || wid_intro_is_visible) {
-        /*
-         * Make sure the menu is visible.
-         */
-        wid_intro_menu_create();
-    }
 
     wid_intro_is_visible = true;
     wid_intro_is_hidden = false;
@@ -463,13 +457,28 @@ static void wid_version_make_visible (void *context)
 
     wid_move_end(w);
     wid_move_to_pct_centered(w, 0.9f, 0.95);
-    wid_game_map_visible();
+
+    wid_game_map_fini();
+    wid_game_map_init();
+
+    if (!wid_change_level_timer) {
+        wid_change_level_timer = action_timer_create(
+            &wid_timers,
+            (action_timer_callback)wid_change_level,
+            (action_timer_destroy_callback)0,
+            0, /* context */
+            "change level",
+            5000,
+            0 /* jitter */);
+    }
 }
 
 static void wid_change_level (void *context)
 {
+    wid_change_level_timer = 0;
+
     wid_game_map_fini();
-    wid_game_map_visible();
+    wid_game_map_init();
 
     wid_change_level_timer = action_timer_create(
         &wid_timers,
@@ -522,15 +531,6 @@ static void wid_intro_menu_create (void)
             0, /* context */
             "init game version",
             500,
-            0 /* jitter */);
-
-        wid_change_level_timer = action_timer_create(
-            &wid_timers,
-            (action_timer_callback)wid_change_level,
-            (action_timer_destroy_callback)0,
-            0, /* context */
-            "change level",
-            5000,
             0 /* jitter */);
     }
 }

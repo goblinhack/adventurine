@@ -4,15 +4,11 @@
  * See the LICENSE file for license.
  */
 
-uint8_t wid_game_map_init(void);
+void wid_game_map_init(void);
 void wid_game_map_fini(void);
-void wid_game_map_hide(void);
-void wid_game_map_visible(void);
 
 void wid_game_map_grid_create(levelp);
 void wid_game_map_wid_create(void);
-void wid_game_map_wid_destroy(int keep_player);
-void wid_game_map_score_update(levelp, uint8_t redo);
 void wid_game_map_scroll_adjust(levelp levle, uint8_t adjust);
 void wid_game_map_go_back_to_editor(void);
 uint8_t wid_game_map_player_move(levelp level);

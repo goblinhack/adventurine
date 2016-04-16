@@ -1720,59 +1720,61 @@ static void map_place_deco_ (levelp level,
                              int index)
 {
     char name[MAXSTR];
+    int corner = 0;
     tilep tile;
 
     snprintf(name, sizeof(name) - 1, "%s_deco", tp_raw_name(tp));
 
     tpp tp_deco = tp_find(name);
     if (!tp_deco) {
-        ERR("no deco tile tp for %s", tp_name(tp));
+        DIE("no deco tile tp for %s at %f,%f", tp_name(tp), x, y);
         return;
     }
 
-    double delta = 0.50;
-    int corner = 0;
+    if (tp_is_wall(tp)) {
+        double delta = 0.50;
 
-    switch (index) {
-        case IS_JOIN_TOP:
-            y += delta;
-            break;
+        switch (index) {
+            case IS_JOIN_TOP:
+                y += delta;
+                break;
 
-        case IS_JOIN_BOT:
-            y -= delta;
-            break;
+            case IS_JOIN_BOT:
+                y -= delta;
+                break;
 
-        case IS_JOIN_LEFT:
-            x += delta;
-            break;
+            case IS_JOIN_LEFT:
+                x += delta;
+                break;
 
-        case IS_JOIN_RIGHT:
-            x -= delta;
-            break;
+            case IS_JOIN_RIGHT:
+                x -= delta;
+                break;
 
-        case IS_JOIN_TL:
-            x += delta;
-            y += delta;
-            corner = 1;
-            break;
+            case IS_JOIN_TL:
+                x += delta;
+                y += delta;
+                corner = 1;
+                break;
 
-        case IS_JOIN_TR:
-            x -= delta;
-            y += delta;
-            corner = 1;
-            break;
+            case IS_JOIN_TR:
+                x -= delta;
+                y += delta;
+                corner = 1;
+                break;
 
-        case IS_JOIN_BL:
-            x += delta;
-            y -= delta;
-            corner = 1;
-            break;
+            case IS_JOIN_BL:
+                x += delta;
+                y -= delta;
+                corner = 1;
+                break;
 
-        case IS_JOIN_BR:
-            x -= delta;
-            y -= delta;
-            corner = 1;
-            break;
+            case IS_JOIN_BR:
+                x -= delta;
+                y -= delta;
+                corner = 1;
+                break;
+        }
     }
 
     widp w = wid_game_map_replace_tile(level,
@@ -1905,12 +1907,26 @@ static void map_fixup2 (levelp level)
         for (x = 0; x < MAP_WIDTH; x++) {
             widp w = 0;
 
-            if (map_find_wall_deco_at(level, x, y, &w)) {
+            while (map_find_wall_deco_at(level, x, y, &w)) {
                 thing_destroy(level, wid_get_thing(w), __FUNCTION__);
             }
 
-            if (map_find_ladder_deco_at(level, x, y, &w)) {
+            while (map_find_ladder_deco_at(level, x, y, &w)) {
                 thing_destroy(level, wid_get_thing(w), __FUNCTION__);
+            }
+        }
+    }
+
+    for (y = 0; y < MAP_HEIGHT; y++) {
+        for (x = 0; x < MAP_WIDTH; x++) {
+            widp w = 0;
+
+            if (map_find_wall_deco_at(level, x, y, &w)) {
+                DIE("could not erase wall deco");
+            }
+
+            if (map_find_ladder_deco_at(level, x, y, &w)) {
+                DIE("could not erase ladder deco");
             }
         }
     }

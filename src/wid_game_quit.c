@@ -57,7 +57,7 @@ static void wid_game_quit_destroy (void)
 
 static void wid_game_quit (void)
 {
-    wid_game_map_hide();
+    wid_game_map_fini();
     wid_game_quit_destroy();
 }
 

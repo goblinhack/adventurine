@@ -134,9 +134,7 @@ wid_game_over_go_back_mouse_event (widp w, int32_t x, int32_t y,
 {
     LOG("Game over completed");
 
-    wid_game_map_hide();
-    wid_game_map_wid_destroy(false /* keep player */);
-
+    wid_game_map_fini();
     wid_intro_visible();
     wid_game_over_hide();
 

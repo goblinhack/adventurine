@@ -367,6 +367,10 @@ static void wid_menu_callback_do (void *context)
 
     verify(tmp);
 
+    if (!tmp->event_handler) {
+        DIE("no callback handler");
+    }
+
     (tmp->event_handler)(tmp->w, mouse_x, mouse_y, tmp->key);
 
     myfree(tmp);

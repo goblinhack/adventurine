@@ -41,6 +41,8 @@ uint32_t tile_width;
 uint32_t tile_height;
 int level_is_being_loaded;
 
+static void wid_game_map_wid_destroy(int keep_player);
+
 static void wid_game_map_set_thing_template (widp w, tpp t)
 {
     wid_set_thing_template(w, t);
@@ -64,27 +66,17 @@ static void wid_game_map_set_thing_template (widp w, tpp t)
     }
 }
 
-uint8_t wid_game_map_init (void)
-{
-    return (true);
-}
-
 void wid_game_map_fini (void)
 {
     wid_game_map_wid_destroy(false /* keep player */);
 }
 
-void wid_game_map_hide (void)
+void wid_game_map_init (void)
 {
-    if (game.wid_map) {
-        LOG("Map hide");
-
-        wid_hide(game.wid_map, 0);
+    if (game.wid_grid) {
+        DIE("Asking to recreate the map when it's already created");
     }
-}
 
-void wid_game_map_visible (void)
-{
     LOG("Create new map");
 
     wid_game_map_wid_create();
@@ -243,8 +235,7 @@ void wid_game_map_scroll_adjust (levelp level, uint8_t adjust)
 
 void wid_game_map_go_back_to_editor (void)
 {
-    wid_game_map_hide();
-    wid_game_map_wid_destroy(false /* keep player */);
+    wid_game_map_fini();
 
     wid_editor(TEST_LEVEL);
 }
@@ -786,10 +777,9 @@ wid_game_map_replace_tile (levelp level,
     return (child);
 }
 
-void wid_game_map_wid_destroy (int keep_player)
+static void wid_game_map_wid_destroy (int keep_player)
 {
     if (game.wid_map) {
-
         if (!keep_player) {
             level_finished_all();
         }
@@ -797,6 +787,5 @@ void wid_game_map_wid_destroy (int keep_player)
         LOG("Destroy game window");
 
         wid_destroy(&game.wid_map);
-        game.wid_score_textbox = 0;
     }
 }

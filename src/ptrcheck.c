@@ -329,7 +329,7 @@ static ptrcheck *ptrcheck_verify_pointer (const void *ptr,
     if (e) {
         context = e->context;
 
-#ifdef ENABLE_PTRCHECK_NO_HISTORY
+#ifndef ENABLE_PTRCHECK_HISTORY
         return (context);
 #endif
         if (dont_store) {
@@ -490,7 +490,7 @@ void *ptrcheck_alloc (const void *ptr,
      * Missing an earlier free?
      */
     if (hash_find(hash, (void*) ptr)) {
-        ERR("pointer %p alread exists and attempting to add again", ptr);
+        DIE("pointer %p already exists and attempting to add again", ptr);
         return ((void*) ptr);
     }
 

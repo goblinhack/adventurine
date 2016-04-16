@@ -73,6 +73,7 @@ uint8_t font_init (void)
 
     font_inited = true;
 
+#if 0
     double scale = (double)game.video_pix_width / 1000.0;
 
     fixed_font_size  = ((double)fixed_font_size  ) * scale;
@@ -82,6 +83,7 @@ uint8_t font_init (void)
     large_font_size  = ((double)large_font_size  ) * scale;
     vlarge_font_size = ((double)vlarge_font_size ) * scale;
     vvlarge_font_size = ((double)vvlarge_font_size ) * scale;
+#endif
 
     if (fixed_font_size > MAX_FONT_SIZE - 1) {
         fixed_font_size = MAX_FONT_SIZE - 1;

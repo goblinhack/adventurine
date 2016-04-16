@@ -471,7 +471,7 @@ void player_wid_update (levelp level)
                     "score",         /* title */
                     0.9f, 0.08,      /* x,y postition in percent */
                     small_font,      /* title font */
-                    large_font,      /* body font */
+                    vlarge_font,      /* body font */
                     0,               /* button font */
                     0);              /* number args */
         wid_move_end(game.wid_score_textbox);
@@ -485,7 +485,7 @@ void player_wid_update (levelp level)
                     "gold",         /* title */
                     0.5f, 0.08,      /* x,y postition in percent */
                     small_font,      /* title font */
-                    large_font,      /* body font */
+                    vlarge_font,      /* body font */
                     0,               /* button font */
                     0);              /* number args */
         wid_move_end(game.wid_gold_textbox);
@@ -493,8 +493,6 @@ void player_wid_update (levelp level)
     }
 
     {
-        snprintf(tmp, sizeof(tmp), "%%%%tile=icon-torches$%%%%fg=white$%u", player->torches);
-
         {
             game.wid_torches_icon = wid_new_window("icon-torches");
             fpoint tl = { 0.0, 0.0 };
@@ -502,24 +500,33 @@ void player_wid_update (levelp level)
             wid_set_tl_br_pct(game.wid_torches_icon, tl, br);
             wid_set_tilename(game.wid_torches_icon, "icon-torches");
             wid_set_no_shape(game.wid_torches_icon);
-            wid_raise(game.wid_torches_icon);
-            wid_set_color(game.wid_torches_icon, WID_COLOR_BG, COLOR_NONE);
-            wid_set_color(game.wid_torches_icon, WID_COLOR_TL, COLOR_NONE);
-            wid_set_color(game.wid_torches_icon, WID_COLOR_BR, COLOR_NONE);
             wid_set_do_not_lower(game.wid_torches_icon, true);
-            wid_move_to_pct_centered(game.wid_torches_icon, 0.1, 0.1);
+            wid_move_to_pct_centered(game.wid_torches_icon, 0.05, 0.15);
         }
+        {
+            game.wid_torches_text = wid_new_window("text-torches");
+            fpoint tl = { 0.0, 0.0 };
+            fpoint br = { 0.06, 0.08 };
+            wid_set_tl_br_pct(game.wid_torches_text, tl, br);
+            wid_set_no_shape(game.wid_torches_text);
+            wid_set_do_not_lower(game.wid_torches_text, true);
+            wid_move_to_pct_centered(game.wid_torches_text, 0.09, 0.17);
 
+            wid_set_font(game.wid_torches_text, vlarge_font);
+            snprintf(tmp, sizeof(tmp), "%u", player->torches);
+            wid_set_text(game.wid_torches_text, tmp);
+        }
     }
 
+    return;
     {
         snprintf(tmp, sizeof(tmp), "%%%%tile=icon-bombs$%%%%fg=white$%u", player->bombs);
 
         game.wid_bombs_textbox = wid_popup(tmp,
                     "",         /* title */
-                    0.05, 0.28,      /* x,y postition in percent */
+                    0.85, 0.28,      /* x,y postition in percent */
                     small_font,      /* title font */
-                    large_font,      /* body font */
+                    vlarge_font,      /* body font */
                     0,               /* button font */
                     0);              /* number args */
         wid_move_end(game.wid_bombs_textbox);
@@ -531,9 +538,9 @@ void player_wid_update (levelp level)
 
         game.wid_keys_textbox = wid_popup(tmp,
                     "",         /* title */
-                    0.05, 0.38,      /* x,y postition in percent */
+                    0.85, 0.38,      /* x,y postition in percent */
                     small_font,      /* title font */
-                    large_font,      /* body font */
+                    vlarge_font,      /* body font */
                     0,               /* button font */
                     0);              /* number args */
         wid_move_end(game.wid_keys_textbox);
@@ -547,7 +554,7 @@ void player_wid_update (levelp level)
                     "",         /* title */
                     0.05, 0.08,      /* x,y postition in percent */
                     small_font,      /* title font */
-                    large_font,      /* body font */
+                    vlarge_font,      /* body font */
                     0,               /* button font */
                     0);              /* number args */
         wid_move_end(game.wid_life_textbox);
@@ -559,9 +566,9 @@ void player_wid_update (levelp level)
 
         game.wid_ropes_textbox = wid_popup(tmp,
                     "",         /* title */
-                    0.05, 0.48,      /* x,y postition in percent */
+                    0.05, 0.28,      /* x,y postition in percent */
                     small_font,      /* title font */
-                    large_font,      /* body font */
+                    vlarge_font,      /* body font */
                     0,               /* button font */
                     0);              /* number args */
         wid_move_end(game.wid_ropes_textbox);
