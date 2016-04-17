@@ -1223,10 +1223,10 @@ int thing_hit (levelp level, thingp t, thingp hitter, uint32_t damage)
     tpp weapon = 0;
 
 #if 0
-    if (hitter && thing_owner(hitter)) {
+    if (hitter && thing_owner(level, hitter)) {
         THING_CON(t, "is being hit by %s, owner %s",
                   thing_logname(hitter), 
-                  thing_logname(thing_owner(hitter)));
+                  thing_logname(thing_owner(level, hitter)));
     } else {
         THING_CON(t, "is being hit by %s",
                   thing_logname(hitter));
@@ -1446,12 +1446,19 @@ int thing_hit (levelp level, thingp t, thingp hitter, uint32_t damage)
     /*
      * Does the thing get off being hit.
      */
-    uint32_t can_be_hit_chance = tp_get_can_be_hit_chance(thing_tp(t));
-    if (can_be_hit_chance) {
-        uint32_t chance = myrand() % (can_be_hit_chance + 1);
+    if (orig_hitter) {
+        /*
+         * Only for the player. Player sourced explosions always hit!
+         */
+        if (thing_is_player(hitter)) {
+            uint32_t can_be_hit_chance = tp_get_can_be_hit_chance(thing_tp(t));
+            if (can_be_hit_chance) {
+                uint32_t chance = myrand() % (can_be_hit_chance + 1);
 
-        if (chance > damage) {
-            return (false);
+                if (chance > damage) {
+                    return (false);
+                }
+            }
         }
     }
 

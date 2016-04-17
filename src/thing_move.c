@@ -368,8 +368,12 @@ void thing_wid_move (levelp level,
     /*
      * Make the player bounce about as they walk
      */
+    if (thing_is_bomb(t)) {
+        wid_bounce_to_pct_in(w, 0.1, 0.9, bounce_ms, 4);
+    }
+
     if (thing_is_player(t) || 
-        (thing_is_monst(t) && (t->scale == 1.0))) {
+        thing_is_monst(t)) {
 
         if (!t->fall_speed && !t->jump_speed) {
             if (!w->bouncing) {

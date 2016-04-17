@@ -638,7 +638,8 @@ CON("  overlap %s vs %s",thing_logname(me), thing_logname(it));
         /*
          * Player bumped into something.
          */
-        if (thing_is_cloud_effect(it)) {
+        if (thing_is_explosion(it) ||
+            thing_is_cloud_effect(it)) {
             /*
              * I'm hit!
              */
@@ -1046,6 +1047,13 @@ uint8_t thing_hit_solid_obstacle (levelp level,
              * Light embers
              */
             if (thing_is_hidden(it)) {
+                continue;
+            }
+
+            /*
+             * Bombs
+             */
+            if (thing_is_carryable(it)) {
                 continue;
             }
 

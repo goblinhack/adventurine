@@ -73,7 +73,6 @@ void level_place_explosion_at (levelp level,
                                   destroy_in,
                                   jitter,
                                   is_epicenter);
-
 }
 
 static double this_explosion[MAP_WIDTH][MAP_HEIGHT];
@@ -326,7 +325,6 @@ static void level_place_explosion_ (levelp level,
                                     epicenter,
                                     nargs, args);
     va_end(args);
-return;
 
     if (!radius) {
         return;
@@ -371,7 +369,6 @@ return;
                                                 epicenter,
                                                 nargs, args);
                 va_end(args);
-return;
             } else {
                 for (dx = -0.5; dx <= 0.5; dx += density) {
                     for (dy = -0.5; dy <= 0.5; dy += density) {
@@ -390,7 +387,6 @@ return;
                                                         epicenter,
                                                         nargs, args);
                         va_end(args);
-return;
                     }
                 }
             }
@@ -407,6 +403,8 @@ void level_place_explosion (levelp level,
     const char *explodes_as = 0;
     double explosion_radius = 1.0;
     int id = 0;
+
+    tpp otp = tp;
 
     if (tp) {
         if (tp_is_cloud_effect(tp)) {
@@ -425,34 +423,40 @@ void level_place_explosion (levelp level,
         id = tp_to_id(tp);
     }
 
-    /*
-     * Used for fire potions and bombs as it gives a layered effect.
-     */
-    if ((id == THING_EXPLOSION1) ||
-        (id == THING_DYNAMITE)) {
-
-        level_explosion_flash_effect = 20;
-
-        level_place_explosion_(level, 
-                               owner,
-                               ox, oy,
-                               x, y,
-                               explosion_radius,
-                               1.0, // density
-                               explodes_as,
-                               1, // nargs
-                               "explosion1");
-        return;
-    }
-
     if (!explodes_as) {
-        ERR("combustable, but no explosion for name %s", tp_name(tp));
+        DIE("combustable, but no explosion for name %s", tp_name(tp));
         return;
     }
 
     tpp non_explosive_gas_cloud = tp_find(explodes_as);
     if (!non_explosive_gas_cloud) {
-        ERR("no explosion for name %s", explodes_as);
+        DIE("no explosion for name %s", explodes_as);
+        return;
+    }
+
+    /*
+     * Used for fire potions and bombs as it gives a layered effect.
+     */
+    if (tp_to_id(otp) == THING_DYNAMITE) {
+
+        level_explosion_flash_effect = 10;
+
+        char tmp[20];
+        static int which;
+        which++;
+        snprintf(tmp, sizeof(tmp) - 1, "explosion%d", (which % 3) + 1);
+
+        level_place_explosion_(level, 
+                               owner,
+                               ox, oy,
+                               x, y,
+                               tp_get_explosion_radius(non_explosive_gas_cloud),
+                               0.5, // density
+                               tmp, // epicenter
+                               3, // nargs
+                               "explosion1",
+                               "explosion2",
+                               "explosion3");
         return;
     }
 

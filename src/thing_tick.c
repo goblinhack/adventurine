@@ -146,6 +146,10 @@ static int thing_tick_all_things (levelp level)
          */
         int need_collision_test = false;
 
+        if (thing_is_explosion(t)) {
+            need_collision_test = true;
+        }
+
         if (!wid_is_moving(w)) {
             /*
              * Only if it finished moving the last delta.

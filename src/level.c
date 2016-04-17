@@ -216,7 +216,6 @@ static void level_update_incremental (levelp level)
         return;
     }
 
-    CON("update");
     level_set_walls(level);
 
     /*

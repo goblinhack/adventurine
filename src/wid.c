@@ -8532,6 +8532,10 @@ static void wid_lighting_render (widp w,
     if (thing_is_candle_light(t)) {
         light_delta += (0.005 * (myrand() % 100));
     }
+
+    /*
+     * Explosions shine through walls
+     */
     if (thing_is_explosion(t)) {
         light_delta += 3;
         light_delta += (0.005 * (myrand() % 100));

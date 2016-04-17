@@ -88,18 +88,22 @@ static uint8_t resource_init_12 (void *context)
 static uint8_t resource_init_13 (void *context)
 {
     return (tex_load_tiled("adventurine-data/gfx/explosion.tga",
-                           "explosion",
+                           "explosion1",
                            2084, 2084) != 0);
 }
 
 static uint8_t resource_init_14 (void *context)
 {
-    return (true);
+    return (tex_load_tiled("adventurine-data/gfx/explosion2.tga",
+                           "explosion2",
+                           2084, 2084) != 0);
 }
 
 static uint8_t resource_init_15 (void *context)
 {
-    return (true);
+    return (tex_load_tiled("adventurine-data/gfx/explosion3.tga",
+                           "explosion3",
+                           2084, 1536) != 0);
 }
 
 static uint8_t resource_init_16 (void *context)
@@ -6130,7 +6134,7 @@ static uint8_t resource_init_last (void *context)
                   128, 128,
                   ARRAY_SIZE(rock_tiles), rock_tiles);
 
-    static const char *explosion_tiles[] = {
+    static const char *explosion1_tiles[] = {
         // --------------------------------------------------------------------
         "explosion1.1",
         "explosion1.2",
@@ -6198,10 +6202,140 @@ static uint8_t resource_init_last (void *context)
         "explosion1.64",
     };
 
-    tile_load_arr("explosion", 
+    tile_load_arr("explosion1", 
                   0,
                   256, 256,
-                  ARRAY_SIZE(explosion_tiles), explosion_tiles);
+                  ARRAY_SIZE(explosion1_tiles), explosion1_tiles);
+
+    static const char *explosion2_tiles[] = {
+        // --------------------------------------------------------------------
+        "explosion2.1",
+        "explosion2.2",
+        "explosion2.3",
+        "explosion2.4",
+        "explosion2.5",
+        "explosion2.6",
+        "explosion2.7",
+        "explosion2.8",
+        "explosion2.9",
+        "explosion2.10",
+        "explosion2.11",
+        "explosion2.12",
+        "explosion2.13",
+        "explosion2.14",
+        "explosion2.15",
+        "explosion2.16",
+        "explosion2.17",
+        "explosion2.18",
+        "explosion2.19",
+        "explosion2.20",
+        "explosion2.21",
+        "explosion2.22",
+        "explosion2.23",
+        "explosion2.24",
+        "explosion2.25",
+        "explosion2.26",
+        "explosion2.27",
+        "explosion2.28",
+        "explosion2.29",
+        "explosion2.30",
+        "explosion2.31",
+        "explosion2.32",
+        "explosion2.33",
+        "explosion2.34",
+        "explosion2.35",
+        "explosion2.36",
+        "explosion2.37",
+        "explosion2.38",
+        "explosion2.39",
+        "explosion2.40",
+        "explosion2.41",
+        "explosion2.42",
+        "explosion2.43",
+        "explosion2.44",
+        "explosion2.45",
+        "explosion2.46",
+        "explosion2.47",
+        "explosion2.48",
+        "explosion2.49",
+        "explosion2.50",
+        "explosion2.51",
+        "explosion2.52",
+        "explosion2.53",
+        "explosion2.54",
+        "explosion2.55",
+        "explosion2.56",
+        "explosion2.57",
+        "explosion2.58",
+        "explosion2.59",
+        "explosion2.60",
+        "explosion2.61",
+        "explosion2.62",
+        "explosion2.63",
+        "explosion2.64",
+    };
+
+    tile_load_arr("explosion2", 
+                  0,
+                  256, 256,
+                  ARRAY_SIZE(explosion2_tiles), explosion2_tiles);
+
+    static const char *explosion3_tiles[] = {
+        // --------------------------------------------------------------------
+        "explosion3.1",
+        "explosion3.2",
+        "explosion3.3",
+        "explosion3.4",
+        "explosion3.5",
+        "explosion3.6",
+        "explosion3.7",
+        "explosion3.8",
+        "explosion3.9",
+        "explosion3.10",
+        "explosion3.11",
+        "explosion3.12",
+        "explosion3.13",
+        "explosion3.14",
+        "explosion3.15",
+        "explosion3.16",
+        "explosion3.17",
+        "explosion3.18",
+        "explosion3.19",
+        "explosion3.20",
+        "explosion3.21",
+        "explosion3.22",
+        "explosion3.23",
+        "explosion3.24",
+        "explosion3.25",
+        "explosion3.26",
+        "explosion3.27",
+        "explosion3.28",
+        "explosion3.29",
+        "explosion3.30",
+        "explosion3.31",
+        "explosion3.32",
+        "explosion3.33",
+        "explosion3.34",
+        "explosion3.35",
+        "explosion3.36",
+        "explosion3.37",
+        "explosion3.38",
+        "explosion3.39",
+        "explosion3.40",
+        "explosion3.41",
+        "explosion3.42",
+        "explosion3.43",
+        "explosion3.44",
+        "explosion3.45",
+        "explosion3.46",
+        "explosion3.47",
+        "explosion3.48",
+    };
+
+    tile_load_arr("explosion3", 
+                  0,
+                  256, 256,
+                  ARRAY_SIZE(explosion3_tiles), explosion3_tiles);
 
     static const char *teleport_tiles[] = {
         // --------------------------------------------------------------------
@@ -6414,6 +6548,8 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_WEAPON_HIT1, "weapon_swing1");
     tp_load(THING_WEAPON_HIT2, "weapon_swing2");
     tp_load(THING_EXPLOSION1, "explosion1");
+    tp_load(THING_EXPLOSION2, "explosion2");
+    tp_load(THING_EXPLOSION3, "explosion3");
 
     tp_load(THING_HEART, "heart");
     tp_load(THING_HIT_SUCCESS, "hit_success");
