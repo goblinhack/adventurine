@@ -405,7 +405,11 @@ void thing_wid_update (levelp level,
     thingp weapon_carry_anim = thing_weapon_carry_anim(level, t);
     if (weapon_carry_anim) {
         weapon_carry_anim->dir = t->dir;
-        thing_wid_move(level, weapon_carry_anim, x, y - 0.5, smooth);
+        if (thing_is_dir_left(t)) {
+            thing_wid_move(level, weapon_carry_anim, x - 0.2, y - 0.3, smooth);
+        } else {
+            thing_wid_move(level, weapon_carry_anim, x + 0.2, y - 0.3, smooth);
+        }
         wid_set_blit_y_offset(weapon_carry_anim->wid, w->blit_y_offset);
     }
 

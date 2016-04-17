@@ -500,7 +500,7 @@ void player_wid_update (levelp level)
         double y2 = 0.09;
         double dx = 0.02;
         fpoint tl = { 0.0, 0.0 };
-        fpoint br = { 0.06, 0.08 };
+        fpoint br = { 0.04, 0.05 };
         fpoint br2 = { 0.25, 0.18 };
 
         {
@@ -596,7 +596,7 @@ void player_wid_update (levelp level)
         double y2 = 0.17;
         double dx = 0.02;
         fpoint tl = { 0.0, 0.0 };
-        fpoint br = { 0.06, 0.08 };
+        fpoint br = { 0.04, 0.05 };
         fpoint br2 = { 0.25, 0.18 };
 
         if (player->keys) {

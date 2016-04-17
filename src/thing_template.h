@@ -279,7 +279,6 @@ typedef struct tp_ {
     uint8_t is_animated_no_dir:1;
     uint8_t is_animated_only_when_moving:1;
     uint8_t is_animation:1;
-    uint8_t is_blit_y_offset:1;
     uint8_t is_bomb:1;
     uint8_t is_bullet:1;
     uint8_t is_candle_light:1;
@@ -702,11 +701,6 @@ static inline uint8_t tp_can_fall (tpp t)
 static inline uint8_t tp_is_life_saving (tpp t)
 {
     return (t->is_life_saving);
-}
-
-static inline uint8_t tp_is_blit_y_offset (tpp t)
-{
-    return (t->is_blit_y_offset);
 }
 
 static inline uint8_t tp_is_water (tpp t)

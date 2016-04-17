@@ -610,7 +610,6 @@ void demarshal_thing_template (demarshal_p ctx, tpp t)
         GET_OPT_NAMED_BITFIELD(ctx, "can_fall", t->can_fall);
         GET_OPT_NAMED_BITFIELD(ctx, "is_life_saving", t->is_life_saving);
         GET_OPT_NAMED_BITFIELD(ctx, "is_single_mob_spawner", t->is_single_mob_spawner);
-        GET_OPT_NAMED_BITFIELD(ctx, "is_blit_y_offset", t->is_blit_y_offset);
         GET_OPT_NAMED_BITFIELD(ctx, "is_mob_spawner", t->is_mob_spawner);
         GET_OPT_NAMED_BITFIELD(ctx, "is_water", t->is_water);
         GET_OPT_NAMED_BITFIELD(ctx, "is_undead", t->is_undead);
@@ -808,7 +807,6 @@ void marshal_thing_template (marshal_p ctx, tpp t)
     PUT_NAMED_BITFIELD(ctx, "can_fall", t->can_fall);
     PUT_NAMED_BITFIELD(ctx, "is_life_saving", t->is_life_saving);
     PUT_NAMED_BITFIELD(ctx, "is_single_mob_spawner", t->is_single_mob_spawner);
-    PUT_NAMED_BITFIELD(ctx, "is_blit_y_offset", t->is_blit_y_offset);
     PUT_NAMED_BITFIELD(ctx, "is_mob_spawner", t->is_mob_spawner);
     PUT_NAMED_BITFIELD(ctx, "is_water", t->is_water);
     PUT_NAMED_BITFIELD(ctx, "is_undead", t->is_undead);

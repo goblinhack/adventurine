@@ -987,13 +987,6 @@ static inline uint8_t thing_is_single_mob_spawner (thingp t)
     return (tp_is_single_mob_spawner(thing_tp(t)));
 }
 
-static inline uint8_t thing_is_blit_y_offset (thingp t)
-{
-    verify(t);
-
-    return (tp_is_blit_y_offset(thing_tp(t)));
-}
-
 static inline uint8_t thing_is_water (thingp t)
 {
     verify(t);
