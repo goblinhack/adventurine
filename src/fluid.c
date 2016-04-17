@@ -46,7 +46,7 @@ void fluid_init (levelp level)
                         level->fluid[fx][fy].type = FLUID_IS_SOLID;
                     }
                 }
-            } else { //if ((myrand() % 1000) < 500) {
+            } else {
                 uint16_t r;
                 for (r = 0; r < 20; r++) {
                     uint16_t fx;
@@ -59,6 +59,50 @@ void fluid_init (levelp level)
 
                     level->fluid[fx][fy].mass = FLUID_MAX_MASS;
                     level->fluid[fx][fy].type = FLUID_IS_WATER;
+                }
+            }
+        }
+    }
+}
+
+void fluid_update (levelp level)
+{
+    uint16_t x, y;
+
+    for (x = 0; x < MAP_WIDTH; x++) {
+        for (y = 0; y < MAP_HEIGHT; y++) {
+
+            if (map_find_wall_at(level, x, y, 0)) {
+                uint16_t fx;
+                uint16_t fy;
+
+                for (fx = x * FLUID_RESOLUTION; 
+                     fx < (x * FLUID_RESOLUTION) + FLUID_RESOLUTION; 
+                     fx++) {
+                    for (fy = y * FLUID_RESOLUTION; 
+                         fy < (y * FLUID_RESOLUTION) + FLUID_RESOLUTION; 
+                         fy++) {
+
+                        level->fluid[fx][fy].mass = 0;
+                        level->fluid[fx][fy].type = FLUID_IS_SOLID;
+                    }
+                }
+            } else {
+                uint16_t fx;
+                uint16_t fy;
+
+                for (fx = x * FLUID_RESOLUTION; 
+                     fx < (x * FLUID_RESOLUTION) + FLUID_RESOLUTION; 
+                     fx++) {
+                    for (fy = y * FLUID_RESOLUTION; 
+                         fy < (y * FLUID_RESOLUTION) + FLUID_RESOLUTION; 
+                         fy++) {
+
+                        if (level->fluid[fx][fy].type == FLUID_IS_SOLID) {
+                            level->fluid[fx][fy].mass = 0;
+                            level->fluid[fx][fy].type = FLUID_IS_AIR;
+                        }
+                    }
                 }
             }
         }

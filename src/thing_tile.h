@@ -189,6 +189,8 @@ uint8_t thing_tile_is_dead_on_end_of_anim(thing_tilep);
 
 thing_tilep thing_tile_find(tpp, uint32_t index,
                             tilep *tile);
+thing_tilep thing_tile_find_n(tpp, uint32_t index,
+                              tilep *tile, int n);
 thing_tilep thing_tile_first(tree_rootp root);
 thing_tilep thing_tile_next(tree_rootp root, thing_tilep in);
 thing_tilep thing_tile_random(tree_rootp root);

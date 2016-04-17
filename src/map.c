@@ -1784,7 +1784,9 @@ static void map_place_deco_ (levelp level,
                                        tp_deco,
                                        0 /* tpp data */);
 
-    thing_tilep thing_tile = thing_tile_find(tp_deco, index, &tile);
+    int n = x + y;
+
+    thing_tilep thing_tile = thing_tile_find_n(tp_deco, index, &tile, n);
     if (!thing_tile) {
         ERR("no deco thing_tile for %s", name);
         return;

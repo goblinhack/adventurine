@@ -739,6 +739,21 @@ thing_tilep thing_tile_find (tpp t, uint32_t index, tilep *tile)
     return (t->tilep_join[index][which]);
 }
 
+thing_tilep thing_tile_find_n (tpp t, uint32_t index, tilep *tile, int n)
+{
+    uint32_t which;
+    
+    if (!t->tilep_join_count[index]) {
+        return (0);
+    }
+
+    which = n % t->tilep_join_count[index];
+
+    *tile = t->tilep_join_tile[index][which];
+
+    return (t->tilep_join[index][which]);
+}
+
 thing_tilep thing_tile_random (tree_rootp root)
 {
     thing_tilep thing_tile;

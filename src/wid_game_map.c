@@ -753,13 +753,6 @@ wid_game_map_replace_tile (levelp level,
         return (child);
     }
 
-    if (thing_is_joinable(t)) {
-        /*
-         * Need to do map fixup for things like spawned lava
-         */
-        level_set_needs_fixup(level, true);
-    }
-
     /*
      * STUFF ADDED HERE WILL BE SKIPPED BY THE ABOVE CHECK
      */

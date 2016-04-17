@@ -588,16 +588,9 @@ static void level_map_fixup (levelp level)
         return;
     }
 
-    /*
-     * Allow the first fixup to happen immediately and the rest deferred.
-     */
-    if (!level_needs_fixup(level)) {
-        return;
-    }
-
     map_fixup(level);
 
-    level_set_needs_fixup(level, false);
+    fluid_update(level);
 }
 
 int level_tick (levelp level)
@@ -688,18 +681,6 @@ void level_set_has_shop (levelp level, uint8_t val)
             level->has_shop--;
         }
     }
-}
-
-uint8_t level_needs_fixup (levelp level)
-{
-
-    return (level->needs_fixup ? 1 : 0);
-}
-
-void level_set_needs_fixup (levelp level, uint8_t val)
-{
-
-    level->needs_fixup = val;
 }
 
 static uint32_t level_count_is_x (levelp level, map_is_at_callback callback)

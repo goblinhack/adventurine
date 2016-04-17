@@ -133,11 +133,6 @@ typedef struct level_t_ {
      */
     uint8_t is_test_level:1;
 
-    /*
-     * Some walls have changed. Need to redo AI algorithims.
-     */
-    uint8_t needs_fixup:1;
-
     uint8_t is_being_destroyed:1;
 
 } level_t;
