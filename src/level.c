@@ -104,6 +104,8 @@ void level_destroy (levelp *plevel, uint8_t keep_player)
         ERR("no level");
     }
 
+    level->is_being_destroyed = true;
+
     if (keep_player) {
         LEVEL_LOG(level, "Destroy level but keep player");
     } else {

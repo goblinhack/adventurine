@@ -45,16 +45,10 @@ static void action_timer_free (timerp p)
 {
     verify(p);
 
-    LOG("%p: Final free of action timer (%s)",
-        p,
-        p->logname);
+    LOG("%p: Final free of action timer", p);
 
     if (p->destroy_callback) {
         (p->destroy_callback)(p->context);
-    }
-
-    if (p->logname) {
-        myfree(p->logname);
     }
 
     myfree(p);
@@ -64,9 +58,7 @@ void action_timer_destroy (tree_rootp *t, timerp p)
 {
     verify(p);
 
-    LOG("%p: Destroy action timer (%s) destroyed",
-        p,
-        p->logname);
+    LOG("%p: Destroy action timer destroyed", p);
 
     if (!t) {
         return;

@@ -31,6 +31,15 @@ static int thing_tick_all_things (levelp level)
         THING_SANITY(level, t);
         tp = thing_tp(t);
         if (tp_is_inactive(tp)) {
+            /*
+             * Even inactive things like walls need death checks else they
+             * stay on the level forever!
+             */
+            if (thing_is_dead(t)) {
+                thing_destroy(level, t, "died");
+                continue;
+            }
+
             continue;
         }
 

@@ -641,7 +641,13 @@ void thing_destroy (levelp level, thingp t, const char *why)
     if (why &&
         (thing_is_monst(t) ||
          thing_is_player_or_owned_by_player(level, t))) {
-        THING_LOG(t, "Destroyed, why(%s)", why);
+
+        /*
+         * No weapon swints.
+         */
+        if (!thing_is_weapon_swing_effect(t)) {
+            THING_LOG(t, "Destroyed, why(%s)", why);
+        }
     }
 
     /*
@@ -875,6 +881,25 @@ void thing_dead (levelp level,
             if (!wid_is_hidden(w)) {
                 wid_set_color(w, WID_COLOR_BLIT, RED);
             }
+        }
+    }
+
+    /*
+     * If a wall is gone, remove the decorations.
+     */
+    if (thing_is_wall(t)) {
+        if (!level->is_being_destroyed) {
+            int dx, dy;
+            for (dx = -1; dx <= 1; dx++) {
+                for (dy = -1; dy <= 1; dy++) {
+                    widp w;
+                    while (map_find_wall_deco_at(level, t->x + dx, t->y + dy, &w)) {
+                        thing_destroy(level, wid_get_thing(w), __FUNCTION__);
+                    }
+                }
+            }
+
+            map_fixup(level);
         }
     }
 
@@ -1733,6 +1758,9 @@ void thing_set_wid (levelp level, thingp t, widp w)
     if (w) {
         verify(w);
     } else {
+        /*
+         * If setting the wid to 0, we're destroying it.
+         */
         if (t->wid) {
             verify(t->wid);
             wid_set_thing(t->wid, 0, 0);

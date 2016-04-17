@@ -138,6 +138,8 @@ typedef struct level_t_ {
      */
     uint8_t needs_fixup:1;
 
+    uint8_t is_being_destroyed:1;
+
 } level_t;
 
 static inline thing_map_t *level_map (levelp level)

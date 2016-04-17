@@ -1059,8 +1059,10 @@ uint8_t thing_hit_solid_obstacle (levelp level,
             /*
              * Allow dead ghosts to walk over each other!
              */
-            if (thing_is_dead(it)) {
-                continue;
+            if (thing_is_monst(it)) {
+                if (thing_is_dead(it)) {
+                    continue;
+                }
             }
 
             if (thing_is_monst(me)) {

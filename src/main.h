@@ -456,6 +456,7 @@ struct game_ {
 
     uint8_t game_over:1;
     uint8_t level_is_being_loaded:1;
+    uint8_t is_being_destroyed:1;
 };
 
 extern struct game_ game;

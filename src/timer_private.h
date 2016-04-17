@@ -10,11 +10,6 @@ typedef struct action_timer_ {
     tree_key_two_int tree;
 
     /*
-     * Name for debugging.
-     */
-    char *logname;
-
-    /*
      * Expires when ?
      */
     uint32_t expires_when;
