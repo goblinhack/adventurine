@@ -156,14 +156,77 @@ void level_update_slow (levelp level)
     level_update_incremental(level);
 }
 
+static int level_update_needed (levelp level)
+{
+    static uint64_t last_checksum;
+    uint64_t checksum = 0;
+
+    int tot = 0;
+    int x, y, z;
+
+    widp w = game.wid_grid;
+    if (!w) {
+        return (false);
+    }
+
+    z = MAP_DEPTH_WALL;
+    {
+        for (x = 0; x < MAP_WIDTH; x++) {
+            for (y = 0; y < MAP_HEIGHT; y++) {
+                tree_root **tree = 
+                    w->grid->grid_of_trees[z] + (y * w->grid->width) + x;
+                widgridnode *node;
+
+                TREE_WALK_REVERSE_UNSAFE_INLINE(
+                                    *tree, 
+                                    node,
+                                    tree_prev_tree_wid_compare_func) {
+
+                    widp w = node->wid;
+
+                    thingp t = wid_get_thing(w);
+                    if (!t) {
+                        continue;
+                    }
+
+                    if (thing_is_wall(t)        ||
+                        thing_is_rock(t)        ||
+                        thing_is_door(t)) {
+
+                        tot++;
+                        checksum += x + y * MAP_WIDTH;
+                        checksum += 1000;
+                    }
+                }
+            }
+        }
+    }
+
+    if (checksum != last_checksum) {
+        last_checksum = checksum;
+        return (true);
+    }
+
+    return (false);
+}
+
 static void level_update_incremental (levelp level)
 {
+    if (!level_update_needed(level)) {
+        return;
+    }
+
+    CON("update");
     level_set_walls(level);
 
     /*
      * Regenerate player dmaps as things like doors may have been opened.
      */
     dmap_generate(level, true /* force */);
+
+    map_fixup(level);
+
+    fluid_update(level);
 }
 
 levelp level_load_new (int level_no)
@@ -582,17 +645,6 @@ void level_finished_all (void)
     level_finished(level, false /* keep_player */);
 }
 
-static void level_map_fixup (levelp level)
-{
-    if (!level) {
-        return;
-    }
-
-    map_fixup(level);
-
-    fluid_update(level);
-}
-
 int level_tick (levelp level)
 {
     if (!level) {
@@ -607,8 +659,6 @@ int level_tick (levelp level)
     last_tick = time_get_time_ms();
 
     level_update_incremental(level);
-
-    level_map_fixup(level);
 
     return (true);
 }

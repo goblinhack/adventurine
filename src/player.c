@@ -40,6 +40,9 @@ uint8_t player_move (levelp level)
     uint8_t down  = 0;
     uint8_t fire  = 0;
     uint8_t jump  = 0;
+    uint8_t bomb  = 0;
+    uint8_t rope  = 0;
+    uint8_t run = sdl_shift_held;
 
 #if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION == 2 /* { */
     {
@@ -51,6 +54,8 @@ uint8_t player_move (levelp level)
         down  = state[SDLK_DOWN] ? 1 : 0;
         fire  = state[SDLK_SPACE] ? 1 : 0;
         jump  = state[SDLK_z] ? 1 : 0;
+        bomb  = state[SDLK_a] ? 1 : 0;
+        rope  = state[SDLK_s] ? 1 : 0;
     }
 #else /* } { */
     {
@@ -62,6 +67,8 @@ uint8_t player_move (levelp level)
         down  = state[SDL_SCANCODE_DOWN] ? 1 : 0;
         fire  = state[SDL_SCANCODE_SPACE] ? 1 : 0;
         jump  = state[SDL_SCANCODE_Z] ? 1 : 0;
+        bomb  = state[SDL_SCANCODE_A] ? 1 : 0;
+        rope  = state[SDL_SCANCODE_S] ? 1 : 0;
     }
 #endif /* } */
 
@@ -84,11 +91,11 @@ uint8_t player_move (levelp level)
     if (sdl_joy_buttons[SDL_JOY_BUTTON_LEFT_FIRE]) {
         fire = true;
     } else if (sdl_joy_buttons[SDL_JOY_BUTTON_RIGHT_FIRE]) {
-        fire = true;
+        run = true;
     } else if (sdl_joy_buttons[SDL_JOY_BUTTON_A]) {
-        fire = true;
+        rope = true;
     } else if (sdl_joy_buttons[SDL_JOY_BUTTON_X]) {
-        // TBD
+        bomb = true;
     }
 
     if (sdl_joy_axes) {
@@ -139,7 +146,7 @@ uint8_t player_move (levelp level)
         return (false);
     }
 
-    if (!up && !down && !left && !right && !fire && !jump) {
+    if (!up && !down && !left && !right && !fire && !jump && !bomb && !rope) {
         return (false);
     }
 
@@ -206,6 +213,8 @@ uint8_t player_move (levelp level)
     static uint32_t last_moved = 0;
     static uint32_t last_hit_obstacle = 0;
     static uint32_t last_jumped = 0;
+    static uint32_t last_bomb = 0;
+    static uint32_t last_rope = 0;
 
     if (!time_have_x_hundredths_passed_since(2, last_moved)) {
         double x = player->x;
@@ -284,6 +293,30 @@ uint8_t player_move (levelp level)
                 player->jump_speed = jump_speed;
                 last_jumped = time_get_time_ms();
             }
+        }
+    }
+
+    if (bomb) {
+        if (!time_have_x_hundredths_passed_since(15, last_bomb)) {
+            bomb = 0;
+        }
+
+        if (bomb) {
+            last_bomb = time_get_time_ms();
+
+            level_place_bomb(level, player, player->x, player->y);
+        }
+    }
+
+    if (rope) {
+        if (!time_have_x_hundredths_passed_since(15, last_rope)) {
+            rope = 0;
+        }
+
+        if (rope) {
+            last_rope = time_get_time_ms();
+
+//            level_place_rope(level, player, player->x, player->y);
         }
     }
 

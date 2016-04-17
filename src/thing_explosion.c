@@ -61,7 +61,7 @@ void level_place_explosion_at (levelp level,
     uint32_t destroy_in;
     uint32_t jitter;
 
-    destroy_in = 100;
+    destroy_in = 5000;
     jitter = 10;
 
     thing_place_and_destroy_timed(level,
@@ -326,6 +326,7 @@ static void level_place_explosion_ (levelp level,
                                     epicenter,
                                     nargs, args);
     va_end(args);
+return;
 
     if (!radius) {
         return;
@@ -370,6 +371,7 @@ static void level_place_explosion_ (levelp level,
                                                 epicenter,
                                                 nargs, args);
                 va_end(args);
+return;
             } else {
                 for (dx = -0.5; dx <= 0.5; dx += density) {
                     for (dy = -0.5; dy <= 0.5; dy += density) {
@@ -388,6 +390,7 @@ static void level_place_explosion_ (levelp level,
                                                         epicenter,
                                                         nargs, args);
                         va_end(args);
+return;
                     }
                 }
             }
@@ -426,16 +429,9 @@ void level_place_explosion (levelp level,
      * Used for fire potions and bombs as it gives a layered effect.
      */
     if ((id == THING_EXPLOSION1) ||
-        (id == THING_EXPLOSION2) ||
-        (id == THING_EXPLOSION3) ||
-        (id == THING_EXPLOSION4) ||
-        (id == THING_BOMB)) {
+        (id == THING_DYNAMITE)) {
 
-        if ((id == THING_EXPLOSION3) ||
-            (id == THING_EXPLOSION4) ||
-            (id == THING_BOMB)) {
-            level_explosion_flash_effect = 20;
-        }
+        level_explosion_flash_effect = 20;
 
         level_place_explosion_(level, 
                                owner,
@@ -444,71 +440,8 @@ void level_place_explosion (levelp level,
                                explosion_radius,
                                1.0, // density
                                explodes_as,
-                               4, // nargs
-                               "explosion1",
-                               "explosion2",
-                               "explosion3",
-                               "explosion4");
-        return;
-    }
-
-    if ((id == THING_SMALL_EXPLOSION1) ||
-        (id == THING_SMALL_EXPLOSION2) ||
-        (id == THING_SMALL_EXPLOSION3) ||
-        (id == THING_SMALL_EXPLOSION4)) {
-
-        level_place_explosion_(level, 
-                               owner,
-                               ox, oy,
-                               x, y,
-                               explosion_radius,
-                               1.0, // density
-                               explodes_as,
-                               4, // nargs
-                               "small_explosion1",
-                               "small_explosion2",
-                               "small_explosion3",
-                               "small_explosion4");
-        return;
-    }
-
-    if ((id == THING_MED_EXPLOSION1) ||
-        (id == THING_MED_EXPLOSION2) ||
-        (id == THING_MED_EXPLOSION3) ||
-        (id == THING_MED_EXPLOSION4)) {
-
-        level_place_explosion_(level, 
-                               owner,
-                               ox, oy,
-                               x, y,
-                               explosion_radius,
-                               0.5, // density
-                               explodes_as,
-                               4, // nargs
-                               "med_explosion1",
-                               "med_explosion2",
-                               "med_explosion3",
-                               "med_explosion4");
-        return;
-    }
-
-    if ((id == THING_FIREBURST1) ||
-        (id == THING_FIREBURST2) ||
-        (id == THING_FIREBURST3) ||
-        (id == THING_FIREBURST4)) {
-
-        level_place_explosion_(level, 
-                               owner,
-                               ox, oy,
-                               x, y,
-                               explosion_radius,
-                               0.25, // density
-                               explodes_as,
-                               4, // nargs
-                               "fireburst1",
-                               "fireburst2",
-                               "fireburst3",
-                               "fireburst4");
+                               1, // nargs
+                               "explosion1");
         return;
     }
 

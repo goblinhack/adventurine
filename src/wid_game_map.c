@@ -690,11 +690,9 @@ wid_game_map_replace_tile (levelp level,
         scale += gaussrand(0.0, 0.05);
     }
 
-#if 0
     if (scale != 1.0) {
         wid_scaling_blit_to_pct_in(child, scale, scale, 500, 9999999);
     }
-#endif
 
     double dx = 0;
     double dy = 0;

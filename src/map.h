@@ -458,7 +458,6 @@ thingp map_is_tp_at(levelp level, int32_t x, int32_t y, tpp tp);
     list_macro(MAP_DEPTH_WALL_DECO,         "wall_deco"),       \
     list_macro(MAP_DEPTH_WALL_DECO2,        "wall_deco2"),      \
     list_macro(MAP_DEPTH_EXPLOSION,         "explosion"),       \
-    list_macro(MAP_DEPTH_EXPLOSION_TOP,     "explosion_top"),   \
     list_macro(MAP_DEPTH_ACTIONS,           "actions"),         \
 
 #define MAP_DEPTH 12

@@ -7766,7 +7766,6 @@ static void wid_display_fast (widp w,
      * Does this thing light up its environment?
      */
     thingp t = wid_get_thing(w);
-    levelp level = wid_get_level(w);
     tpp tp = 0;
 
     if (likely(t != 0)) {
@@ -7848,20 +7847,11 @@ static void wid_display_fast (widp w,
 
             double light_radius = tp_get_light_radius(tp);
 
-            if (thing_is_player_or_owned_by_player(level, t)) {
+            if (thing_is_player(t)) {
                 /*
                  * Player light is limited by the number of torches.
                  */
-                if (t == player) {
-                    light_radius = t->torch_light_radius;
-                } else {
-                    /*
-                     * If another player is on screen we will not know how
-                     * much they are lighting up the screen; so just light
-                     * up the default.
-                     */
-                    light_radius = tp_get_light_radius(tp);
-                }
+                light_radius = t->torch_light_radius;
             } else if (thing_is_cloud_effect(t) && !t->is_epicenter) {
                 /*
                  * No light source for explosion edges. Too high a cpu drain.
@@ -8540,6 +8530,10 @@ static void wid_lighting_render (widp w,
     alpha = 0.0;
 
     if (thing_is_candle_light(t)) {
+        light_delta += (0.005 * (myrand() % 100));
+    }
+    if (thing_is_explosion(t)) {
+        light_delta += 3;
         light_delta += (0.005 * (myrand() % 100));
     }
 

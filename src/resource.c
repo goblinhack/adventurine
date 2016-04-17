@@ -89,7 +89,7 @@ static uint8_t resource_init_13 (void *context)
 {
     return (tex_load_tiled("adventurine-data/gfx/explosion.tga",
                            "explosion",
-                           1024, 1024) != 0);
+                           2084, 2084) != 0);
 }
 
 static uint8_t resource_init_14 (void *context)
@@ -6136,78 +6136,71 @@ static uint8_t resource_init_last (void *context)
         "explosion1.2",
         "explosion1.3",
         "explosion1.4",
-        "explosion2.1",
-        "explosion2.2",
-        "explosion2.3",
-        "explosion2.4",
-        // --------------------------------------------------------------------
         "explosion1.5",
         "explosion1.6",
         "explosion1.7",
         "explosion1.8",
-        "explosion2.5",
-        "explosion2.6",
-        "explosion2.7",
-        "explosion2.8",
-        // --------------------------------------------------------------------
         "explosion1.9",
         "explosion1.10",
         "explosion1.11",
         "explosion1.12",
-        "explosion2.9",
-        "explosion2.10",
-        "explosion2.11",
-        "explosion2.12",
-        // --------------------------------------------------------------------
         "explosion1.13",
         "explosion1.14",
         "explosion1.15",
         "explosion1.16",
-        "explosion2.13",
-        "explosion2.14",
-        "explosion2.15",
-        "explosion2.16",
-        // --------------------------------------------------------------------
-        "explosion3.1",
-        "explosion3.2",
-        "explosion3.3",
-        "explosion3.4",
-        "explosion4.1",
-        "explosion4.2",
-        "explosion4.3",
-        "explosion4.4",
-        // --------------------------------------------------------------------
-        "explosion3.5",
-        "explosion3.6",
-        "explosion3.7",
-        "explosion3.8",
-        "explosion4.5",
-        "explosion4.6",
-        "explosion4.7",
-        "explosion4.8",
-        // --------------------------------------------------------------------
-        "explosion3.9",
-        "explosion3.10",
-        "explosion3.11",
-        "explosion3.12",
-        "explosion4.9",
-        "explosion4.10",
-        "explosion4.11",
-        "explosion4.12",
-        // --------------------------------------------------------------------
-        "explosion3.13",
-        "explosion3.14",
-        "explosion3.15",
-        "explosion3.16",
-        "explosion4.13",
-        "explosion4.14",
-        "explosion4.15",
-        "explosion4.16",
+        "explosion1.17",
+        "explosion1.18",
+        "explosion1.19",
+        "explosion1.20",
+        "explosion1.21",
+        "explosion1.22",
+        "explosion1.23",
+        "explosion1.24",
+        "explosion1.25",
+        "explosion1.26",
+        "explosion1.27",
+        "explosion1.28",
+        "explosion1.29",
+        "explosion1.30",
+        "explosion1.31",
+        "explosion1.32",
+        "explosion1.33",
+        "explosion1.34",
+        "explosion1.35",
+        "explosion1.36",
+        "explosion1.37",
+        "explosion1.38",
+        "explosion1.39",
+        "explosion1.40",
+        "explosion1.41",
+        "explosion1.42",
+        "explosion1.43",
+        "explosion1.44",
+        "explosion1.45",
+        "explosion1.46",
+        "explosion1.47",
+        "explosion1.48",
+        "explosion1.49",
+        "explosion1.50",
+        "explosion1.51",
+        "explosion1.52",
+        "explosion1.53",
+        "explosion1.54",
+        "explosion1.55",
+        "explosion1.56",
+        "explosion1.57",
+        "explosion1.58",
+        "explosion1.59",
+        "explosion1.60",
+        "explosion1.61",
+        "explosion1.62",
+        "explosion1.63",
+        "explosion1.64",
     };
 
     tile_load_arr("explosion", 
                   0,
-                  128, 128,
+                  256, 256,
                   ARRAY_SIZE(explosion_tiles), explosion_tiles);
 
     static const char *teleport_tiles[] = {
@@ -6399,7 +6392,7 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_ORCMOB, "orcmob");
     tp_load(THING_EYEBAWLMOB, "eyebawlmob");
     tp_load(THING_SORCERORMOB, "sorcerormob");
-    tp_load(THING_BOMB, "bomb");
+    tp_load(THING_DYNAMITE, "dynamite");
 
     /*
      * Projectiles
@@ -6420,26 +6413,7 @@ static uint8_t resource_init_last (void *context)
      */
     tp_load(THING_WEAPON_HIT1, "weapon_swing1");
     tp_load(THING_WEAPON_HIT2, "weapon_swing2");
-
     tp_load(THING_EXPLOSION1, "explosion1");
-    tp_load(THING_EXPLOSION2, "explosion2");
-    tp_load(THING_EXPLOSION3, "explosion3");
-    tp_load(THING_EXPLOSION4, "explosion4");
-
-    tp_load(THING_SMALL_EXPLOSION1, "small_explosion1");
-    tp_load(THING_SMALL_EXPLOSION2, "small_explosion2");
-    tp_load(THING_SMALL_EXPLOSION3, "small_explosion3");
-    tp_load(THING_SMALL_EXPLOSION4, "small_explosion4");
-
-    tp_load(THING_MED_EXPLOSION1, "med_explosion1");
-    tp_load(THING_MED_EXPLOSION2, "med_explosion2");
-    tp_load(THING_MED_EXPLOSION3, "med_explosion3");
-    tp_load(THING_MED_EXPLOSION4, "med_explosion4");
-
-    tp_load(THING_FIREBURST1, "fireburst1");
-    tp_load(THING_FIREBURST2, "fireburst2");
-    tp_load(THING_FIREBURST3, "fireburst3");
-    tp_load(THING_FIREBURST4, "fireburst4");
 
     tp_load(THING_HEART, "heart");
     tp_load(THING_HIT_SUCCESS, "hit_success");
