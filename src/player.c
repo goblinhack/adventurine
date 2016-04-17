@@ -509,12 +509,20 @@ void player_wid_update (levelp level)
             {
                 game.wid_hp_icon = wid_new_window("icon-hp");
                 wid_set_tl_br_pct(game.wid_hp_icon, tl, br);
-                wid_set_tilename(game.wid_hp_icon, "icon-hp");
+
+                if (player->hp > 0) {
+                    wid_set_tilename(game.wid_hp_icon, "icon-hp");
+                } else {
+                    wid_set_tilename(game.wid_hp_icon, "icon-skull");
+                }
+
                 wid_set_no_shape(game.wid_hp_icon);
                 wid_set_do_not_lower(game.wid_hp_icon, true);
                 wid_move_to_pct_centered(game.wid_hp_icon, x1, y1);
             }
-            {
+
+            if (player->hp > 0) {
+
                 game.wid_hp_text = wid_new_window("text-hp");
                 wid_set_tl_br_pct(game.wid_hp_text, tl, br2);
                 wid_set_no_shape(game.wid_hp_text);
@@ -528,7 +536,8 @@ void player_wid_update (levelp level)
             }
         }
 
-        {
+        if (player->torches) {
+
             double x1 = 0.12;
 
             {
@@ -590,7 +599,8 @@ void player_wid_update (levelp level)
         fpoint br = { 0.06, 0.08 };
         fpoint br2 = { 0.25, 0.18 };
 
-        {
+        if (player->keys) {
+
             double x1 = 0.88;
 
             {
@@ -615,7 +625,8 @@ void player_wid_update (levelp level)
             }
         }
 
-        {
+        if (player->bombs) {
+
             double x1 = 0.95;
 
             {
@@ -696,5 +707,16 @@ void player_wid_destroy (levelp level)
     if (game.wid_keys_text) {
         wid_destroy_nodelay(&game.wid_keys_text);
         game.wid_keys_text = 0;
+    }
+
+
+    if (game.wid_ropes_icon) {
+        wid_destroy_nodelay(&game.wid_ropes_icon);
+        game.wid_ropes_icon = 0;
+    }
+
+    if (game.wid_ropes_text) {
+        wid_destroy_nodelay(&game.wid_ropes_text);
+        game.wid_ropes_text = 0;
     }
 }

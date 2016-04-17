@@ -477,6 +477,9 @@ thingp thing_new (levelp level,
 
     if (thing_is_player(t)) {
         t->torches = 10;
+        t->ropes = 5;
+        t->bombs = 1;
+        thing_wield(level, t, id_to_tp(THING_SWORD1));
     }
 
     thing_wield_next_weapon(level, t);

@@ -223,11 +223,11 @@ int thing_slide (levelp level, thingp t)
     return (true);
 }
 
-static void thing_wid_move (levelp level,
-                            thingp t, 
-                            double x, 
-                            double y, 
-                            uint8_t smooth)
+void thing_wid_move (levelp level,
+                     thingp t, 
+                     double x, 
+                     double y, 
+                     uint8_t smooth)
 {
     double dist = DISTANCE(t->x, t->y, x, y);
 
@@ -405,7 +405,7 @@ void thing_wid_update (levelp level,
     thingp weapon_carry_anim = thing_weapon_carry_anim(level, t);
     if (weapon_carry_anim) {
         weapon_carry_anim->dir = t->dir;
-        thing_wid_move(level, weapon_carry_anim, x, y, smooth);
+        thing_wid_move(level, weapon_carry_anim, x, y - 0.5, smooth);
         wid_set_blit_y_offset(weapon_carry_anim->wid, w->blit_y_offset);
     }
 

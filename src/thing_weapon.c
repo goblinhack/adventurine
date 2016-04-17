@@ -439,18 +439,20 @@ void thing_set_weapon_placement (levelp level,
         return;
     }
 
+    thingp weapon = wid_get_thing(weapon_wid);
+
     int depth_modifier = 0;
 
     if (thing_is_dead(t)) {
         depth_modifier = -1;
     } else {
-#if 0
         switch (t->dir) {
         case THING_DIR_NONE:
             depth_modifier = 1;
             break;
         case THING_DIR_LEFT:
             depth_modifier = 1;
+            thing_wid_move(level, weapon, t->x - 1.5, t->y - 0.5, false);
             break;
         case THING_DIR_RIGHT:
             depth_modifier = 1;
@@ -474,9 +476,7 @@ void thing_set_weapon_placement (levelp level,
             depth_modifier = 1;
             break;
         }
-#else
         depth_modifier = 1;
-#endif
     }
 
     int weapon_depth = wid_get_z_depth(weapon_wid);
