@@ -397,8 +397,6 @@ void thing_wid_update (levelp level,
 
     thing_wid_move(level, t, x, y, smooth);
 
-    widp w = t->wid;
-
     /*
      * Update the weapon being carried.
      */
@@ -410,7 +408,6 @@ void thing_wid_update (levelp level,
         } else {
             thing_wid_move(level, weapon_carry_anim, x + 0.2, y - 0.3, smooth);
         }
-        wid_set_blit_y_offset(weapon_carry_anim->wid, w->blit_y_offset);
     }
 
     /*
@@ -424,6 +421,5 @@ void thing_wid_update (levelp level,
         weapon_swing_anim->dir = t->dir;
         thing_weapon_swing_offset(level, t, &dx, &dy);
         thing_wid_move(level, weapon_swing_anim, x + dx, y + dy, smooth);
-        wid_set_blit_y_offset(weapon_swing_anim->wid, w->blit_y_offset);
     }
 }
