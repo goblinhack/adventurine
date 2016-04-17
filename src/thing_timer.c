@@ -123,32 +123,41 @@ void thing_timers_destroy (levelp level, thingp t)
 void thing_timers_tick (levelp level)
 {
     thing_place_context_t *p;
+    int total = 0;
     int i;
 
     for (i = 0; i < MAX_TIMERS_PER_LEVEL; i++) {
         p = &level->timers[i];
         if (p->fire_in) {
-            p->fire_in -= MAIN_LOOP_DELAY;
+            p->fire_in -= LEVEL_TICK_DELAY_TENTHS * 100;
 
-            if (!p->fire_in) {
+            if (p->fire_in <= 0) {
                 if (p->destroy_in) {
                     thing_timer_place_and_destroy_callback(level, p);
                 } else {
                     thing_timer_place_callback(level, p);
                 }
+                memset(p, 0, sizeof(*p));
             }
+            total++;
             continue;
         }
 
         if (p->destroy_in) {
-            p->destroy_in -= MAIN_LOOP_DELAY;
+            p->destroy_in -= LEVEL_TICK_DELAY_TENTHS * 100;
 
-            if (!p->destroy_in) {
+            if (p->destroy_in <= 0) {
                 thing_action_timer_callback_dead(level, p);
+                memset(p, 0, sizeof(*p));
             }
+            total++;
             continue;
         }
     }
+
+#if 0
+    CON("total timers %u", total);
+#endif
 }
 
 /*
@@ -175,10 +184,12 @@ void thing_place_timed (levelp level,
         p = &level->timers[i];
         if (!p->fire_in && !p->destroy_in) {
             memcpy(p, &context, sizeof(*p));
+            LOG("%p: place [%s] via timer, %u ms", p, tp_short_name(tp), ms);
             return;
         }
     }
-    ERR("out of timers");
+
+    ERR("out of timers trying to place [%s]", tp_short_name(tp));
 }
 
 /*
@@ -203,8 +214,6 @@ void thing_place_and_destroy_timed (levelp level,
     context.tp = tp;
     context.is_epicenter = is_epicenter ? 1 : 0;
 
-    LOG("Place newborn %s via timer", tp_short_name(tp));
-
     if (owner) {
         context.owner_id = owner->thing_id;
     }
@@ -216,8 +225,10 @@ void thing_place_and_destroy_timed (levelp level,
         p = &level->timers[i];
         if (!p->fire_in && !p->destroy_in) {
             memcpy(p, &context, sizeof(*p));
+            LOG("%p: place [%s] via timer, in %u ms, destroy in %u ms", p, tp_short_name(tp), ms, destroy_in);
             return;
         }
     }
-    ERR("out of timers");
+
+    ERR("out of timers trying to place [%s]", tp_short_name(tp));
 }

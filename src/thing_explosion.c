@@ -206,6 +206,7 @@ static void level_place_explosion_ (levelp level,
      * end up being a wall. If this is the case, look around for a closer tile 
      * that has no wall.
      */
+    if (0)
     if (map_find_wall_at(level, x, y, 0) ||
         map_find_door_at(level, x, y, 0) ||
         map_find_rock_at(level, x, y, 0)) {
@@ -451,7 +452,7 @@ void level_place_explosion (levelp level,
                                ox, oy,
                                x, y,
                                tp_get_explosion_radius(non_explosive_gas_cloud),
-                               0.5, // density
+                               1.0, // density
                                tmp, // epicenter
                                3, // nargs
                                "explosion1",
@@ -460,6 +461,8 @@ void level_place_explosion (levelp level,
         return;
     }
 
+CON("todo %s", tp_name(otp));
+return;
     level_place_explosion_(level, 
                            owner,
                            ox, oy,

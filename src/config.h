@@ -25,6 +25,11 @@
 #define TICKS_PER_SEC             100
 
 /*
+ * Handles map updates and timer ticks.
+ */
+#define LEVEL_TICK_DELAY_TENTHS   1
+
+/*
  * Keep loading files simple and in the dir we expect.
  */
 #undef ENABLE_DIR_TRAVERSAL_IN_WIDGETS

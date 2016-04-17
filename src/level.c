@@ -28,6 +28,7 @@
 #include "thing_shop.h"
 #include "fluid.h"
 #include "player.h"
+#include "thing_timer.h"
 
 static uint8_t level_init_done;
 static uint8_t level_init_done;
@@ -651,9 +652,11 @@ int level_tick (levelp level)
     }
 
     static uint32_t last_tick;
-    if (!time_have_x_tenths_passed_since(1, last_tick)) {
+    if (!time_have_x_tenths_passed_since(LEVEL_TICK_DELAY_TENTHS, last_tick)) {
         return (true);
     }
+
+    thing_timers_tick(level);
 
     last_tick = time_get_time_ms();
 

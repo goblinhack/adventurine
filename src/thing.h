@@ -167,12 +167,12 @@ typedef struct {
     /*
      * First expiry
      */
-    uint16_t fire_in;
+    int16_t fire_in;
 
     /*
      * Second expiry
      */
-    uint16_t destroy_in;
+    int16_t destroy_in;
 
     tpp tp;
     float x;

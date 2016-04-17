@@ -1471,8 +1471,6 @@ void sdl_loop (void)
             /*
              * Fire global timers.
              */
-            thing_timers_tick(level);
-
             if (player) {
                 /*
                  * When the player moves, the monsters move.
