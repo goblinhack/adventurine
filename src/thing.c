@@ -898,8 +898,6 @@ void thing_dead (levelp level,
                     }
                 }
             }
-
-            map_fixup(level);
         }
     }
 

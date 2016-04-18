@@ -8386,6 +8386,12 @@ static void wid_lighting_calculate (widp w,
         return;
     }
 
+    if (level_explosion_flash_effect) {
+        if (thing_is_explosion(t)) {
+            return;
+        }
+    }
+
     double visible_width = light_radius + 3;
     double visible_height = light_radius + 3;
 
@@ -9352,7 +9358,9 @@ static void wid_display (widp w,
                 /*
                  * This for soft shadows.
                  */
-                wid_lighting_render(w, i, 1);
+                if (!level_explosion_flash_effect) {
+                    wid_lighting_render(w, i, 1);
+                }
             }
 
             glBindFramebuffer_EXT(GL_FRAMEBUFFER, 0);

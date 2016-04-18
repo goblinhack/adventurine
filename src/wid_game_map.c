@@ -730,7 +730,9 @@ wid_game_map_replace_tile (levelp level,
 
     const char *sound = tp_sound_on_creation(tp);
     if (sound) {
-        if (thing_is_cloud_effect(t)) {
+        if (thing_is_explosion(t) ||
+            thing_is_cloud_effect(t)) {
+
             if (t->is_epicenter) {
                 sound_play_at(sound, t->x, t->y);
             }
