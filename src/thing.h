@@ -66,10 +66,11 @@ uint8_t thing_z_order(thingp);
 tree_rootp thing_tile_tiles(thingp);
 void thing_animate(levelp, thingp);
 uint8_t thing_hit_solid_obstacle(levelp, thingp t, double nx, double ny);
+uint8_t thing_hit_fall_obstacle(levelp, thingp t, double nx, double ny);
 uint8_t thing_hit_any_obstacle(levelp, thingp t, double nx, double ny);
-uint8_t thing_hit_solid_obstacle(levelp, thingp t, double nx, double ny);
 uint8_t thing_overlaps(levelp level, thingp t, double nx, double ny,
                        uint32_t tp_id);
+typedef uint8_t (*thing_hit_obstacle_fn)(levelp level, thingp t, double nx, double ny);
 void thing_set_is_light_source(thingp t, uint8_t val);
 uint8_t thing_is_light_source(thingp t);
 void thing_set_is_candle_light(thingp t, uint8_t val);
@@ -1646,22 +1647,22 @@ void thing_reached_exit(levelp, thingp t, thingp exit);
  * round the thing coords and find out what floor tile we are really on.
  * we use the bottom of the tile as that is where the 'feet' commonly are
  */
-static inline void thing_real_to_map (thingp t, int *x, int *y)
+static inline void thing_real_to_map (thingp t, double *x, double *y)
 {
-    *x = (t->x + 0.5);
-    *y = (t->y + 0.9);
+    *x = (t->x + 0.0);
+    *y = (t->y + 0.0);
 }
 
 static inline void thing_real_to_fmap (thingp t, double *x, double *y)
 {
-    *x = (t->x + 0.5);
-    *y = (t->y + 0.9);
+    *x = (t->x + 0.0);
+    *y = (t->y + 0.0);
 }
 
-static inline void real_to_map (double ix, double iy, int *x, int *y)
+static inline void real_to_map (double ix, double iy, double *x, double *y)
 {
-    *x = (ix + 0.5);
-    *y = (iy + 0.9);
+    *x = (ix + 0.0);
+    *y = (iy + 0.0);
 }
 
 /*

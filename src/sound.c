@@ -157,7 +157,7 @@ void sound_play_at (const char *name_alias, double x, double y)
               ((float) MIX_MAX_VOLUME / (float) SOUND_MAX);
 
     if (player) {
-        int sx, sy;
+        double sx, sy;
 
         real_to_map(x, y, &sx, &sy);
 

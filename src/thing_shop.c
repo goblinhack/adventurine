@@ -607,13 +607,13 @@ int shop_inside (levelp level, thingp t)
 {
     thing_map_t *map = level_map(level);
 
-    int x;
-    int y;
+    double x;
+    double y;
     int dx;
     int dy;
 
     for (dx = -2; dx <= 2; dx++) {
-        for (dy = -2; dy <= 2; dy++) {
+        dy = 0; {
 
             thing_real_to_map(t, &x, &y);
             x += dx;
@@ -633,7 +633,7 @@ int shop_inside (levelp level, thingp t)
                 continue;
             }
 
-            thing_map_cell *cell = &map->cells[x][y];
+            thing_map_cell *cell = &map->cells[(int)x][(int)y];
 
             uint32_t i;
             for (i = 0; i < cell->count; i++) {

@@ -1242,6 +1242,99 @@ uint8_t thing_hit_solid_obstacle (levelp level,
 /*
  * Have we hit anything?
  *
+ * No opening of doors in here or other actions. This is just a check.
+ */
+uint8_t thing_hit_fall_obstacle (levelp level,
+                                 thingp t, 
+                                 double nx, 
+                                 double ny)
+{
+    thingp me;
+    widp wid_me;
+
+    verify(t);
+    wid_me = thing_wid(t);
+    verify(wid_me);
+
+    int32_t dx, dy;
+    me = wid_get_thing(wid_me);
+    thing_map_t *map = level_map(level);
+
+    /*
+     * Allow things like death to walk unharmed through walls.
+     */
+    if (thing_is_ethereal(t)) {
+        return (false);
+    }
+
+    for (dx = -collision_radius; dx <= collision_radius; dx++) 
+    for (dy = -collision_radius; dy <= collision_radius; dy++) {
+        int32_t x = (int32_t)nx + dx;
+        int32_t y = (int32_t)ny + dy;
+
+        if ((x < 0) || (y < 0) || (x >= MAP_WIDTH) || (y >= MAP_HEIGHT)) {
+            continue;
+        }
+
+        thing_map_cell *cell = &map->cells[x][y];
+
+        uint32_t i;
+        for (i = 0; i < cell->count; i++) {
+            thingp it;
+            
+            it = id_to_thing(cell->id[i]);
+            if (it == t) {
+                continue;
+            }
+
+            verify(it);
+
+            if (!thing_is_wall(it) && 
+                !thing_is_rock(it) && 
+                !thing_is_cobweb(it) && 
+                !thing_is_door(it)) {
+                continue;
+            }
+
+            if (!things_overlap(me, nx, ny, it)) {
+                continue;
+            }
+
+            /*
+             * You can walk closer to a cobweb, but not back out...
+             */
+            if (thing_is_cobweb(it)) {
+                double dist_now = DISTANCE(t->x, t->y, it->x, it->y);
+                double dist_then = DISTANCE(nx, ny, it->x, it->y);
+
+                /*
+                 * No spiders stuck in their own web
+                 */
+                if ((tp_to_id(thing_tp(t)) == THING_SPIDER1) ||
+                    (tp_to_id(thing_tp(t)) == THING_SPIDER2)) {
+                    continue;
+                }
+
+                /*
+                 * Else be sticky
+                 */
+                if (dist_then < dist_now) {
+                    continue;
+                } else {
+                    return (true);
+                }
+            }
+
+            return (true);
+        }
+    }
+
+    return (false);
+}
+
+/*
+ * Have we hit anything?
+ *
  * Is there anything other than floor here
  */
 uint8_t thing_hit_any_obstacle (levelp level, thingp t, double nx, double ny)

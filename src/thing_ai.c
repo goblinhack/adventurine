@@ -179,8 +179,8 @@ static void dmap_thing_print (thingp t,
         fp = fopen("map.txt", "w");
     }
 
-    int tx;
-    int ty;
+    double tx;
+    double ty;
 
     thing_real_to_map(t, &tx, &ty);
 
@@ -385,8 +385,8 @@ static uint32_t dmap_generate_for_player_target_set_goals (uint8_t test, level_w
 {
     uint32_t checksum = 0;
     thingp thing_it;
-    int x;
-    int y;
+    double x;
+    double y;
 
     thing_it = player;
     if (thing_it) {
@@ -403,10 +403,10 @@ static uint32_t dmap_generate_for_player_target_set_goals (uint8_t test, level_w
         thing_real_to_map(thing_it, &x, &y);
 
         if (!test) {
-            dmap->walls[x][y] = 0;
+            dmap->walls[(int)x][(int)y] = 0;
         }
 
-        checksum ^= x | (y << 16);
+        checksum ^= (int)x | ((int)y << 16);
         checksum = checksum << 1;
     }
 
@@ -546,10 +546,15 @@ static uint8_t thing_find_nexthop_dmap (thingp t,
                                         int32_t *nexthop_x, 
                                         int32_t *nexthop_y)
 {
+    double fx;
+    double fy;
     int x;
     int y;
 
-    thing_real_to_map(t, &x, &y);
+    thing_real_to_map(t, &fx, &fy);
+
+    x = (int)fx;
+    y = (int)fy;
 
     int8_t a;
     int8_t b;

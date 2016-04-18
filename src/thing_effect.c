@@ -14,6 +14,8 @@
 void thing_effect_hit_miss (levelp level, thingp t)
 {
     verify(t);
+CON("todo miss");
+return;
 
     widp w = t->wid;
     if (w) {
@@ -28,6 +30,8 @@ void thing_effect_hit_success (levelp level, thingp t)
 {
     verify(t);
 
+CON("todo success");
+return;
     widp w = t->wid;
     if (w) {
         wid_set_mode(w, WID_MODE_ACTIVE);

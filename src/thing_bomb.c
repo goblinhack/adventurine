@@ -12,9 +12,9 @@ thingp level_place_bomb (levelp level,
                          thingp owner,
                          double x, double y)
 {
-    widp w = thing_place_behind_or_under(level,
-                                         owner,
-                                         id_to_tp(THING_DYNAMITE));
+    widp w = thing_place(level,
+                         owner,
+                         id_to_tp(THING_DYNAMITE));
     if (!w) {
         ERR("could not place bomb");
         return (0);

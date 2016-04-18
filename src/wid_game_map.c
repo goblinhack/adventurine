@@ -563,7 +563,7 @@ wid_game_map_replace_tile (levelp level,
         /*
          * Trying to fire a weapon off the end of the level?
          */
-        DIE("Thing template [%s] cannot be placed at %f %f, "
+        LOG("Thing template [%s] cannot be placed at %f %f, "
             "out of bounds, max %d %d",
             tp_short_name(tp), x, y, MAP_WIDTH, MAP_HEIGHT);
         return (0);

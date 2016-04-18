@@ -331,7 +331,7 @@ static void level_place_explosion_ (levelp level,
         return;
     }
 
-    for (ix = x - radius - 2; ix <= x + radius + 2; ix++) {
+    for (ix = x - radius; ix <= x + radius; ix++) {
         if (ix < 1) {
             continue;
         }
@@ -340,7 +340,7 @@ static void level_place_explosion_ (levelp level,
             continue;
         }
 
-        for (iy = y - radius - 2; iy <= y + radius + 2; iy++) {
+        for (iy = y - radius; iy <= y + radius; iy++) {
                                 
             if (iy < 1) {
                 continue;

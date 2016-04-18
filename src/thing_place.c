@@ -8,11 +8,12 @@
 #include "thing.h"
 #include "wid_game_map.h"
 
-static widp thing_place_ (levelp level,
-                          thingp t, 
-                          tpp tp, 
-                          const int under, 
-                          const int behind)
+static widp thing_place__ (levelp level,
+                           thingp t, 
+                           tpp tp, 
+                           const int under, 
+                           const int behind,
+                           thing_hit_obstacle_fn fn)
 {
     double dx = 0;
     double dy = 0;
@@ -42,7 +43,7 @@ static widp thing_place_ (levelp level,
      */
     if ((dx == 0.0) && (dy == 0.0)) {
         dx = 1.0;
-        dy = 1.0;
+        dy = 0.0;
     }
 
     if (behind) {
@@ -52,6 +53,11 @@ static widp thing_place_ (levelp level,
 
     dx /= 2.0;
     dy /= 2.0;
+
+    /*
+     * The player sinks into the ground a bit.
+     */
+    dy = -0.3;
 
     double x;
     double y;
@@ -67,7 +73,7 @@ static widp thing_place_ (levelp level,
         ERR("cannot place thing, no grid map");
     }
 
-    if (!thing_hit_any_obstacle(level, t, x, y)) {
+    if (!(*fn)(level, t, x, y)) {
         widp w = wid_game_map_replace_tile(level, x, y,
                                            0, /* thing */
                                            tp,
@@ -86,7 +92,7 @@ static widp thing_place_ (levelp level,
     /*
      * Try to place in front of the player.
      */
-    if (!thing_hit_any_obstacle(level, t, x, y)) {
+    if (!(*fn)(level, t, x, y)) {
         widp w = wid_game_map_replace_tile(level, x, y,
                                            0, /* thing */
                                            tp,
@@ -98,7 +104,7 @@ static widp thing_place_ (levelp level,
      * Just place anywhere free.
      */
     for (dx = -1.0; dx <= 1.0; dx += 1.0) {
-        for (dy = -1.0; dy <= 1.0; dy += 1.0) {
+        dy = 0; {
             if ((dx == 0.0) && (dy == 0.0)) {
                 continue;
             }
@@ -123,48 +129,13 @@ static widp thing_place_ (levelp level,
                 continue;
             }
 
-            if (map_find_wall_at(level, x, y, 0) ||
-                map_find_door_at(level, x, y, 0) ||
-                map_find_rock_at(level, x, y, 0)) {
-                continue;
-            }
-
-            if (!thing_hit_any_obstacle(level, t, x, y)) {
+            if (!(*fn)(level, t, x, y)) {
                 widp w = wid_game_map_replace_tile(level, x, y, 
                                                    0, /* thing */
                                                    tp,
                                                    0 /* tpp_data */);
                 return (w);
             }
-        }
-    }
-
-    /*
-     * Ok place on top of something else other than a wall
-     */
-    for (dx = -1.0; dx <= 1.0; dx += 1.0) {
-        for (dy = -1.0; dy <= 1.0; dy += 1.0) {
-            if ((dx == 0.0) && (dy == 0.0)) {
-                continue;
-            }
-
-            double x;
-            double y;
-            thing_real_to_fmap(t, &x, &y);
-            x += dx;
-            y += dy;
-
-            if (map_find_wall_at(level, x, y, 0) ||
-                map_find_door_at(level, x, y, 0) ||
-                map_find_rock_at(level, x, y, 0)) {
-                continue;
-            }
-
-            widp w = wid_game_map_replace_tile(level, x, y, 
-                                               0, /* thing */
-                                               tp,
-                                               0 /* tpp_data */);
-            return (w);
         }
     }
 
@@ -177,6 +148,40 @@ static widp thing_place_ (levelp level,
                                        0, /* thing */
                                        tp,
                                        0 /* tpp_data */);
+    return (w);
+}
+
+static widp thing_place_ (levelp level,
+                          thingp t, 
+                          tpp tp, 
+                          const int under, 
+                          const int behind)
+{
+    thing_hit_obstacle_fn fn;
+
+    if (thing_is_bomb(t)) {
+        fn = thing_hit_fall_obstacle;
+    } else {
+        fn = thing_hit_any_obstacle;
+    }
+
+    widp w = thing_place__(level,
+                          t, 
+                          tp, 
+                          under, 
+                          behind,
+                          fn);
+
+    if (!w) {
+        return (0);
+    }
+
+    thingp it = wid_get_thing(w);
+
+    it->fall_speed = t->fall_speed;
+    it->jump_speed = t->jump_speed;
+    it->momentum = t->momentum;
+
     return (w);
 }
 

@@ -16,6 +16,8 @@ static void level_place_spatter (levelp level,
                                  int amount,
                                  uint32_t nargs, ...)
 {
+CON("todo spatter");
+return;
     va_list args;
 
     while (amount--) {

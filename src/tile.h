@@ -118,15 +118,37 @@ void tile_blit_fat_black_and_white (tpp tp, tile *tile, char *name, fpoint tl, f
     double y1 = tile->y1;
     double y2 = tile->y2;
 
-    if (tp) {
-        double w = tile->pct_width;
-        double h = tile->pct_height;
+    if (unlikely(tp != 0)) {
+        double left_off  = (double)tp_get_blit_left_off(tp);
+        double right_off = (double)tp_get_blit_right_off(tp);
+        double top_off   = (double)tp_get_blit_top_off(tp);
+        double bot_off   = (double)tp_get_blit_bot_off(tp);
 
-        x1 -= (double)tp_get_blit_left_off(tp) * w;
-        x2 += (double)tp_get_blit_right_off(tp) * w;
-        y1 -= (double)tp_get_blit_top_off(tp) * h;
-        y2 += (double)tp_get_blit_bot_off(tp) * h;
+        double pct_w     = tile->pct_width;
+        double pct_h     = tile->pct_height;
+        double pix_w     = br.x - tl.x;
+        double pix_h     = br.y - tl.y;
+
+        tl.x -= left_off  * pix_w;
+        br.x += right_off * pix_w;
+        tl.y -= top_off   * pix_h;
+        br.y += bot_off   * pix_h;
+
+        x1 -= left_off  * pct_w;
+        x2 += right_off * pct_w;
+        y1 -= top_off   * pct_h;
+        y2 += bot_off   * pct_h;
     }
+
+    /*
+     * Else we get little lines of white sometimes.
+     */
+#if 0
+    tl.x = (int)tl.x;
+    tl.y = (int)tl.y;
+    br.x = (int)br.x;
+    br.y = (int)br.y;
+#endif
 
     if (!tile->gl_surface_binding_black_and_white) {
         blit(tile->gl_surface_binding,

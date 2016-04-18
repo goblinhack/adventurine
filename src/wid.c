@@ -7670,7 +7670,7 @@ static void wid_light_add (widp w, fpoint at, double strength, color c)
      */
     if (player && 
                !thing_is_player_or_owned_by_player(level, t)) {
-        int sx, sy;
+        double sx, sy;
 
         thing_real_to_map(t, &sx, &sy);
 
@@ -7705,6 +7705,8 @@ static void wid_light_add (widp w, fpoint at, double strength, color c)
 
     if (thing_is_player_or_owned_by_player(level, t)) {
         max_light_rays = MAX_LIGHT_RAYS;
+    } else if (thing_is_explosion(t)) {
+        max_light_rays = MAX_LIGHT_RAYS / 8;
     } else {
         if (strength >= 10) {
             max_light_rays = MAX_LIGHT_RAYS;
@@ -7973,7 +7975,7 @@ static void wid_display_fast (widp w,
     }
 
     if (unlikely(debug && t)) {
-        int mx, my;
+        double mx, my;
 
         thing_real_to_map(t, &mx, &my);
 
@@ -7987,7 +7989,7 @@ static void wid_display_fast (widp w,
             sprintf(tmp, "%f,%f",t->x, t->y);
             ttf_puts_no_fmt(small_font, tmp, (otlx + obrx) / 2, (otly + obry) / 2, 1.0, 1.0, true);
 
-            sprintf(tmp, "%d,%d (rounded)",mx, my);
+            sprintf(tmp, "%f,%f (rounded)",mx, my);
             ttf_puts_no_fmt(small_font, tmp, (otlx + obrx) / 2, obry, 1.0, 1.0, true);
         } else {
             if (distance == -1) {
@@ -9435,7 +9437,7 @@ static void wid_display (widp w,
                                         thing_is_teleport(t)    ||
                                         thing_is_torch(t)       ||
                                         thing_is_acid(t)) {
-                                        int sx, sy;
+                                        double sx, sy;
                                         thing_real_to_map(t, &sx, &sy);
 
                                         int distance = dmap_distance_to_player(sx, sy);
