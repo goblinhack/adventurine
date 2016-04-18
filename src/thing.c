@@ -1053,7 +1053,9 @@ CON("%s hit success on %s hitter %s",
     /*
      * Keep hitting until all damage is used up or the thing is dead.
      */
+#if 0
     THING_LOG(t, "Is hit! hp %d, damage %d", t->hp, damage);
+#endif
 
     /*
      * Clash of swords?

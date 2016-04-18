@@ -64,8 +64,6 @@ static void thing_timer_place_and_destroy_callback (levelp level,
      * Save the owner of this new thing. This could be who cast a spell.
      */
     thing_set_owner_id(level, t, place->owner_id);
-
-    THING_LOG(t, "Destroy newborn thing via timer");
 }
 
 static void thing_timer_place_callback (levelp level,
@@ -184,7 +182,9 @@ void thing_place_timed (levelp level,
         p = &level->timers[i];
         if (!p->fire_in && !p->destroy_in) {
             memcpy(p, &context, sizeof(*p));
+#ifdef THING_TIMER_DEBUG
             LOG("%p: place [%s] via timer, %u ms", p, tp_short_name(tp), ms);
+#endif
             return;
         }
     }
@@ -225,7 +225,9 @@ void thing_place_and_destroy_timed (levelp level,
         p = &level->timers[i];
         if (!p->fire_in && !p->destroy_in) {
             memcpy(p, &context, sizeof(*p));
+#ifdef THING_TIMER_DEBUG
             LOG("%p: place [%s] via timer, in %u ms, destroy in %u ms", p, tp_short_name(tp), ms, destroy_in);
+#endif
             return;
         }
     }

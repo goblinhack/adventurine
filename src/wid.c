@@ -7703,10 +7703,10 @@ static void wid_light_add (widp w, fpoint at, double strength, color c)
 
     uint16_t max_light_rays;
 
-    if (thing_is_player_or_owned_by_player(level, t)) {
+    if (thing_is_explosion(t)) {
+        max_light_rays = MAX_LIGHT_RAYS / 16;
+    } else if (thing_is_player_or_owned_by_player(level, t)) {
         max_light_rays = MAX_LIGHT_RAYS;
-    } else if (thing_is_explosion(t)) {
-        max_light_rays = MAX_LIGHT_RAYS / 8;
     } else {
         if (strength >= 10) {
             max_light_rays = MAX_LIGHT_RAYS;

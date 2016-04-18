@@ -384,8 +384,8 @@ static uint8_t things_overlap (const thingp A,
      */
     if ((thing_collision_radius(A) > 0.0) || (thing_collision_radius(B) > 0.0)) {
 
-        if (!thing_is_wall(A) && !thing_is_door(A) && !thing_is_action(A) && !thing_is_action_trigger(A) &&
-            !thing_is_wall(B) && !thing_is_door(B) && !thing_is_action(B) && !thing_is_action_trigger(B)) { 
+        if (!thing_is_action(A) && !thing_is_action_trigger(A) &&
+            !thing_is_action(B) && !thing_is_action_trigger(B)) { 
 
             if (Aw->first_tile) {
                 Ax += ((Aw->first_tile->px1 + Aw->first_tile->px2) / 2.0);
@@ -945,6 +945,11 @@ LOG("shield coll");
 }
 #endif
     thing_map_t *map = level_map(level);
+
+    collision_radius = thing_collision_radius(me);
+    if (!collision_radius) {
+        collision_radius = 2;
+    }
 
     for (dx = -collision_radius; dx <= collision_radius; dx++) 
     for (dy = -collision_radius; dy <= collision_radius; dy++) {
