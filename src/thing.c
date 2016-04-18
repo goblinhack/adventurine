@@ -1084,9 +1084,6 @@ CON("%s hit success on %s hitter %s",
 
             t->hp = 0;
 
-            THING_LOG(t, "Is hit terminally, hp %d, damage %d", 
-                      t->hp, damage);
-
             /*
              * Record who dun it.
              */
@@ -1104,8 +1101,8 @@ CON("%s hit success on %s hitter %s",
                                       t->x, t->y);
             }
 
-            THING_LOG(t, "Is hit by (%s) for %u, now dead", 
-                      thing_logname(orig_hitter), damage);
+            THING_LOG(t, "Is hit terminally, hp %d, damage %d, now dead", 
+                      t->hp, damage);
 
             if (t == orig_hitter) {
                 THING_ERR(t, "Hitting thyself? wth.");
