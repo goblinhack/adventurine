@@ -1,3 +1,4 @@
+theme - The evil hashtag has captured princeess asterisk? 8)
 
 april
 -----
@@ -6,12 +7,14 @@ april
 - sound for epicenter failing
 - throw character in air if too close to bombs
 - player hit by phantom nothing after explosion
-- flying bounders
 - sparks on hitting
-- have boulder roll 
+- on death, no bonepile
+- hp per level
 
 may
 ---
+- flying bounders
+- have boulder roll 
 - decrease hit points to rally small
 - ropes
 - fix level exit
@@ -26,6 +29,8 @@ june
 - spider
 - bat
 - cobwebs
+- zombies
+- massive blood splatter
 - moving spikes
 - dissolving floor
 
@@ -37,6 +42,12 @@ aug
 - push boulders
 - push crates smash
 - keys/doors
+
+sep
+---
+- level editor
+- secret levels
+- GIANT treasure/diamonds
 
 done
 - flip explosions

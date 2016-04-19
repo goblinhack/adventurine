@@ -90,9 +90,9 @@ void wid_game_map_init (void)
 
     level = &game.level;
 
-    tpp tp = tp_find("dwarf");
+    tpp tp = tp_find("player");
     if (!tp) {
-        DIE("no player");
+        DIE("no player template found");
     }
 
     /*

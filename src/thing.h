@@ -223,7 +223,7 @@ enum {
     THING_FLOOR1,
     THING_SORCEROR,
     THING_SORCERORMOB,
-    THING_DWARF,
+    THING_PLAYER,
     THING_ZOMBIE1,
     THING_ZOMBIE2,
     THING_ZOMBIE3,
@@ -606,6 +606,7 @@ typedef struct thing_ {
      */
     uint32_t is_jumping:1;
     uint32_t want_to_jump:1;
+    uint32_t falling_too_fast:1;
 } thing;
 
 #include "thing_template.h"

@@ -6583,7 +6583,7 @@ static uint8_t resource_init_last (void *context)
     /*
      * Heroes. Must come after items they can carry.
      */
-    tp_load(THING_DWARF, "dwarf");
+    tp_load(THING_PLAYER, "player");
 
     /*
      * Monsters

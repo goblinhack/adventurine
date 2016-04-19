@@ -72,7 +72,7 @@ static soundp sound_load (double volume, const char *filename, const char *name_
             ERR("no filename for sound");
             return (0);
         } else {
-            ERR("no filename for loading sound %s", name_alias);
+            ERR("no filename for loading sound [%s]", name_alias);
             return (0);
         }
     }

@@ -96,6 +96,20 @@ int thing_move (levelp level,
 }
 
 /*
+ * Hit the ground hard?
+ */
+static void thing_hit_ground (levelp level, thingp t)
+{
+    if (t->falling_too_fast) {
+        THING_LOG(t, "Hit the ground fast");
+        t->falling_too_fast = 0;
+        (void) thing_hit(level, t, 0, 1);
+    }
+
+    t->fall_speed = 0;
+}
+
+/*
  * Try to fall down
  */
 int thing_fall (levelp level, thingp t)
@@ -107,7 +121,7 @@ int thing_fall (levelp level, thingp t)
         thing_is_ladder(t) ||
         thing_is_player(t)) {
         if (thing_overlaps(level, t, t->x, t->y, THING_LADDER1)) {
-            t->fall_speed = 0;
+            thing_hit_ground(level, t);
             return (false);
         }
     }
@@ -118,11 +132,15 @@ int thing_fall (levelp level, thingp t)
     }
 
     if (thing_hit_fall_obstacle(level, t, x, y)) {
-        t->fall_speed = 0;
+        thing_hit_ground(level, t);
         return (false);
     }
 
     t->fall_speed += 0.010;
+
+    if (t->fall_speed > 0.5) {
+        t->falling_too_fast = true;
+    }
 
     if (t->fall_speed > 1) {
         t->fall_speed = 1;
@@ -142,7 +160,7 @@ int thing_fall (levelp level, thingp t)
 
                 y = t->y + t->fall_speed;
                 if (thing_hit_fall_obstacle(level, t, x, y)) {
-                    t->fall_speed = 0;
+                    thing_hit_ground(level, t);
                     return (false);
                 }
             }
