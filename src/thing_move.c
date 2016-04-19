@@ -103,7 +103,8 @@ int thing_fall (levelp level, thingp t)
     double x = t->x;
     double y = t->y + 0.015;
 
-    if (thing_is_monst(t) ||
+    if (thing_is_monst(t)  ||
+        thing_is_ladder(t) ||
         thing_is_player(t)) {
         if (thing_overlaps(level, t, t->x, t->y, THING_LADDER1)) {
             t->fall_speed = 0;
