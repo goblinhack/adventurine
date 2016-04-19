@@ -7968,9 +7968,12 @@ static void wid_display_fast (widp w,
         return;
     }
 
+#ifdef ENABLE_BLACK_AND_WHITE
     if (unlikely(black_and_white)) {
         tile_blit_fat_black_and_white(tp, tile, 0, tl, br);
-    } else {
+    } else 
+#endif
+    {
         tile_blit_fat(tp, tile, 0, tl, br);
     }
 
@@ -9274,9 +9277,12 @@ static void wid_display (widp w,
         uint8_t z;
 
         uint8_t black_and_white = 0;
+
+#ifdef PREFER_TO_SEE_THE_LEVEL_ON_DEATH
         if (!player || thing_is_dead(player)) {
             black_and_white = 1;
         }
+#endif
 
         wid_light_init();
 
@@ -9390,104 +9396,112 @@ static void wid_display (widp w,
             blit(fbo_tex_id1, 0.0, 1.0, 1.0, 0.0, 0, 0, window_w, window_h);
             blit_flush();
 
+            /*
+             * If we redraw light sources, like torches then they appear
+             * in front of the wall decos. So skip this.
+             */
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            /*
-             * Redraw light sources on top of the light they cast.
-             */
-            blit_init();
+#ifdef ENABLE_REDRAW_LIGHT_SOURCES
+            {
+                /*
+                 * Redraw light sources on top of the light they cast.
+                 */
+                blit_init();
 
-            /*
-             * Need to keep track of lit cells as a lava block at the bottom 
-             * of the z depth must also lit all things sitting on top of it.
-             */
-#ifdef LIGHT_ALL_UNDER_LIGHT_SOURCE
-            static uint32_t cell_lit[MAP_WIDTH][MAP_HEIGHT];
-            static uint32_t cell_lit_value;
+                /*
+                 * Need to keep track of lit cells as a lava block at the 
+                 * bottom of the z depth must also lit all things sitting on 
+                 * top of it.
+                 */
+#ifdef ENABLE_LIGHT_ALL_UNDER_LIGHT_SOURCE
+                static uint32_t cell_lit[MAP_WIDTH][MAP_HEIGHT];
+                static uint32_t cell_lit_value;
 
-            cell_lit_value++;
+                cell_lit_value++;
 #endif
+                for (x = maxx - 1; x >= minx; x--) {
+                    for (y = miny; y < maxy; y++) {
+                        for (z = 0; z < MAP_DEPTH; z++) {
+                            tree_root **tree = 
+                                w->grid->grid_of_trees[z] + (y * w->grid->width) + x;
+                            widgridnode *node;
 
-            for (x = maxx - 1; x >= minx; x--) {
-                for (y = miny; y < maxy; y++) {
-                    for (z = 0; z < MAP_DEPTH; z++) {
-                        tree_root **tree = 
-                            w->grid->grid_of_trees[z] + (y * w->grid->width) + x;
-                        widgridnode *node;
+                            TREE_WALK_REVERSE_UNSAFE_INLINE(
+                                                *tree, 
+                                                node,
+                                                tree_prev_tree_wid_compare_func_fast) {
 
-                        TREE_WALK_REVERSE_UNSAFE_INLINE(
-                                            *tree, 
-                                            node,
-                                            tree_prev_tree_wid_compare_func_fast) {
+                                widp w = node->wid;
+                                thingp t = w->thing;
+                                levelp level = wid_get_level(w);
 
-                            widp w = node->wid;
-                            thingp t = w->thing;
-                            levelp level = wid_get_level(w);
-
-#ifdef LIGHT_ALL_UNDER_LIGHT_SOURCE
-                            uint8_t lit = (cell_lit[x][y] == cell_lit_value);
+#ifdef ENABLE_LIGHT_ALL_UNDER_LIGHT_SOURCE
+                                uint8_t lit = (cell_lit[x][y] == cell_lit_value);
 #else
-                            uint8_t lit = 0;
+                                uint8_t lit = 0;
 #endif
 
-                            if (t) {
-                                if (thing_is_player_or_owned_by_player(level, t)) {
-                                    /*
-                                     * So player standing one tile below a 
-                                     * light source like rock do not have the 
-                                     * rock overlaid over their heads!
-                                     */
-                                    lit = 0;
-                                } else if (thing_is_light_source(t)) {
-                                    if (thing_is_monst(t)       ||
-                                        thing_is_lava(t)        ||
-                                        thing_is_projectile(t)  ||
-                                        thing_is_teleport(t)    ||
-                                        thing_is_torch(t)       ||
-                                        thing_is_acid(t)) {
-                                        double sx, sy;
-                                        thing_real_to_map(t, &sx, &sy);
+                                if (t) {
+                                    if (thing_is_player_or_owned_by_player(level, t)) {
+                                        /*
+                                         * So player standing one tile below a 
+                                         * light source like rock do not have 
+                                         * the rock overlaid over their heads!
+                                         */
+                                        lit = 0;
+                                    } else if (thing_is_light_source(t)) {
+                                        if (thing_is_monst(t)       ||
+                                            thing_is_lava(t)        ||
+                                            thing_is_projectile(t)  ||
+                                            thing_is_teleport(t)    ||
+                                            thing_is_torch(t)       ||
+                                            thing_is_acid(t)) {
+                                            double sx, sy;
+                                            thing_real_to_map(t, &sx, &sy);
 
-                                        int distance = dmap_distance_to_player(sx, sy);
-                                        if (distance != -1) {
-                                            lit = 1;
+                                            int distance = dmap_distance_to_player(sx, sy);
+                                            if (distance != -1) {
+                                                lit = 1;
+                                            }
                                         }
+                                    } else if ((t->lit == 0) && 
+                                        (t->torch_light_radius == 0) &&
+                                        thing_is_cats_eyes(t)) {
+                                        lit = 1;
                                     }
-                                } else if ((t->lit == 0) && 
-                                    (t->torch_light_radius == 0) &&
-                                    thing_is_cats_eyes(t)) {
-                                    lit = 1;
                                 }
-                            }
 
-                            if (lit || w->text[0]) {
-                                if (unlikely(wid_this_is_hidden(node->wid))) {
-                                } else if (w->text[0]) {
-                                    uint8_t child_updated_scissors = false;
-        
-                                    wid_display(w, true, &child_updated_scissors);
-                                } else {
-                                    /*
-                                     * Doesn't look that great as a torch with 
-                                     * red light has a base that is colored 
-                                     * white.
-                                     */
-#ifdef LIGHT_ALL_UNDER_LIGHT_SOURCE
-                                    cell_lit[x][y] = cell_lit_value;
+                                if (lit || w->text[0]) {
+                                    if (unlikely(wid_this_is_hidden(node->wid))) {
+                                    } else if (w->text[0]) {
+                                        uint8_t child_updated_scissors = false;
+            
+                                        wid_display(w, true, &child_updated_scissors);
+                                    } else {
+                                        /*
+                                         * Doesn't look that great as a torch 
+                                         * with red light has a base that is 
+                                         * colored white.
+                                         */
+#ifdef ENABLE_LIGHT_ALL_UNDER_LIGHT_SOURCE
+                                        cell_lit[x][y] = cell_lit_value;
 #endif
 
-                                    wid_display_fast(node->wid, 
-                                                     shake_x,
-                                                     shake_y,
-                                                     1, black_and_white);
+                                        wid_display_fast(node->wid, 
+                                                        shake_x,
+                                                        shake_y,
+                                                        1, black_and_white);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            blit_flush();
+                blit_flush();
+            }
+#endif
 
             if (debug) {
                 for (i = 0; i < wid_light_count; i++) {

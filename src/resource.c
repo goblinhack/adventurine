@@ -73,10 +73,9 @@ static uint8_t resource_init_10 (void *context)
 
 static uint8_t resource_init_11 (void *context)
 {
-    return (tex_load_tiled_black_and_white("adventurine-data/gfx/rock.tga",
-                                           "rock",
-                                           "rock_black_and_white",
-                                           1024, 1024) != 0);
+    return (tex_load_tiled("adventurine-data/gfx/rock.tga",
+                           "rock",
+                           1024, 1024) != 0);
 }
 
 static uint8_t resource_init_12 (void *context)
@@ -123,10 +122,9 @@ static uint8_t resource_init_18 (void *context)
 
 static uint8_t resource_init_19 (void *context)
 {
-    return (tex_load_tiled_black_and_white("adventurine-data/gfx/sprites_large.tga",
-                                           "sprites_large",
-                                           "sprites_large_black_and_white",
-                                           64, 64) != 0);
+    return (tex_load_tiled("adventurine-data/gfx/sprites_large.tga",
+                           "sprites_large",
+                           64, 64) != 0);
     return (true);
 }
 
@@ -6050,7 +6048,7 @@ static uint8_t resource_init_last (void *context)
     };
 
     tile_load_arr("sprites_large", 
-                  "sprites_large_black_and_white",
+                  0,
                   64, 64,
                   ARRAY_SIZE(sprites_large), sprites_large);
 
@@ -6130,7 +6128,7 @@ static uint8_t resource_init_last (void *context)
     };
 
     tile_load_arr("rock", 
-                  "rock_black_and_white",
+                  0,
                   128, 128,
                   ARRAY_SIZE(rock_tiles), rock_tiles);
 

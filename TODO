@@ -2,23 +2,24 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 april
 -----
-- torch base needs to be under deco
+- sound for epicenter explosion failing
 - fall too fast, death
-- sound for epicenter failing
+- get rid of black and white
 - throw character in air if too close to bombs
 - player hit by phantom nothing after explosion
-- sparks on hitting
 - on death, no bonepile
 - hp per level
 
 may
 ---
+- ropes
+- impale on spikes
+- bloodied spikes
+- sparks on hitting
 - flying bounders
 - have boulder roll 
 - decrease hit points to rally small
-- ropes
 - fix level exit
-- impale on spikes
 - float in water
 - float graphics
 - monster patrol left/right
@@ -49,7 +50,9 @@ sep
 - secret levels
 - GIANT treasure/diamonds
 
-done
+april
+-----
+- torch base needs to be under deco
 - flip explosions
 - make torch shorter
 - dynamite doesn't look good

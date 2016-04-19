@@ -22,6 +22,10 @@
 #undef ENABLE_WID_DEBUG           // Widget debug
 #undef ENABLE_CONSOLE
 
+#undef ENABLE_REDRAW_LIGHT_SOURCES
+#undef ENABLE_LIGHT_ALL_UNDER_LIGHT_SOURCE
+#undef ENABLE_BLACK_AND_WHITE
+
 #define TICKS_PER_SEC             100
 
 /*

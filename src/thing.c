@@ -1036,12 +1036,14 @@ CON("%s hit success on %s hitter %s",
 
     thing_effect_hit_success(level, t);
 
-    if (thing_is_lava(hitter)) {
-        thing_effect_flames(level, t);
-    }
+    if (hitter) {
+        if (thing_is_lava(hitter)) {
+            thing_effect_flames(level, t);
+        }
 
-    if (thing_is_acid(hitter)) {
-        thing_effect_bubbles(level, t);
+        if (thing_is_acid(hitter)) {
+            thing_effect_bubbles(level, t);
+        }
     }
 
     if (damage > t->hp / 10) {
@@ -1214,9 +1216,6 @@ int thing_hit (levelp level, thingp t, thingp hitter, uint32_t damage)
         }
     }
 
-    if (!hitter) {
-        ERR("no hitter");
-    }
     tpp weapon = 0;
 
 #if 0
@@ -1242,7 +1241,7 @@ int thing_hit (levelp level, thingp t, thingp hitter, uint32_t damage)
         return (false);
     }
 
-    if (thing_is_dead(hitter)) {
+    if (hitter && thing_is_dead(hitter)) {
         /*
          * This case is hit if a ghost runs into a player. The ghost takes
          * damage. We don't want the player to keep absorbing hits when
@@ -1447,7 +1446,7 @@ int thing_hit (levelp level, thingp t, thingp hitter, uint32_t damage)
         /*
          * Only for the player. Player sourced explosions always hit!
          */
-        if (thing_is_player(hitter)) {
+        if (hitter && thing_is_player(hitter)) {
             uint32_t can_be_hit_chance = tp_get_can_be_hit_chance(thing_tp(t));
             if (can_be_hit_chance) {
                 uint32_t chance = myrand() % (can_be_hit_chance + 1);
