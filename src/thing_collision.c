@@ -737,7 +737,7 @@ LOG("add poss me %s hitter %s",thing_logname(me), thing_logname(it));
 #endif
 
         /*
-         * Allow things like death to walk unharmed through walls.
+         * Allow things to walk unharmed through walls.
          */
         if (thing_is_ethereal(it)) {
             return (true);
@@ -1010,10 +1010,15 @@ uint8_t thing_hit_solid_obstacle (levelp level,
     thing_map_t *map = level_map(level);
 
     /*
-     * Allow things like death to walk unharmed through walls.
+     * Allow things to walk unharmed through walls.
      */
     if (thing_is_ethereal(t)) {
         return (false);
+    }
+
+    collision_radius = thing_collision_radius(me);
+    if (!collision_radius) {
+        collision_radius = 2;
     }
 
     for (dx = -collision_radius; dx <= collision_radius; dx++) 
@@ -1063,7 +1068,7 @@ uint8_t thing_hit_solid_obstacle (levelp level,
             }
 
             /*
-             * Allow things like death to walk unharmed through walls.
+             * Allow things to walk unharmed through walls.
              */
             if (thing_is_ethereal(it)) {
                 continue;
@@ -1265,11 +1270,9 @@ uint8_t thing_hit_fall_obstacle (levelp level,
     me = wid_get_thing(wid_me);
     thing_map_t *map = level_map(level);
 
-    /*
-     * Allow things like death to walk unharmed through walls.
-     */
-    if (thing_is_ethereal(t)) {
-        return (false);
+    collision_radius = thing_collision_radius(me);
+    if (!collision_radius) {
+        collision_radius = 2;
     }
 
     for (dx = -collision_radius; dx <= collision_radius; dx++) 
@@ -1361,6 +1364,11 @@ uint8_t thing_hit_any_obstacle (levelp level, thingp t, double nx, double ny)
     uint8_t z;
 
     widp grid = game.wid_grid;
+
+    collision_radius = thing_collision_radius(me);
+    if (!collision_radius) {
+        collision_radius = 2;
+    }
 
     for (dx = -collision_radius; dx <= collision_radius; dx++) 
     for (dy = -collision_radius; dy <= collision_radius; dy++)
@@ -1458,6 +1466,11 @@ uint8_t thing_overlaps (levelp level, thingp t, double nx, double ny,
     uint8_t z;
 
     widp grid = game.wid_grid;
+
+    collision_radius = thing_collision_radius(me);
+    if (!collision_radius) {
+        collision_radius = 2;
+    }
 
     for (dx = -collision_radius; dx <= collision_radius; dx++) 
     for (dy = -collision_radius; dy <= collision_radius; dy++)

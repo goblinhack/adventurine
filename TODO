@@ -1,35 +1,49 @@
 
+april
+-----
+- torch base needs to be under deco
+- fall too fast, death
 - sound for epicenter failing
-- flip explosions
 - throw character in air if too close to bombs
 - player hit by phantom nothing after explosion
 - flying bounders
-- make torch shorter
-- dynamic doesn't look good
-- ladders can be destroyed
-- ladders cannot be destroyed
 - sparks on hitting
-- have boulder roll and change graphic
+- have boulder roll 
+
+may
+---
+- decrease hit points to rally small
 - ropes
 - fix level exit
-- death by spikes
-- impale graphics
+- impale on spikes
 - float in water
 - float graphics
-- decrease hit points to rally small
 - monster patrol left/right
+
+june
+----
 - snake
 - spider
 - bat
 - cobwebs
 - moving spikes
 - dissolving floor
+
+aug
+---
 - lava
 - shopkeeper
 - push blocks
 - push boulders
 - push crates smash
 - keys/doors
+
+done
+- flip explosions
+- make torch shorter
+- dynamite doesn't look good
+- ladders cannot be destroyed
+- death by spikes
 
 Left/Right - Move
 Up         - Look up / Climb
