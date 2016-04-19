@@ -741,6 +741,12 @@ wid_game_map_replace_tile (levelp level,
         }
     }
 
+    if (thing_is_explosion(t)) {
+        static int flip;
+        flip = !flip;
+        wid_flip_horiz(child, flip);
+    }
+
     /*
      * This adds it to the grid wid.
      */

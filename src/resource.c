@@ -5898,35 +5898,35 @@ static uint8_t resource_init_last (void *context)
         0,
         0,
         // --------------------------------------------------------------------
-        "dynamite1-1",
-        "dynamite1-2",
-        "dynamite1-3",
-        "dynamite1-4",
-        "dynamite1-5",
-        "dynamite1-6",
-        "dynamite1-6c",
-        "dynamite1-2b",
-        "dynamite1-3b",
-        "dynamite1-4b",
-        "dynamite1-5b",
-        "dynamite1-6b",
+        "dynamite1.1",
+        "dynamite1.3",
+        "dynamite1.5",
+        "dynamite1.7",
+        "dynamite1.9",
+        "dynamite1.11",
+        "dynamite1.13",
+        "dynamite1.15",
+        "dynamite1.17",
+        "dynamite1.19",
+        "dynamite1.21",
+        "dynamite1.23",
         0,
         0,
         0,
         0,
         // --------------------------------------------------------------------
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        "dynamite1.2",
+        "dynamite1.4",
+        "dynamite1.6",
+        "dynamite1.8",
+        "dynamite1.10",
+        "dynamite1.12",
+        "dynamite1.14",
+        "dynamite1.16",
+        "dynamite1.18",
+        "dynamite1.20",
+        "dynamite1.22",
+        "dynamite1.24",
         0,
         0,
         0,
@@ -6482,21 +6482,6 @@ static uint8_t resource_init_last (void *context)
     /*
      * Walls
      */
-    tp_load(THING_ROCK1, "rock1");
-    tp_load(THING_ROCK2, "rock2");
-    tp_load(THING_ROCK3, "rock3");
-    tp_load(THING_ROCK4, "rock4");
-    tp_load(THING_ROCK5, "rock5");
-    tp_load(THING_ROCK6, "rock6");
-    tp_load(THING_ROCK7, "rock7");
-    tp_load(THING_ROCK1a, "rock1a");
-    tp_load(THING_ROCK2a, "rock2a");
-    tp_load(THING_ROCK3a, "rock3a");
-    tp_load(THING_ROCK4a, "rock4a");
-    tp_load(THING_ROCK5a, "rock5a");
-    tp_load(THING_ROCK6a, "rock6a");
-    tp_load(THING_ROCK7a, "rock7a");
-    tp_load(THING_CORRIDOR_WALL1, "corridor_wall1");
     tp_load(THING_WALL1, "wall1");
     tp_load(THING_WALL1_DECO, "wall1_deco");
     tp_load(THING_BLOCK1, "block1");
@@ -6507,11 +6492,8 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_LADDER1, "ladder1");
     tp_load(THING_LADDER1_DECO, "ladder1_deco");
     tp_load(THING_SHOP_FLOOR1, "shop_floor1");
-    tp_load(THING_CORRIDOR1, "corridor1");
-    tp_load(THING_CORRIDOR2, "corridor2");
     tp_load(THING_FLOOR1, "floor1");
     tp_load(THING_DOOR1, "door1");
-    tp_load(THING_DOOR2, "door2");
     tp_load(THING_NOENTRY, "noentry");
     tp_load(THING_EXIT1, "exit1");
     tp_load(THING_ENTRANCE1, "entrance1");

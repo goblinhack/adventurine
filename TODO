@@ -1,4 +1,36 @@
 
+- sound for epicenter failing
+- flip explosions
+- throw character in air if too close to bombs
+- player hit by phantom nothing after explosion
+- flying bounders
+- make torch shorter
+- dynamic doesn't look good
+- ladders can be destroyed
+- ladders cannot be destroyed
+- sparks on hitting
+- have boulder roll and change graphic
+- ropes
+- fix level exit
+- death by spikes
+- impale graphics
+- float in water
+- float graphics
+- decrease hit points to rally small
+- monster patrol left/right
+- snake
+- spider
+- bat
+- cobwebs
+- moving spikes
+- dissolving floor
+- lava
+- shopkeeper
+- push blocks
+- push boulders
+- push crates smash
+- keys/doors
+
 Left/Right - Move
 Up         - Look up / Climb
 Down       - Look down / Crouch / Climb / Run (If down-for-running is enabled)

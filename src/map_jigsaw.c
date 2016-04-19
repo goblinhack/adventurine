@@ -3648,6 +3648,7 @@ static tpp map_char_to_tp (char c,
             *rock = random_rock();
         }
 
+#if 0
         if ((myrand() % 1000) < 5) {
             switch (tp_to_id(*rock)) {
             case THING_ROCK1: tp = id_to_tp(THING_ROCK1a); return (tp);
@@ -3659,6 +3660,7 @@ static tpp map_char_to_tp (char c,
             case THING_ROCK7: tp = id_to_tp(THING_ROCK7a); return (tp);
             }
         }
+#endif
 
         tp = *rock;
         break;
