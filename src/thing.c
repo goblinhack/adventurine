@@ -1019,6 +1019,16 @@ static int thing_hit_ (levelp level,
         return (false);
     }
 
+    /*
+     * Protect player from multiple impact - landing hard on a spike.
+     */
+    if (thing_is_player(t)) {
+        if (!time_have_x_tenths_passed_since(10, t->timestamp_last_hit)) {
+            return (false);
+        }
+        t->timestamp_last_hit = time_get_time_ms();
+    }
+
     t->timestamp_last_attacked = time_get_time_ms();
 
     /*
@@ -1060,8 +1070,14 @@ CON("%s hit success on %s hitter %s",
     /*
      * Clash of swords?
      */
-    const char *sound = 
+    const char *sound = 0;
+
+    if (orig_hitter) {
         tp_sound_on_hitting_something(thing_tp(orig_hitter));
+    } else if (hitter) {
+        tp_sound_on_hitting_something(thing_tp(hitter));
+    }
+
     if (sound) {
         if (thing_is_player(real_hitter)) {
             MSG_SHOUT_AT(SOUND, 
@@ -1072,9 +1088,7 @@ CON("%s hit success on %s hitter %s",
             /*
              * Orc hitting player
              */
-            MSG_SHOUT_AT(SOUND, t, 
-                                t->x, t->y, 
-                                "%s", sound);
+            MSG_SHOUT_AT(SOUND, t, t->x, t->y, "%s", sound);
         }
     }
 
@@ -1197,6 +1211,8 @@ CON("%s hit success on %s hitter %s",
 int thing_hit (levelp level, thingp t, thingp hitter, uint32_t damage)
 {
     thingp orig_hitter = hitter;
+
+    verify(t);
 
     if (t == hitter) {
         THING_ERR(t, "Hitting thyself? wth.");

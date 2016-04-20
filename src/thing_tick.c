@@ -93,7 +93,12 @@ static int thing_tick_all_things (levelp level)
          * Thing has croaked it?
          */
         if (thing_is_dead(t)) {
-            thing_destroy(level, t, "died");
+            /*
+             * Keep the player around until we restart the level.
+             */
+            if (!thing_is_player(t)) {
+                thing_destroy(level, t, "died");
+            }
             continue;
         }
 

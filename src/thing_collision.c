@@ -993,10 +993,10 @@ LOG("%d %d [%d] %s",x,y,i, thing_logname(it));
  *
  * No opening of doors in here or other actions. This is just a check.
  */
-uint8_t thing_hit_solid_obstacle (levelp level,
-                                  thingp t, 
-                                  double nx, 
-                                  double ny)
+thingp thing_hit_solid_obstacle (levelp level,
+                                 thingp t, 
+                                 double nx, 
+                                 double ny)
 {
     thingp me;
     widp wid_me;
@@ -1013,7 +1013,7 @@ uint8_t thing_hit_solid_obstacle (levelp level,
      * Allow things to walk unharmed through walls.
      */
     if (thing_is_ethereal(t)) {
-        return (false);
+        return (0);
     }
 
     collision_radius = thing_collision_radius(me);
@@ -1238,15 +1238,15 @@ uint8_t thing_hit_solid_obstacle (levelp level,
                 if (dist_then < dist_now) {
                     continue;
                 } else {
-                    return (true);
+                    return (it);
                 }
             }
 
-            return (true);
+            return (it);
         }
     }
 
-    return (false);
+    return (0);
 }
 
 /*
@@ -1254,10 +1254,10 @@ uint8_t thing_hit_solid_obstacle (levelp level,
  *
  * No opening of doors in here or other actions. This is just a check.
  */
-uint8_t thing_hit_fall_obstacle (levelp level,
-                                 thingp t, 
-                                 double nx, 
-                                 double ny)
+thingp thing_hit_fall_obstacle (levelp level,
+                                thingp t, 
+                                double nx, 
+                                double ny)
 {
     thingp me;
     widp wid_me;
@@ -1329,15 +1329,15 @@ uint8_t thing_hit_fall_obstacle (levelp level,
                 if (dist_then < dist_now) {
                     continue;
                 } else {
-                    return (true);
+                    return (it);
                 }
             }
 
-            return (true);
+            return (it);
         }
     }
 
-    return (false);
+    return (0);
 }
 
 /*
@@ -1345,7 +1345,10 @@ uint8_t thing_hit_fall_obstacle (levelp level,
  *
  * Is there anything other than floor here
  */
-uint8_t thing_hit_any_obstacle (levelp level, thingp t, double nx, double ny)
+thingp thing_hit_any_obstacle (levelp level, 
+                               thingp t, 
+                               double nx, 
+                               double ny)
 {
     thingp it;
     thingp me;
@@ -1434,11 +1437,11 @@ uint8_t thing_hit_any_obstacle (levelp level, thingp t, double nx, double ny)
                 continue;
             }
 
-            return (true);
+            return (it);
         }
     }
 
-    return (false);
+    return (0);
 }
 
 /*
@@ -1446,8 +1449,11 @@ uint8_t thing_hit_any_obstacle (levelp level, thingp t, double nx, double ny)
  *
  * Is there anything other than floor here
  */
-uint8_t thing_overlaps (levelp level, thingp t, double nx, double ny,
-                        uint32_t id)
+thingp thing_overlaps (levelp level, 
+                       thingp t, 
+                       double nx, 
+                       double ny,
+                       uint32_t id)
 {
     thingp it;
     thingp me;
@@ -1504,7 +1510,7 @@ uint8_t thing_overlaps (levelp level, thingp t, double nx, double ny,
             }
 
             if (tp_to_id(thing_tp(it)) == id) {
-                return (true);
+                return (it);
             }
 
             wid_it = wid_next;
@@ -1512,5 +1518,5 @@ uint8_t thing_overlaps (levelp level, thingp t, double nx, double ny,
         }
     }
 
-    return (false);
+    return (0);
 }

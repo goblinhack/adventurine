@@ -7854,6 +7854,10 @@ static void wid_display_fast (widp w,
                  * Player light is limited by the number of torches.
                  */
                 light_radius = t->torch_light_radius;
+
+                if (thing_is_dead(t)) {
+                    light_radius = t->torch_light_radius;
+                }
             } else if (thing_is_cloud_effect(t) && !t->is_epicenter) {
                 /*
                  * No light source for explosion edges. Too high a cpu drain.

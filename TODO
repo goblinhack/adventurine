@@ -4,11 +4,10 @@ april
 -----
 - sound for epicenter explosion failing
 - fall too fast, death
-- get rid of black and white
 - throw character in air if too close to bombs
 - player hit by phantom nothing after explosion
-- on death, no bonepile
 - hp per level
+- level end crash
 
 may
 ---
@@ -52,6 +51,8 @@ sep
 
 april
 -----
+- on death, no bonepile
+- get rid of black and white
 - torch base needs to be under deco
 - flip explosions
 - make torch shorter

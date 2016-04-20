@@ -98,12 +98,11 @@ int thing_move (levelp level,
 /*
  * Hit the ground hard?
  */
-static void thing_hit_ground (levelp level, thingp t)
+static void thing_hit_ground (levelp level, thingp t, thingp it)
 {
     if (t->falling_too_fast) {
-        THING_LOG(t, "Hit the ground fast");
         t->falling_too_fast = 0;
-        (void) thing_hit(level, t, 0, 1);
+        (void) thing_hit(level, t, it, 1);
     }
 
     t->fall_speed = 0;
@@ -116,12 +115,15 @@ int thing_fall (levelp level, thingp t)
 {
     double x = t->x;
     double y = t->y + 0.015;
+    thingp it;
 
     if (thing_is_monst(t)  ||
         thing_is_ladder(t) ||
         thing_is_player(t)) {
-        if (thing_overlaps(level, t, t->x, t->y, THING_LADDER1)) {
-            thing_hit_ground(level, t);
+
+        it = thing_overlaps(level, t, t->x, t->y, THING_LADDER1);
+        if (it) {
+            thing_hit_ground(level, t, it);
             return (false);
         }
     }
@@ -131,14 +133,28 @@ int thing_fall (levelp level, thingp t)
         return (false);
     }
 
-    if (thing_hit_fall_obstacle(level, t, x, y)) {
-        thing_hit_ground(level, t);
+    if (thing_is_monst(t)  ||
+        thing_is_player(t)) {
+
+        if (t->fall_speed > 0.1) {
+            it = thing_overlaps(level, t, t->x, t->y, THING_SPIKES1);
+            if (it) {
+                (void) thing_hit(level, t, it, 1);
+                verify(t);
+            }
+        }
+    }
+
+    it = thing_hit_fall_obstacle(level, t, x, y);
+    if (it) {
+        thing_hit_ground(level, t, it);
         return (false);
     }
 
     t->fall_speed += 0.010;
 
-    if (t->fall_speed > 0.5) {
+CON("%f", t->fall_speed);
+    if (t->fall_speed > 0.4) {
         t->falling_too_fast = true;
     }
 
@@ -147,20 +163,24 @@ int thing_fall (levelp level, thingp t)
     }
 
     y = t->y + t->fall_speed;
-    if (thing_hit_fall_obstacle(level, t, x, y)) {
+    it = thing_hit_fall_obstacle(level, t, x, y);
+    if (it) {
         t->fall_speed /= 2;
 
         y = t->y + t->fall_speed;
-        if (thing_hit_fall_obstacle(level, t, x, y)) {
+        it = thing_hit_fall_obstacle(level, t, x, y);
+        if (it) {
             t->fall_speed /= 2;
 
             y = t->y + t->fall_speed;
-            if (thing_hit_fall_obstacle(level, t, x, y)) {
+            it = thing_hit_fall_obstacle(level, t, x, y);
+            if (it) {
                 t->fall_speed /= 2;
 
                 y = t->y + t->fall_speed;
-                if (thing_hit_fall_obstacle(level, t, x, y)) {
-                    thing_hit_ground(level, t);
+                it = thing_hit_fall_obstacle(level, t, x, y);
+                if (it) {
+                    thing_hit_ground(level, t, it);
                     return (false);
                 }
             }

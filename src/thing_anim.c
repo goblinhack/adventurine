@@ -88,10 +88,6 @@ void thing_animate (levelp level, thingp t)
         }
 
         if (thing_is_animated_only_when_moving(t) &&
-            /*
-             * Let dying things decay. I guess they sort of move... urgh.
-             */
-            !thing_is_dead(t) &&
             !t->is_moving) {
 
             thing_tilep new_tile;

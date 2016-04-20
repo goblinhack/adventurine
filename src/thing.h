@@ -65,12 +65,13 @@ uint8_t thing_z_depth(thingp);
 uint8_t thing_z_order(thingp);
 tree_rootp thing_tile_tiles(thingp);
 void thing_animate(levelp, thingp);
-uint8_t thing_hit_solid_obstacle(levelp, thingp t, double nx, double ny);
-uint8_t thing_hit_fall_obstacle(levelp, thingp t, double nx, double ny);
-uint8_t thing_hit_any_obstacle(levelp, thingp t, double nx, double ny);
-uint8_t thing_overlaps(levelp level, thingp t, double nx, double ny,
-                       uint32_t tp_id);
-typedef uint8_t (*thing_hit_obstacle_fn)(levelp level, thingp t, double nx, double ny);
+thingp thing_hit_solid_obstacle(levelp, thingp t, double nx, double ny);
+thingp thing_hit_fall_obstacle(levelp, thingp t, double nx, double ny);
+thingp thing_hit_any_obstacle(levelp, thingp t, double nx, double ny);
+thingp thing_overlaps(levelp level, thingp t, double nx, double ny,
+                      uint32_t tp_id);
+typedef thingp (*thing_hit_obstacle_fn)(levelp level, thingp t, 
+                                        double nx, double ny);
 void thing_set_is_light_source(thingp t, uint8_t val);
 uint8_t thing_is_light_source(thingp t);
 void thing_set_is_candle_light(thingp t, uint8_t val);
@@ -486,6 +487,11 @@ typedef struct thing_ {
      * Last time we were teleported.
      */
     uint32_t timestamp_last_teleport;
+
+    /*
+     * So players are not killed too quickly
+     */
+    uint32_t timestamp_last_hit;
 
     /*
      * Last time we entered a shop.
