@@ -5413,11 +5413,11 @@ static uint8_t resource_init_last (void *context)
         "rock1-4-right",
         "ladder1-top",
         "spikes1-1",
-        "spikes1-2",
-        "spikes1-3",
-        "spikes1-4",
-        "spikes1-5",
-        "spikes1-6",
+        "spikes2-1",
+        "spikes3-1",
+        "spikes4-1",
+        "spikes5-1",
+        "spikes6-1",
         "rope1-top",
         // --------------------------------------------------------------------
         "rock1-5-left",
@@ -5429,12 +5429,12 @@ static uint8_t resource_init_last (void *context)
         "rock1-5-mid6",
         "rock1-5-right",
         "ladder1-mid1",
-        "door1-1",
-        "door1-2",
-        "door1-3",
-        "door1-4",
-        "door1-5",
-        "door1-6",
+        "spikes1-1-blood",
+        "spikes2-1-blood",
+        "spikes3-1-blood",
+        "spikes4-1-blood",
+        "spikes5-1-blood",
+        "spikes6-1-blood",
         "rope1-mid1",
         // --------------------------------------------------------------------
         "rock1-6-left",
@@ -5446,12 +5446,12 @@ static uint8_t resource_init_last (void *context)
         "rock1-6-mid6",
         "rock1-6-right",
         "ladder1-mid2",
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        "door1-1",
+        "door1-2",
+        "door1-3",
+        "door1-4",
+        "door1-5",
+        "door1-6",
         "rope1-mid2",
         // --------------------------------------------------------------------
         "rock1-7-left",
@@ -6485,6 +6485,11 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_BLOCK1, "block1");
     tp_load(THING_CRATE1, "crate1");
     tp_load(THING_SPIKES1, "spikes1");
+    tp_load(THING_SPIKES2, "spikes2");
+    tp_load(THING_SPIKES3, "spikes3");
+    tp_load(THING_SPIKES4, "spikes4");
+    tp_load(THING_SPIKES5, "spikes5");
+    tp_load(THING_SPIKES6, "spikes6");
     tp_load(THING_BOULDER1, "boulder1");
     tp_load(THING_GOLD, "gold");
     tp_load(THING_LADDER1, "ladder1");

@@ -121,7 +121,7 @@ int thing_fall (levelp level, thingp t)
         thing_is_ladder(t) ||
         thing_is_player(t)) {
 
-        it = thing_overlaps(level, t, t->x, t->y, THING_LADDER1);
+        it = thing_overlaps(level, t, t->x, t->y, thing_is_ladder);
         if (it) {
             thing_hit_ground(level, t, it);
             return (false);
@@ -137,9 +137,10 @@ int thing_fall (levelp level, thingp t)
         thing_is_player(t)) {
 
         if (t->fall_speed > 0.1) {
-            it = thing_overlaps(level, t, t->x, t->y, THING_SPIKES1);
+            it = thing_overlaps(level, t, t->x, t->y, thing_is_spikes);
             if (it) {
                 (void) thing_hit(level, t, it, 1);
+                thing_dead(level, it, 0, "splat");
                 verify(t);
             }
         }

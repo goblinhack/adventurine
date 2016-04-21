@@ -1453,7 +1453,7 @@ thingp thing_overlaps (levelp level,
                        thingp t, 
                        double nx, 
                        double ny,
-                       uint32_t id)
+                       thing_is_fn fn)
 {
     thingp it;
     thingp me;
@@ -1509,7 +1509,7 @@ thingp thing_overlaps (levelp level,
                 continue;
             }
 
-            if (tp_to_id(thing_tp(it)) == id) {
+            if (fn(it)) {
                 return (it);
             }
 

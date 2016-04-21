@@ -68,10 +68,13 @@ void thing_animate(levelp, thingp);
 thingp thing_hit_solid_obstacle(levelp, thingp t, double nx, double ny);
 thingp thing_hit_fall_obstacle(levelp, thingp t, double nx, double ny);
 thingp thing_hit_any_obstacle(levelp, thingp t, double nx, double ny);
-thingp thing_overlaps(levelp level, thingp t, double nx, double ny,
-                      uint32_t tp_id);
 typedef thingp (*thing_hit_obstacle_fn)(levelp level, thingp t, 
                                         double nx, double ny);
+
+typedef uint8_t (*thing_is_fn)(thingp t);
+thingp thing_overlaps(levelp level, thingp t, double nx, double ny,
+                      thing_is_fn);
+
 void thing_set_is_light_source(thingp t, uint8_t val);
 uint8_t thing_is_light_source(thingp t);
 void thing_set_is_candle_light(thingp t, uint8_t val);
@@ -214,6 +217,11 @@ enum {
     THING_BLOCK1,
     THING_CRATE1,
     THING_SPIKES1,
+    THING_SPIKES2,
+    THING_SPIKES3,
+    THING_SPIKES4,
+    THING_SPIKES5,
+    THING_SPIKES6,
     THING_BOULDER1,
     THING_GOLD,
     THING_LADDER1,
