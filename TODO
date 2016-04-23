@@ -2,8 +2,6 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 april
 -----
-- player hit by phantom nothing after explosion
-- sound for epicenter explosion failing
 - throw character in air if too close to bombs
 - hp per level
 - level end crash
@@ -42,7 +40,6 @@ aug
 - keys/doors
 - glowing gold
 - mine gold 
-- mine gold 
 - mine gems 
 
 sep
@@ -53,6 +50,8 @@ sep
 
 april
 -----
+- sound for epicenter explosion failing
+- player hit by phantom nothing after explosion
 - impale on spikes
 - bloodied spikes
 - on death, no bonepile

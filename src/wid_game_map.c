@@ -697,15 +697,6 @@ wid_game_map_replace_tile (levelp level,
     double dx = 0;
     double dy = 0;
 
-    if (thing_is_cloud_effect(t)) {
-        if (!t->is_epicenter) {
-            dx = gaussrand(0.0, 0.5);
-            dy = gaussrand(0.0, 0.5);
-        }
-
-        wid_fade_out(child, 1000);
-    }
-
     thing_wid_update(level,
                      t, 
                      x + dx, y + dy, false /* smooth */, true /* is new */);
@@ -733,9 +724,9 @@ wid_game_map_replace_tile (levelp level,
         if (thing_is_explosion(t) ||
             thing_is_cloud_effect(t)) {
 
-            if (t->is_epicenter) {
-                sound_play_at(sound, t->x, t->y);
-            }
+            /*
+             * Let the caller do this for the epicenter
+             */
         } else {
             sound_play_at(sound, t->x, t->y);
         }
