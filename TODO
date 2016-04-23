@@ -2,18 +2,15 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 april
 -----
-- sound for epicenter explosion failing
-- fall too fast, death
-- throw character in air if too close to bombs
 - player hit by phantom nothing after explosion
+- sound for epicenter explosion failing
+- throw character in air if too close to bombs
 - hp per level
 - level end crash
 
 may
 ---
 - ropes
-- impale on spikes
-- bloodied spikes
 - sparks on hitting
 - flying bounders
 - have boulder roll 
@@ -36,6 +33,7 @@ june
 
 aug
 ---
+- fall too fast, death
 - lava
 - shopkeeper
 - push blocks
@@ -55,6 +53,8 @@ sep
 
 april
 -----
+- impale on spikes
+- bloodied spikes
 - on death, no bonepile
 - get rid of black and white
 - torch base needs to be under deco

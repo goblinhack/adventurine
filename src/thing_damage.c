@@ -41,7 +41,7 @@ int32_t thing_stats_get_total_damage (thingp t)
 
     if (thing_is_monst(t) || thing_is_player(t)) {
         if (weapon) {
-            THING_LOG(t, "Attack damage (from %s), modifier %d, damage %d -> %d", 
+            THING_LOG(t, "Attack damage (from %s), mod %d, damage %d -> %d", 
                       weapon ? tp_name(weapon) : 0,
                       (int) modifier, (int) damage, (int) final_damage);
         } else {
@@ -51,6 +51,10 @@ int32_t thing_stats_get_total_damage (thingp t)
     }
 
     if (!final_damage) {
+        return (final_damage);
+    }
+
+    if (final_damage <= 1) {
         return (final_damage);
     }
 

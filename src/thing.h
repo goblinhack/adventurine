@@ -32,6 +32,7 @@ void thing_reinit(levelp, thingp, double x, double y);
 void thing_restarted(levelp, thingp t);
 void thing_destroy(levelp, thingp, const char *why);
 void thing_destroy_in(levelp level, thingp t, int32_t delay);
+void thing_remove_hooks(levelp level, thingp t);
 int thing_tick_all(levelp level);
 void thing_animate_all(levelp level);
 void thing_tick_player_slow_all(levelp level,
@@ -591,6 +592,7 @@ typedef struct thing_ {
     uint32_t is_collected:1;
     uint32_t is_open:1;
     uint32_t is_dead:1;
+    uint32_t is_bloodied:1;
     uint32_t is_angry:1;
 
     /*
@@ -651,6 +653,13 @@ static inline uint8_t thing_is_dead (thingp t)
     verify(t);
 
     return (t->is_dead);
+}
+
+static inline uint8_t thing_is_bloodied (thingp t)
+{
+    verify(t);
+
+    return (t->is_bloodied);
 }
 
 static inline uint8_t thing_is_epicenter (thingp t)

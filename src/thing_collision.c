@@ -142,10 +142,10 @@ static void thing_possible_hit_do (levelp level, thingp hitter)
 //best->hitter_killed_on_hitting);
         if (thing_hit(level, best->target, hitter, 0)) {
             if (best->hitter_killed_on_hitting) {
-                thing_dead(level, hitter, 0, "hit");
+                thing_dead(level, hitter, 0, "hitter killed on hitting");
             }
         } else if (best->hitter_killed_on_hit_or_miss) {
-            thing_dead(level, hitter, 0, "hit");
+            thing_dead(level, hitter, 0, "hitter killed on hitting");
         }
     }
 
@@ -857,9 +857,14 @@ LOG("add poss me %s hitter %s",thing_logname(me), thing_logname(it));
         }
 
         if (thing_is_door(it)                   ||
-            thing_is_player(it)                 ||
             thing_is_rock(it)                   ||
-            thing_is_wall(it)                   ||
+            thing_is_wall(it)) {
+            thing_possible_hit_add(it, "explosion hit wall");
+            return (true);
+        }
+
+        if (thing_is_door(it)                   ||
+            thing_is_player(it)                 ||
             thing_is_sawblade(it)) {
             if (owner_me == it) {
                 /*

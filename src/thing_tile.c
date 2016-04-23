@@ -114,6 +114,7 @@ static void demarshal_thing_tile (demarshal_p ctx, thing_tile *t)
         GET_OPT_NAMED_BITFIELD(ctx, "is_sleeping", t->is_sleeping);
         GET_OPT_NAMED_BITFIELD(ctx, "is_open", t->is_open);
         GET_OPT_NAMED_BITFIELD(ctx, "is_dead", t->is_dead);
+        GET_OPT_NAMED_BITFIELD(ctx, "is_bloodied", t->is_bloodied);
         GET_OPT_NAMED_BITFIELD(ctx, "is_end_of_anim", t->is_end_of_anim);
         GET_OPT_NAMED_BITFIELD(ctx, "is_dead_on_end_of_anim", t->is_dead_on_end_of_anim);
 
@@ -219,6 +220,7 @@ static void marshal_thing_tile (marshal_p ctx, thing_tile *t)
     PUT_NAMED_BITFIELD(ctx, "is_sleeping", t->is_sleeping);
     PUT_NAMED_BITFIELD(ctx, "is_open", t->is_open);
     PUT_NAMED_BITFIELD(ctx, "is_dead", t->is_dead);
+    PUT_NAMED_BITFIELD(ctx, "is_bloodied", t->is_bloodied);
     PUT_NAMED_BITFIELD(ctx, "is_dead_on_end_of_anim", t->is_dead_on_end_of_anim);
 
     switch (t->dir) {
@@ -714,6 +716,11 @@ uint8_t thing_tile_is_dead (thing_tilep t)
     return (t->is_dead);
 }
 
+uint8_t thing_tile_is_bloodied (thing_tilep t)
+{
+    return (t->is_bloodied);
+}
+
 uint8_t thing_tile_is_end_of_anim (thing_tilep t)
 {
     return (t->is_end_of_anim);
@@ -766,6 +773,9 @@ thing_tilep thing_tile_random (tree_rootp root)
          * Filter out terminal state tiles.
          */
         if (thing_tile->is_dead) {
+            continue;
+        }
+        if (thing_tile->is_bloodied) {
             continue;
         }
 

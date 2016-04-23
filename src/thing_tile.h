@@ -93,6 +93,7 @@ typedef struct thing_tile_ {
     uint8_t is_sleeping:1;
     uint8_t is_open:1;
     uint8_t is_dead:1;
+    uint8_t is_bloodied:1;
     uint8_t is_end_of_anim:1;
     uint8_t is_dead_on_end_of_anim:1;
     uint8_t has_dir_anim:1;
@@ -184,6 +185,7 @@ uint8_t thing_tile_is_yyy16(thing_tilep);
 uint8_t thing_tile_is_sleeping(thing_tilep);
 uint8_t thing_tile_is_open(thing_tilep);
 uint8_t thing_tile_is_dead(thing_tilep);
+uint8_t thing_tile_is_bloodied(thing_tilep);
 uint8_t thing_tile_is_end_of_anim(thing_tilep);
 uint8_t thing_tile_is_dead_on_end_of_anim(thing_tilep);
 
