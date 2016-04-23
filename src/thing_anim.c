@@ -87,7 +87,11 @@ void thing_animate (levelp level, thingp t)
             }
         }
 
+        /*
+         * If walking and now we've stopped, choose the idle no dir tile.
+         */
         if (thing_is_animated_only_when_moving(t) &&
+            !thing_is_dead(t) &&
             !t->is_moving) {
 
             thing_tilep new_tile;
@@ -122,14 +126,24 @@ void thing_animate (levelp level, thingp t)
             tries++;
 
             /*
-            * Cater for wraps.
-            */
+             * Cater for wraps.
+             */
             if (!tile) {
                 tile = thing_tile_first(tiles);
             }
             verify(tile);
 
-            if (thing_is_sleeping(t)) {
+            if (thing_tile_is_dead(tile)) {
+                if (!thing_is_dead(t)) {
+                    tile = thing_tile_next(tiles, tile);
+                    continue;
+                }
+            } else if (thing_is_dead(t)) {
+                if (!thing_tile_is_dead(tile)) {
+                    tile = thing_tile_next(tiles, tile);
+                    continue;
+                }
+            } else if (thing_is_sleeping(t)) {
                 if (!thing_tile_is_sleeping(tile)) {
                     tile = thing_tile_next(tiles, tile);
                     continue;
@@ -137,9 +151,9 @@ void thing_animate (levelp level, thingp t)
             } else if (thing_is_jumping(t) && 
                     thing_is_effect_rotate_2way(t)) {
                 /*
-                * Jumping and doesn't use directions, so just stick to jump 
-                * animation frames/
-                */
+                 * Jumping and doesn't use directions, so just stick to jump 
+                 * animation frames/
+                 */
                 if (!thing_tile_is_jumping(tile)) {
                     tile = thing_tile_next(tiles, tile);
                     continue;

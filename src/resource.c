@@ -5639,7 +5639,7 @@ static uint8_t resource_init_last (void *context)
         "player1-up-4",
         "player1-up-5",
         "player1-up-6",
-        0,
+        "player1-dead",
         // --------------------------------------------------------------------
         "spider1-1-1",
         "spider1-1-2",
