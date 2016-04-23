@@ -2,9 +2,8 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 april
 -----
+- can fall out of bottom of level!
 - explosion on spikes fizzled out
-- spikes should not hurt on small jumps
-- throw character in air if too close to bombs
 - hp per level
 - level end crash
 - sparks effect
@@ -54,6 +53,8 @@ sep
 
 april
 -----
+- spikes should not hurt on small jumps
+- throw character in air if too close to bombs
 - sound for epicenter explosion failing
 - player hit by phantom nothing after explosion
 - impale on spikes

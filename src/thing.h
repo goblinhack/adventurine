@@ -725,11 +725,25 @@ static inline uint8_t thing_is_collision_map_large (thingp t)
     return (tp_is_collision_map_large(thing_tp(t)));
 }
 
-static inline uint8_t thing_is_collision_map_player_sized (thingp t)
+static inline uint8_t thing_is_collision_map_medium (thingp t)
 {
     verify(t);
 
-    return (tp_is_collision_map_player_sized(thing_tp(t)));
+    return (tp_is_collision_map_medium(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_collision_map_small (thingp t)
+{
+    verify(t);
+
+    return (tp_is_collision_map_small(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_collision_map_tiny (thingp t)
+{
+    verify(t);
+
+    return (tp_is_collision_map_tiny(thing_tp(t)));
 }
 
 static inline uint8_t thing_is_rock (thingp t)

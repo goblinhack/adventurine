@@ -292,7 +292,9 @@ typedef struct tp_ {
     uint8_t is_cloud_effect:1;
     uint8_t is_cobweb:1;
     uint8_t is_collision_map_large:1;
-    uint8_t is_collision_map_player_sized:1;
+    uint8_t is_collision_map_medium:1;
+    uint8_t is_collision_map_small:1;
+    uint8_t is_collision_map_tiny:1;
     uint8_t is_combustable:1;
     uint8_t is_conical_breath_attack:1;
     uint8_t is_corpse:1;
@@ -979,9 +981,19 @@ static inline uint8_t tp_is_animated (tpp t)
     return (t->is_animated);
 }
 
-static inline uint8_t tp_is_collision_map_player_sized (tpp t)
+static inline uint8_t tp_is_collision_map_medium (tpp t)
 {
-    return (t->is_collision_map_player_sized);
+    return (t->is_collision_map_medium);
+}
+
+static inline uint8_t tp_is_collision_map_small (tpp t)
+{
+    return (t->is_collision_map_small);
+}
+
+static inline uint8_t tp_is_collision_map_tiny (tpp t)
+{
+    return (t->is_collision_map_tiny);
 }
 
 static inline uint8_t tp_is_combustable (tpp t)
