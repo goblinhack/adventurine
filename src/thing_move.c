@@ -140,8 +140,6 @@ int thing_fall (levelp level, thingp t)
             it = thing_overlaps(level, t, t->x, t->y, thing_is_spikes);
             if (it) {
                 (void) thing_hit(level, t, it, 1);
-                thing_dead(level, it, 0, "splat");
-                verify(t);
             }
         }
     }
@@ -154,7 +152,6 @@ int thing_fall (levelp level, thingp t)
 
     t->fall_speed += 0.010;
 
-CON("%f", t->fall_speed);
     if (t->fall_speed > 0.4) {
         t->falling_too_fast = true;
     }
@@ -469,4 +466,80 @@ void thing_wid_update (levelp level,
         thing_weapon_swing_offset(level, t, &dx, &dy);
         thing_wid_move(level, weapon_swing_anim, x + dx, y + dy, smooth);
     }
+}
+
+/*
+ * Throw things in the vicinity around.
+ */
+thingp things_throw (levelp level, thingp t)
+{
+    thingp it;
+    thingp me;
+    widp wid_next;
+    widp wid_me;
+    widp wid_it;
+
+    verify(t);
+    wid_me = thing_wid(t);
+    verify(wid_me);
+
+    int32_t dx, dy;
+
+    me = wid_get_thing(wid_me);
+
+    uint8_t z;
+
+    widp grid = game.wid_grid;
+
+    int32_t collision_radius = thing_collision_radius(me);
+    if (!collision_radius) {
+        collision_radius = 2;
+    }
+
+    collision_radius *= 3;
+
+    for (dx = -collision_radius; dx <= collision_radius; dx++) 
+    for (dy = -collision_radius; dy <= collision_radius; dy++)
+    for (z = MAP_DEPTH_OBJ; z < MAP_DEPTH; z++) {
+        int32_t x = (int32_t)me->x + dx;
+        int32_t y = (int32_t)me->y + dy;
+
+        if ((x < 0) || (y < 0) || (x >= MAP_WIDTH) || (y >= MAP_HEIGHT)) {
+            continue;
+        }
+
+        wid_it = wid_grid_find_first(grid, x, y, z);
+        while (wid_it) {
+            verify(wid_it);
+
+            wid_next = wid_grid_find_next(grid, wid_it, x, y, z);
+            if (wid_me == wid_it) {
+                wid_it = wid_next;
+                continue;
+            }
+
+            it = wid_get_thing(wid_it);
+            if (!it) {
+                wid_it = wid_next;
+                continue;
+            }
+
+            if (!thing_is_throwable(it)) {
+                wid_it = wid_next;
+                continue;
+            }
+
+            THING_LOG(it, "is thrown by the explosion");
+
+            double scale = 8;
+
+            it->momentum = (it->x - me->x) / scale;
+            it->jump_speed = (it->y - me->y) / scale;
+
+            wid_it = wid_next;
+            continue;
+        }
+    }
+
+    return (0);
 }

@@ -133,18 +133,22 @@ void thing_animate (levelp level, thingp t)
             }
             verify(tile);
 
+            if (thing_tile_is_bloodied(tile)) {
+                if (!thing_is_bloodied(t)) {
+                    tile = thing_tile_next(tiles, tile);
+                    continue;
+                }
+            }
+
             if (thing_tile_is_dead(tile)) {
                 if (!thing_is_dead(t)) {
                     tile = thing_tile_next(tiles, tile);
                     continue;
                 }
-            } else if (thing_is_dead(t)) {
+            }
+
+            if (thing_is_dead(t)) {
                 if (!thing_tile_is_dead(tile)) {
-                    tile = thing_tile_next(tiles, tile);
-                    continue;
-                }
-            } else if (thing_tile_is_bloodied(tile)) {
-                if (!thing_is_bloodied(t)) {
                     tile = thing_tile_next(tiles, tile);
                     continue;
                 }
@@ -531,6 +535,11 @@ void thing_animate (levelp level, thingp t)
                     continue;
                 }
 
+                if (thing_tile_is_bloodied(tile)) {
+                    tile = thing_tile_next(tiles, tile);
+                    continue;
+                }
+
                 if (thing_tile_is_open(tile)) {
                     tile = thing_tile_next(tiles, tile);
                     continue;
@@ -557,12 +566,6 @@ void thing_animate (levelp level, thingp t)
             return;
         }
     }
-
-#if 0
-if (thing_is_explosion(t)) {
-    THING_CON(t, "%s",thing_tile_name(tile));
-}
-#endif
 
 #if 0
     if (tile && otile) {

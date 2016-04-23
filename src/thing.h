@@ -876,11 +876,11 @@ static inline uint8_t thing_is_rrr4 (thingp t)
     return (tp_is_rrr4(thing_tp(t)));
 }
 
-static inline uint8_t thing_is_rrr5 (thingp t)
+static inline uint8_t thing_is_throwable (thingp t)
 {
     verify(t);
 
-    return (tp_is_rrr5(thing_tp(t)));
+    return (tp_is_throwable(thing_tp(t)));
 }
 
 static inline uint8_t thing_is_not_light_blocking (thingp t)
@@ -1562,6 +1562,7 @@ void level_place_explosion(levelp level,
                            double ox, double oy,
                            double x, double y);
 void explosion_flood(levelp level, uint8_t x, uint8_t y);
+thingp things_throw(levelp level, thingp t);
 
 /*
  * thing_blood.c

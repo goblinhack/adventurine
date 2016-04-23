@@ -775,6 +775,7 @@ thing_tilep thing_tile_random (tree_rootp root)
         if (thing_tile->is_dead) {
             continue;
         }
+
         if (thing_tile->is_bloodied) {
             continue;
         }

@@ -344,7 +344,7 @@ typedef struct tp_ {
     uint8_t is_rrr2:1;
     uint8_t is_rrr3:1;
     uint8_t is_rrr4:1;
-    uint8_t is_rrr5:1;
+    uint8_t is_throwable:1;
     uint8_t is_sawblade:1;
     uint8_t is_shadow_caster:1;
     uint8_t is_shadow_caster_soft:1;
@@ -639,9 +639,9 @@ static inline uint8_t tp_is_rrr4 (tpp t)
     return (t->is_rrr4);
 }
 
-static inline uint8_t tp_is_rrr5 (tpp t)
+static inline uint8_t tp_is_throwable (tpp t)
 {
-    return (t->is_rrr5);
+    return (t->is_throwable);
 }
 
 static inline uint8_t tp_is_not_light_blocking (tpp t)

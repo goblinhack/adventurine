@@ -53,6 +53,22 @@ static int thing_hit_ (levelp level,
 
     t->timestamp_last_attacked = time_get_time_ms();
 
+    if (hitter) {
+        if (thing_is_spikes(hitter)) {
+            /*
+             * Spikes only hurt if you land on them!
+             */
+            if (t->fall_speed < 0.05) {
+                return (false);
+            }
+
+            if (thing_is_monst(t) ||
+                thing_is_player(t)) {
+                hitter->is_bloodied = true;
+            }
+        }
+    }
+
     /*
      * Take note of the hit so we can send an event to the client.
      *
@@ -75,13 +91,6 @@ CON("%s hit success on %s hitter %s",
 
         if (thing_is_acid(hitter)) {
             thing_effect_bubbles(level, t);
-        }
-
-        if (thing_is_spikes(hitter)) {
-            if (thing_is_monst(t) ||
-                thing_is_player(t)) {
-                hitter->is_bloodied = true;
-            }
         }
     }
 
