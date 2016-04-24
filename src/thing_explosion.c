@@ -1,11 +1,12 @@
 /*
- * Copyright (C) 2011-2015 goblinhack@gmail.com
+ * Copyright (C) 2011-2017 goblinhack@gmail.com
  *
  * See the LICENSE file for license.
  */
 
 
 #include "math_util.h"
+#include "wid_game_map.h"
 #include "thing.h"
 
 int level_explosion_flash_effect;
@@ -472,4 +473,49 @@ return;
                            explodes_as, // epicenter
                            1, // nargs
                            explodes_as);
+}
+
+static void level_place_small_rocks (levelp level, 
+                                     thingp t,
+                                     double x, 
+                                     double y,
+                                     double radius,
+                                     int amount)
+{
+    const char *what[] = {
+        "smallrock1",
+        "smallrock2",
+        "smallrock3",
+        "smallrock4",
+        "smallrock5",
+        "smallrock6"
+    };
+        
+    while (amount--) {
+        double px = gauss(x, radius);
+        double py = y - gauss(1, radius);
+
+        const char *name = what[myrand() % ARRAY_SIZE(what)];
+        tpp tp = tp_find(name);
+        if (!tp) {
+            ERR("no explosion for name %s", name);
+            return;
+        }
+
+        wid_game_map_replace_tile(level, px, py,
+                                  0, /* thing */
+                                  tp,
+                                  0 /* tpp_data */);
+    }
+}
+
+void thing_explosion_placed (levelp level, thingp t)
+{
+        level_place_small_rocks(level, t,
+                                t->x, t->y,
+                                2.05, // radius
+                                5 // amount
+                            );
+
+        things_throw(level, t);
 }

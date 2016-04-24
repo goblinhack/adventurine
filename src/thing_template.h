@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2015 goblinhack@gmail.com
+ * Copyright (C) 2011-2017 goblinhack@gmail.com
  *
  * See the LICENSE file.
  */
@@ -345,7 +345,7 @@ typedef struct tp_ {
     uint8_t is_rrr1:1;
     uint8_t is_rrr2:1;
     uint8_t is_rrr3:1;
-    uint8_t is_rrr4:1;
+    uint8_t is_rope:1;
     uint8_t is_throwable:1;
     uint8_t is_sawblade:1;
     uint8_t is_shadow_caster:1;
@@ -636,9 +636,9 @@ static inline uint8_t tp_is_rrr3 (tpp t)
     return (t->is_rrr3);
 }
 
-static inline uint8_t tp_is_rrr4 (tpp t)
+static inline uint8_t tp_is_rope (tpp t)
 {
-    return (t->is_rrr4);
+    return (t->is_rope);
 }
 
 static inline uint8_t tp_is_throwable (tpp t)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2015 goblinhack@gmail.com
+ * Copyright (C) 2011-2017 goblinhack@gmail.com
  *
  * See the LICENSE file.
  */

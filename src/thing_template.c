@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2015 goblinhack@gmail.com
+ * Copyright (C) 2011-2017 goblinhack@gmail.com
  *
  * See the LICENSE file for license.
  */
@@ -601,7 +601,7 @@ void demarshal_thing_template (demarshal_p ctx, tpp t)
         GET_OPT_NAMED_BITFIELD(ctx, "is_rrr1", t->is_rrr1);
         GET_OPT_NAMED_BITFIELD(ctx, "is_rrr2", t->is_rrr2);
         GET_OPT_NAMED_BITFIELD(ctx, "is_rrr3", t->is_rrr3);
-        GET_OPT_NAMED_BITFIELD(ctx, "is_rrr4", t->is_rrr4);
+        GET_OPT_NAMED_BITFIELD(ctx, "is_rope", t->is_rope);
         GET_OPT_NAMED_BITFIELD(ctx, "is_throwable", t->is_throwable);
         GET_OPT_NAMED_BITFIELD(ctx, "is_not_light_blocking", t->is_not_light_blocking);
         GET_OPT_NAMED_BITFIELD(ctx, "is_spikes", t->is_spikes);
@@ -799,7 +799,7 @@ void marshal_thing_template (marshal_p ctx, tpp t)
     PUT_NAMED_BITFIELD(ctx, "is_rrr1", t->is_rrr1);
     PUT_NAMED_BITFIELD(ctx, "is_rrr2", t->is_rrr2);
     PUT_NAMED_BITFIELD(ctx, "is_rrr3", t->is_rrr3);
-    PUT_NAMED_BITFIELD(ctx, "is_rrr4", t->is_rrr4);
+    PUT_NAMED_BITFIELD(ctx, "is_rope", t->is_rope);
     PUT_NAMED_BITFIELD(ctx, "is_throwable", t->is_throwable);
     PUT_NAMED_BITFIELD(ctx, "is_not_light_blocking", t->is_not_light_blocking);
     PUT_NAMED_BITFIELD(ctx, "is_spikes", t->is_spikes);

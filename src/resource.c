@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2015 goblinhack@gmail.com
+ * Copyright (C) 2011-2017 goblinhack@gmail.com
  *
  * See the README file for license info for license.
  */
@@ -5366,8 +5366,8 @@ static uint8_t resource_init_last (void *context)
         "exit1-1-1",
         "exit1-1-2",
         "exit1-1-3",
-        "gold1",
-        "gem1",
+        0,
+        0,
         // --------------------------------------------------------------------
         "rock1-2-left",
         "rock1-2-mid1",
@@ -5383,8 +5383,8 @@ static uint8_t resource_init_last (void *context)
         "exit1-2-1",
         "exit1-2-2",
         "exit1-2-3",
-        "gold2",
-        "gem2",
+        0,
+        0,
         // --------------------------------------------------------------------
         "rock1-3-left",
         "rock1-3-mid1",
@@ -5400,8 +5400,8 @@ static uint8_t resource_init_last (void *context)
         "exit1-3-1",
         "exit1-3-2",
         "exit1-3-3",
-        "gold3",
-        "gem3",
+        0,
+        0,
         // --------------------------------------------------------------------
         "rock1-4-left",
         "rock1-4-mid1",
@@ -5418,7 +5418,7 @@ static uint8_t resource_init_last (void *context)
         "spikes4-1",
         "spikes5-1",
         "spikes6-1",
-        "rope1-top",
+        "rope-top",
         // --------------------------------------------------------------------
         "rock1-5-left",
         "rock1-5-mid1",
@@ -5435,7 +5435,7 @@ static uint8_t resource_init_last (void *context)
         "spikes4-1-blood",
         "spikes5-1-blood",
         "spikes6-1-blood",
-        "rope1-mid1",
+        "rope1",
         // --------------------------------------------------------------------
         "rock1-6-left",
         "rock1-6-mid1",
@@ -5452,7 +5452,7 @@ static uint8_t resource_init_last (void *context)
         "door1-4",
         "door1-5",
         "door1-6",
-        "rope1-mid2",
+        "rope2",
         // --------------------------------------------------------------------
         "rock1-7-left",
         "rock1-7-mid1",
@@ -5469,7 +5469,7 @@ static uint8_t resource_init_last (void *context)
         "key1",
         0,
         "boulder1",
-        "rope1-mid3",
+        "rope3",
         // --------------------------------------------------------------------
         "rock1-8-bl",
         "rock1-8-bot1",
@@ -5485,8 +5485,8 @@ static uint8_t resource_init_last (void *context)
         "chest1",
         0,
         0,
-        "rope1-pile",
-        "rope1-bot",
+        "rope-pile",
+        "rope4",
         // --------------------------------------------------------------------
         "torch-lit1-1",
         "torch-lit1-2",
@@ -5539,12 +5539,12 @@ static uint8_t resource_init_last (void *context)
         "cobweb1-1-3",
         "food1",
         // --------------------------------------------------------------------
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        "gold1.1",
+        "gem1.1",
+        "gold1.2",
+        "gem1.2",
+        "gold1.3",
+        "gem1.3",
         "spike-2-1",
         "spike-2-2",
         "spike-2-3",
@@ -5556,12 +5556,12 @@ static uint8_t resource_init_last (void *context)
         "cobweb1-2-3",
         "gun1",
         // --------------------------------------------------------------------
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        "gold2.1",
+        "gem2.1",
+        "gold2.2",
+        "gem2.2",
+        "gold2.3",
+        "gem2.3",
         "spike-3-1",
         "spike-3-2",
         "spike-3-3",
@@ -5573,12 +5573,12 @@ static uint8_t resource_init_last (void *context)
         "cobweb1-3-3",
         "gun2",
         // --------------------------------------------------------------------
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        "gold3.1",
+        "gem3.1",
+        "gold3.2",
+        "gem3.2",
+        "gold3.3",
+        "gem3.3",
         "bridge1-1-1",
         "bridge1-1-2",
         "bridge1-1-3",
@@ -5607,13 +5607,13 @@ static uint8_t resource_init_last (void *context)
         "blood1-2",
         "blood1-1",
         // --------------------------------------------------------------------
+        "smallrock1",
+        "smallrock2",
+        "smallrock3",
+        "smallrock4",
+        "smallrock5",
+        "smallrock6",
         0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        "bridge1-3-1",
         "bridge1-3-2",
         "bridge1-3-3",
         "icon-torches",
@@ -6490,8 +6490,18 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_SPIKES4, "spikes4");
     tp_load(THING_SPIKES5, "spikes5");
     tp_load(THING_SPIKES6, "spikes6");
+    tp_load(THING_SMALLROCK1, "smallrock1");
+    tp_load(THING_SMALLROCK2, "smallrock2");
+    tp_load(THING_SMALLROCK3, "smallrock3");
+    tp_load(THING_SMALLROCK4, "smallrock4");
+    tp_load(THING_SMALLROCK5, "smallrock5");
+    tp_load(THING_SMALLROCK6, "smallrock6");
     tp_load(THING_BOULDER1, "boulder1");
-    tp_load(THING_GOLD, "gold");
+    tp_load(THING_GOLD1, "gold1");
+    tp_load(THING_GOLD2, "gold2");
+    tp_load(THING_GOLD3, "gold3");
+    tp_load(THING_ROPETOP, "ropetop");
+    tp_load(THING_ROPE, "rope");
     tp_load(THING_LADDER1, "ladder1");
     tp_load(THING_LADDER1_DECO, "ladder1_deco");
     tp_load(THING_SHOP_FLOOR1, "shop_floor1");

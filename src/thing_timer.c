@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2015 goblinhack@gmail.com
+ * Copyright (C) 2011-2017 goblinhack@gmail.com
  *
  * See the LICENSE file for license.
  */
@@ -62,9 +62,7 @@ static void thing_timer_place_and_destroy_callback (levelp level,
 
         sound_play_at(sound, t->x, t->y);
 
-        if (thing_is_explosion(t)) {
-            things_throw(level, t);
-        }
+        thing_explosion_placed(level, t);
     }
 
     place->thing_id = t->thing_id;

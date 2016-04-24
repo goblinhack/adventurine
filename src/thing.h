@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2015 goblinhack@gmail.com
+ * Copyright (C) 2011-2017 goblinhack@gmail.com
  *
  * See the LICENSE file.
  */
@@ -223,8 +223,18 @@ enum {
     THING_SPIKES4,
     THING_SPIKES5,
     THING_SPIKES6,
+    THING_SMALLROCK1,
+    THING_SMALLROCK2,
+    THING_SMALLROCK3,
+    THING_SMALLROCK4,
+    THING_SMALLROCK5,
+    THING_SMALLROCK6,
     THING_BOULDER1,
-    THING_GOLD,
+    THING_GOLD1,
+    THING_GOLD2,
+    THING_GOLD3,
+    THING_ROPE,
+    THING_ROPETOP,
     THING_LADDER1,
     THING_LADDER1_DECO,
     THING_DOOR1,
@@ -883,11 +893,11 @@ static inline uint8_t thing_is_rrr3 (thingp t)
     return (tp_is_rrr3(thing_tp(t)));
 }
 
-static inline uint8_t thing_is_rrr4 (thingp t)
+static inline uint8_t thing_is_rope (thingp t)
 {
     verify(t);
 
-    return (tp_is_rrr4(thing_tp(t)));
+    return (tp_is_rope(thing_tp(t)));
 }
 
 static inline uint8_t thing_is_throwable (thingp t)
@@ -1446,12 +1456,12 @@ static inline tpp thing_weapon (const thingp t)
 }
 
 /*
- * thing.c
+ * thing_move.c
  */
 int thing_fall(levelp, thingp);
 int thing_slide(levelp, thingp);
 int thing_jump(levelp, thingp);
-
+thingp things_throw(levelp level, thingp t);
 void thing_move_set_dir(levelp,
                         thingp t,
                         double *x,
@@ -1576,7 +1586,7 @@ void level_place_explosion(levelp level,
                            double ox, double oy,
                            double x, double y);
 void explosion_flood(levelp level, uint8_t x, uint8_t y);
-thingp things_throw(levelp level, thingp t);
+void thing_explosion_placed(levelp level, thingp t);
 
 /*
  * thing_blood.c

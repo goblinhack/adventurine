@@ -3566,13 +3566,25 @@ static tpp map_char_to_tp (char c,
          */
         {
             static const char *loot[] = {
-                "gold",
+                "gold1",
+                "gold2",
+                "gold3",
                 "gem1",
                 "gem2",
                 "gem3",
+                "smallrock1",
+                "smallrock2",
+                "smallrock3",
+                "smallrock4",
+                "smallrock5",
+                "smallrock6",
             };
 
-            tpp tp = tp_find(loot[myrand() % ARRAY_SIZE(loot)]);
+            const char *name = loot[myrand() % ARRAY_SIZE(loot)];
+            tpp tp = tp_find(name);
+            if (!tp) {
+                DIE("cannot place random loot %s", name);
+            }
 
             int r =  myrand() % 10000;
             if (r < tp_get_d10000_chance_of_appearing(tp)) {
