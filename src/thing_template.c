@@ -600,7 +600,7 @@ void demarshal_thing_template (demarshal_p ctx, tpp t)
         GET_OPT_NAMED_BITFIELD(ctx, "is_mob_spawner", t->is_mob_spawner);
         GET_OPT_NAMED_BITFIELD(ctx, "is_rrr1", t->is_rrr1);
         GET_OPT_NAMED_BITFIELD(ctx, "is_rrr2", t->is_rrr2);
-        GET_OPT_NAMED_BITFIELD(ctx, "is_rrr3", t->is_rrr3);
+        GET_OPT_NAMED_BITFIELD(ctx, "is_smallrock", t->is_smallrock);
         GET_OPT_NAMED_BITFIELD(ctx, "is_rope", t->is_rope);
         GET_OPT_NAMED_BITFIELD(ctx, "is_throwable", t->is_throwable);
         GET_OPT_NAMED_BITFIELD(ctx, "is_not_light_blocking", t->is_not_light_blocking);
@@ -798,7 +798,7 @@ void marshal_thing_template (marshal_p ctx, tpp t)
     PUT_NAMED_BITFIELD(ctx, "is_mob_spawner", t->is_mob_spawner);
     PUT_NAMED_BITFIELD(ctx, "is_rrr1", t->is_rrr1);
     PUT_NAMED_BITFIELD(ctx, "is_rrr2", t->is_rrr2);
-    PUT_NAMED_BITFIELD(ctx, "is_rrr3", t->is_rrr3);
+    PUT_NAMED_BITFIELD(ctx, "is_smallrock", t->is_smallrock);
     PUT_NAMED_BITFIELD(ctx, "is_rope", t->is_rope);
     PUT_NAMED_BITFIELD(ctx, "is_throwable", t->is_throwable);
     PUT_NAMED_BITFIELD(ctx, "is_not_light_blocking", t->is_not_light_blocking);

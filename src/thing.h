@@ -886,11 +886,11 @@ static inline uint8_t thing_is_rrr2 (thingp t)
     return (tp_is_rrr2(thing_tp(t)));
 }
 
-static inline uint8_t thing_is_rrr3 (thingp t)
+static inline uint8_t thing_is_smallrock (thingp t)
 {
     verify(t);
 
-    return (tp_is_rrr3(thing_tp(t)));
+    return (tp_is_smallrock(thing_tp(t)));
 }
 
 static inline uint8_t thing_is_rope (thingp t)

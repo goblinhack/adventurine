@@ -24,14 +24,14 @@ void thing_health_tick (levelp level, thingp t)
         /*
          * Only heal if not being actively attacked.
          */
-        if (time_have_x_tenths_passed_since(100,
+        if (time_have_x_tenths_passed_since(600,
                                             t->timestamp_last_attacked)) {
-            t->hp -= 1;
+            t->hp += 1;
         }
     }
 
     if (t->hp <= 0) {
-        thing_dead(level, t, 0, 0);
+        thing_dead(level, t, 0, "heath ran our");
     }
 
     /*

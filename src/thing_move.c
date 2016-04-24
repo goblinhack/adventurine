@@ -202,7 +202,7 @@ int thing_jump (levelp level, thingp t)
 
     y = t->y - t->jump_speed;
 
-    if (thing_hit_fall_obstacle(level, t, x, y)) {
+    if (thing_hit_solid_obstacle(level, t, x, y)) {
         t->jump_speed = 0;
         return (false);
     }
@@ -234,19 +234,19 @@ int thing_slide (levelp level, thingp t)
     }
 
     x = t->x + t->momentum;
-    if (thing_hit_fall_obstacle(level, t, x, y)) {
+    if (thing_hit_solid_obstacle(level, t, x, y)) {
         t->momentum /= 2;
 
         x = t->x + t->momentum;
-        if (thing_hit_fall_obstacle(level, t, x, y)) {
+        if (thing_hit_solid_obstacle(level, t, x, y)) {
             t->momentum /= 2;
 
             x = t->x + t->momentum;
-            if (thing_hit_fall_obstacle(level, t, x, y)) {
+            if (thing_hit_solid_obstacle(level, t, x, y)) {
                 t->momentum /= 2;
 
                 x = t->x + t->momentum;
-                if (thing_hit_fall_obstacle(level, t, x, y)) {
+                if (thing_hit_solid_obstacle(level, t, x, y)) {
                     t->momentum = 0;
                     return (false);
                 }

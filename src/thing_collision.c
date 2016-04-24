@@ -1107,6 +1107,17 @@ thingp thing_hit_solid_obstacle (levelp level,
             }
 
             /*
+             * Allowed to pass through small rocks.
+             */
+            if (thing_is_smallrock(it)) {
+                continue;
+            }
+
+            if (thing_is_spikes(it)) {
+                continue;
+            }
+
+            /*
              * Light embers
              */
             if (thing_is_hidden(it)) {
@@ -1350,11 +1361,50 @@ thingp thing_hit_fall_obstacle (levelp level,
 
             verify(it);
 
-            if (!thing_is_wall(it) && 
-                !thing_is_rock(it) && 
-                !thing_is_cobweb(it) && 
-                !thing_is_door(it)) {
+            if (thing_is_spikes(it)) {
                 continue;
+            }
+
+            if (thing_is_wall_deco(it)) {
+                continue;
+            }
+
+            if (thing_is_player(me)) {
+                /*
+                 * Allow players to land on small rocks and monsters.
+                 */
+                if (!thing_is_wall(it) && 
+                    !thing_is_rock(it) && 
+                    !thing_is_monst(it) && 
+                    !thing_is_smallrock(it) && 
+                    !thing_is_obstacle(it) && 
+                    !thing_is_cobweb(it) && 
+                    !thing_is_door(it)) {
+                    continue;
+                }
+            } else if (thing_is_monst(me)) {
+
+                /*
+                 * Allow monsters to land on small rocks.
+                 */
+                if (!thing_is_wall(it) && 
+                    !thing_is_rock(it) && 
+                    !thing_is_smallrock(it) && 
+                    !thing_is_obstacle(it) && 
+                    !thing_is_cobweb(it) && 
+                    !thing_is_spikes(it) && 
+                    !thing_is_door(it)) {
+                    continue;
+                }
+            } else {
+                /*
+                 * Larger obstacles are only stopped by large obstacles.
+                 */
+                if (!thing_is_wall(it) && 
+                    !thing_is_rock(it) && 
+                    !thing_is_door(it)) {
+                    continue;
+                }
             }
 
             if (!things_overlap(me, nx, ny, it)) {
