@@ -200,9 +200,15 @@ int thing_jump (levelp level, thingp t)
     double x = t->x;
     double y;
 
+if (thing_is_rope(t)) {
+    CON("%f, at %f",t->jump_speed, t->y);
+}
     y = t->y - t->jump_speed;
 
     if (thing_hit_solid_obstacle(level, t, x, y)) {
+if (thing_is_rope(t)) {
+    CON("%f, at %f end of jump",t->jump_speed, t->y);
+}
         t->jump_speed = 0;
         return (false);
     }

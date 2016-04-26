@@ -6521,7 +6521,7 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_ORCMOB, "orcmob");
     tp_load(THING_EYEBAWLMOB, "eyebawlmob");
     tp_load(THING_SORCERORMOB, "sorcerormob");
-    tp_load(THING_DYNAMITE, "dynamite");
+    tp_load(THING_BOMB, "dynamite");
 
     /*
      * Projectiles

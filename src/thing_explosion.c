@@ -439,7 +439,7 @@ void level_place_explosion (levelp level,
     /*
      * Used for fire potions and bombs as it gives a layered effect.
      */
-    if (tp_to_id(otp) == THING_DYNAMITE) {
+    if (tp_to_id(otp) == THING_BOMB) {
 
         level_explosion_flash_effect = 10;
 

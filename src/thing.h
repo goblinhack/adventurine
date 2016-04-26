@@ -338,7 +338,7 @@ enum {
     THING_GHOSTMOB3,
     THING_GHOSTMOB4,
     THING_EYEBAWLMOB,
-    THING_DYNAMITE,
+    THING_BOMB,
     THING_BOW1,
     THING_CLUB1,
     THING_SHOTGUN,
@@ -1613,6 +1613,12 @@ void level_place_blood_crit(levelp level,
  * thing_bomb.c
  */
 thingp level_place_bomb(levelp level, 
+                        thingp owner,
+                        double x, double y);
+/*
+ * thing_rope.c
+ */
+thingp level_place_rope(levelp level, 
                         thingp owner,
                         double x, double y);
 /*

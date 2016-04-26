@@ -8,27 +8,23 @@
 #include "main.h"
 #include "thing.h"
 
-thingp level_place_bomb (levelp level, 
+thingp level_place_rope (levelp level, 
                          thingp owner,
                          double x, double y)
 {
     widp w = thing_place(level,
                          owner,
-                         id_to_tp(THING_BOMB));
+                         id_to_tp(THING_ROPETOP));
     if (!w) {
-        ERR("could not place bomb");
+        ERR("could not place rope");
         return (0);
     }
 
     thingp t = wid_get_thing(w);
 
-    /*
-     * Set no owner. Bombs should kill their owner too!
-     *
-    thing_set_owner(t, owner);
-     */
-
     thing_wake(level, t);
+
+    t->jump_speed = 0.5;
 
     return (t);
 }
