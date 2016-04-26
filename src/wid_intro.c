@@ -90,8 +90,8 @@ static void wid_intro_help_create (void)
                 0.5, /* x */
                 0.5, /* y */
                 2, /* columns */
-                3, /* focus */
-                6, /* items */
+                4, /* focus */
+                8, /* items */
 
                 /*
                  * Column widths
@@ -100,27 +100,37 @@ static void wid_intro_help_create (void)
 
                 (int) '0',
                 "%%fmt=left$%%fg=white$Space",
-                "%%fg=white$Fire",
+                "%%fg=purple$Fire",
                 (void*) 0,
 
                 (int) '0', 
                 "%%fmt=left$%%fg=white$Movement",
-                "%%fg=white$Cursor keys, shift to run", 
+                "%%fg=purple$Cursor keys, shift to run", 
                 (void*) 0,
 
                 (int) '0', 
                 "%%fmt=left$%%fg=white$Jump",
-                "%%fg=white$z", 
+                "%%fg=purple$z", 
+                (void*) 0,
+
+                (int) '0', 
+                "%%fmt=left$%%fg=white$Drop bomb",
+                "%%fg=purple$b", 
+                (void*) 0,
+
+                (int) '0', 
+                "%%fmt=left$%%fg=white$Fire rope",
+                "%%fg=purple$r", 
                 (void*) 0,
 
                 (int) '0', 
                 "%%fmt=left$%%fg=white$Pay in shop",
-                "%%fg=white$p",
+                "%%fg=purple$p",
                 (void*) 0,
 
                 (int) '0', 
                 "%%fmt=left$%%fg=white$Quit game",
-                "%%fg=white$q",
+                "%%fg=purple$q",
                 (void*) 0,
 
                 (int) 'b', 

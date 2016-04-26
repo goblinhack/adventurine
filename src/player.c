@@ -54,7 +54,7 @@ uint8_t player_move (levelp level)
         down  = state[SDLK_DOWN] ? 1 : 0;
         fire  = state[SDLK_SPACE] ? 1 : 0;
         jump  = state[SDLK_z] ? 1 : 0;
-        bomb  = state[SDLK_a] ? 1 : 0;
+        bomb  = state[SDLK_b] ? 1 : 0;
         rope  = state[SDLK_s] ? 1 : 0;
     }
 #else /* } { */
@@ -67,8 +67,8 @@ uint8_t player_move (levelp level)
         down  = state[SDL_SCANCODE_DOWN] ? 1 : 0;
         fire  = state[SDL_SCANCODE_SPACE] ? 1 : 0;
         jump  = state[SDL_SCANCODE_Z] ? 1 : 0;
-        bomb  = state[SDL_SCANCODE_A] ? 1 : 0;
-        rope  = state[SDL_SCANCODE_S] ? 1 : 0;
+        bomb  = state[SDL_SCANCODE_B] ? 1 : 0;
+        rope  = state[SDL_SCANCODE_R] ? 1 : 0;
     }
 #endif /* } */
 
