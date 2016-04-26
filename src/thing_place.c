@@ -159,7 +159,7 @@ static widp thing_place_ (levelp level,
 {
     thing_hit_obstacle_fn fn;
 
-    if (thing_is_bomb(t)) {
+    if (thing_is_bomb(t) || thing_is_rope(t)) {
         fn = thing_hit_fall_obstacle;
     } else {
         fn = thing_hit_any_obstacle;

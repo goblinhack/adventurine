@@ -287,6 +287,7 @@ static uint8_t things_overlap (const thingp A,
     if (thing_is_wall(A) || thing_is_door(A)) {
         tilep tileA = wid_get_tile(Aw);
         if (!tileA) {
+            DIE("no tile for thing A %s", thing_logname(A));
             return (false);
         }
 
@@ -329,6 +330,7 @@ static uint8_t things_overlap (const thingp A,
          */
         tilep tileA = wid_get_tile(Aw);
         if (!tileA) {
+            DIE("no tile for thing A %s", thing_logname(A));
             return (false);
         }
 
@@ -341,6 +343,7 @@ static uint8_t things_overlap (const thingp A,
     if (thing_is_wall(B) || thing_is_door(B)) {
         tilep tileB = wid_get_tile(Bw);
         if (!tileB) {
+            DIE("no tile for thing B %s", thing_logname(B));
             return (false);
         }
 
@@ -383,6 +386,7 @@ static uint8_t things_overlap (const thingp A,
          */
         tilep tileB = wid_get_tile(Bw);
         if (!tileB) {
+            DIE("no tile for thing B %s", thing_logname(B));
             return (false);
         }
 
@@ -477,8 +481,8 @@ static uint8_t things_overlap (const thingp A,
         (Abry > Btly)) {
 
 #if 0
-    if ((thing_is_player(A) &&
-         thing_is_wall(B))) {
+    if ((thing_is_rope(A) &&
+         thing_is_rope(B))) {
 CON("    A %s %f %f %f %f",thing_logname(A),Atlx,Atly,Abrx,Abry);
 CON("      %f %f",Ax,Ay);
 CON("      %f %f %f %f",Apx1,Apy1,Apx2,Apy2);
@@ -502,6 +506,12 @@ static int thing_handle_collision (levelp level,
                                    int32_t x, int32_t y,
                                    int32_t dx, int32_t dy)
 {
+    if (thing_is_hidden(it) ||
+        thing_is_wall_deco(it) ||
+        thing_is_ladder_deco(it)) {
+        return (true);
+    }
+
     /*
      * Filter out boring things.
      */
@@ -1097,6 +1107,15 @@ thingp thing_hit_solid_obstacle (levelp level,
             verify(it);
 
             /*
+             * Light embers and other junky effects to ignore.
+             */
+            if (thing_is_hidden(it) ||
+                thing_is_wall_deco(it) ||
+                thing_is_ladder_deco(it)) {
+                continue;
+            }
+
+            /*
              * No collisions with the floor!
              */
             if (thing_is_dungeon_floor(it)  ||
@@ -1114,13 +1133,6 @@ thingp thing_hit_solid_obstacle (levelp level,
             }
 
             if (thing_is_spikes(it)) {
-                continue;
-            }
-
-            /*
-             * Light embers
-             */
-            if (thing_is_hidden(it)) {
                 continue;
             }
 
@@ -1173,6 +1185,7 @@ thingp thing_hit_solid_obstacle (levelp level,
                            thing_is_weapon(it)                 ||
                            thing_is_sawblade(it)               ||
                            thing_is_teleport(it)               ||
+                           thing_is_rope(it)                   ||
                            thing_is_corpse(it)                 ||
                            thing_is_food(it)) {
                     /*
@@ -1230,6 +1243,7 @@ thingp thing_hit_solid_obstacle (levelp level,
                     thing_is_treasure(it)               ||
                     thing_is_weapon(it)                 ||
                     thing_is_exit(it)                   ||
+                    thing_is_rope(it)                   ||
                     thing_is_teleport(it)               ||
                     thing_is_lava(it)                   ||
                     thing_is_water(it)                  ||
@@ -1361,11 +1375,16 @@ thingp thing_hit_fall_obstacle (levelp level,
 
             verify(it);
 
-            if (thing_is_spikes(it)) {
+            /*
+             * Light embers and other junky effects to ignore.
+             */
+            if (thing_is_hidden(it) ||
+                thing_is_wall_deco(it) ||
+                thing_is_ladder_deco(it)) {
                 continue;
             }
 
-            if (thing_is_wall_deco(it)) {
+            if (thing_is_spikes(it)) {
                 continue;
             }
 
@@ -1377,6 +1396,8 @@ thingp thing_hit_fall_obstacle (levelp level,
                     !thing_is_rock(it) && 
                     !thing_is_monst(it) && 
                     !thing_is_smallrock(it) && 
+                    !thing_is_rope(it) && 
+                    !thing_is_ladder(it) && 
                     !thing_is_obstacle(it) && 
                     !thing_is_cobweb(it) && 
                     !thing_is_door(it)) {
@@ -1391,9 +1412,15 @@ thingp thing_hit_fall_obstacle (levelp level,
                     !thing_is_rock(it) && 
                     !thing_is_smallrock(it) && 
                     !thing_is_obstacle(it) && 
+                    !thing_is_rope(it) && 
+                    !thing_is_ladder(it) && 
                     !thing_is_cobweb(it) && 
                     !thing_is_spikes(it) && 
                     !thing_is_door(it)) {
+                    continue;
+                }
+            } else if (thing_is_rope(me)) {
+                if (!thing_is_rope(it)) {
                     continue;
                 }
             } else {
@@ -1503,6 +1530,16 @@ thingp thing_hit_any_obstacle (levelp level,
             }
 
             /*
+             * Light embers and other junky effects to ignore.
+             */
+            if (thing_is_hidden(it) ||
+                thing_is_wall_deco(it) ||
+                thing_is_ladder_deco(it)) {
+                wid_it = wid_next;
+                continue;
+            }
+
+            /*
              * No collisions with the floor!
              */
             if (thing_is_dungeon_floor(it) ||
@@ -1515,14 +1552,6 @@ thingp thing_hit_any_obstacle (levelp level,
              * Allow dead ghosts to walk over each other!
              */
             if (thing_is_dead(it)) {
-                wid_it = wid_next;
-                continue;
-            }
-
-            /*
-             * Light embers.
-             */
-            if (thing_is_hidden(it)) {
                 wid_it = wid_next;
                 continue;
             }
@@ -1603,6 +1632,13 @@ thingp thing_overlaps (levelp level,
 
             it = wid_get_thing(wid_it);
             if (!it) {
+                wid_it = wid_next;
+                continue;
+            }
+
+            if (thing_is_hidden(it) ||
+                thing_is_wall_deco(it) ||
+                thing_is_ladder_deco(it)) {
                 wid_it = wid_next;
                 continue;
             }
