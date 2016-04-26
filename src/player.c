@@ -319,7 +319,7 @@ uint8_t player_move (levelp level)
         if (rope) {
             last_rope = time_get_time_ms();
 
-            level_place_rope(level, player, player->x, player->y);
+            level_place_ropetop(level, player, player->x, player->y);
         }
     }
 

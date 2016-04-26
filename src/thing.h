@@ -1618,6 +1618,9 @@ thingp level_place_bomb(levelp level,
 /*
  * thing_rope.c
  */
+thingp level_place_ropetop(levelp level, 
+                           thingp owner,
+                           double x, double y);
 thingp level_place_rope(levelp level, 
                         thingp owner,
                         double x, double y);

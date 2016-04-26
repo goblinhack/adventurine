@@ -117,6 +117,13 @@ int thing_fall (levelp level, thingp t)
     double y = t->y + 0.015;
     thingp it;
 
+    if (thing_is_rope(t)) {
+        if (!thing_hit_any_obstacle(level, t,  t->x, t->y + 1)) {
+CON("rope at %f %f no obs below", t->x, t->y);
+            level_place_rope(level, t, t->x, t->y + 1);
+        }
+    }
+
     if (thing_is_monst(t)  ||
         thing_is_ladder(t) ||
         thing_is_player(t)) {
@@ -200,17 +207,18 @@ int thing_jump (levelp level, thingp t)
     double x = t->x;
     double y;
 
-if (thing_is_rope(t)) {
-    CON("%f, at %f",t->jump_speed, t->y);
-}
     y = t->y - t->jump_speed;
 
     if (thing_hit_solid_obstacle(level, t, x, y)) {
-if (thing_is_rope(t)) {
-    CON("%f, at %f end of jump",t->jump_speed, t->y);
-}
         t->jump_speed = 0;
-        return (false);
+        if (!thing_is_rope(t)) {
+            return (false);
+        } else {
+            if (!thing_hit_solid_obstacle(level, t, x, y + 1)) {
+CON("hit obs %f %f, place rope", x, y+1);
+                level_place_rope(level, t, t->x, t->y + 1);
+            }
+        }
     }
 
     thing_wid_update(level, t, x, y, true, false /* is new */);
