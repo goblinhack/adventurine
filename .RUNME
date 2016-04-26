@@ -280,6 +280,7 @@ case `uname` in
 	EXE=""
 	LDLIBS="$LDLIBS -funwind-tables"
 	LDLIBS="$LDLIBS -rdynamic"
+	LDLIBS="$LDLIBS -Wl,-framework,Opengl"
 	DSYM="dsymutil ../adventurine"
         WERROR="-Werror"
         COMPILER_WARN="-Wmissing-prototypes"
