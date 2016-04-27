@@ -343,7 +343,7 @@ typedef struct tp_ {
     uint8_t is_ranged_weapon:1;
     uint8_t is_rock:1;
     uint8_t is_rrr1:1;
-    uint8_t is_rrr2:1;
+    uint8_t is_climbable:1;
     uint8_t is_smallrock:1;
     uint8_t is_rope:1;
     uint8_t is_throwable:1;
@@ -626,9 +626,9 @@ static inline uint8_t tp_is_rrr1 (tpp t)
     return (t->is_rrr1);
 }
 
-static inline uint8_t tp_is_rrr2 (tpp t)
+static inline uint8_t tp_is_climbable (tpp t)
 {
-    return (t->is_rrr2);
+    return (t->is_climbable);
 }
 
 static inline uint8_t tp_is_smallrock (tpp t)

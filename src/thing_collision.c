@@ -1403,7 +1403,8 @@ thingp thing_hit_fall_obstacle (levelp level,
                     !thing_is_door(it)) {
                     continue;
                 }
-            } else if (thing_is_monst(me)) {
+            } else if (thing_is_monst(me) ||
+                       thing_is_rope(me)) {
 
                 /*
                  * Allow monsters to land on small rocks.
@@ -1417,10 +1418,6 @@ thingp thing_hit_fall_obstacle (levelp level,
                     !thing_is_cobweb(it) && 
                     !thing_is_spikes(it) && 
                     !thing_is_door(it)) {
-                    continue;
-                }
-            } else if (thing_is_rope(me)) {
-                if (!thing_is_rope(it)) {
                     continue;
                 }
             } else {

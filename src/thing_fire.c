@@ -511,6 +511,7 @@ static void thing_consider_target (levelp level,
      */
     if (thing_is_dungeon_floor(it)  ||
         thing_is_ladder(it)         ||
+        thing_is_rope(it)           ||
         thing_is_animation(it)) {
         return;
     }

@@ -3291,6 +3291,7 @@ static uint8_t wid_editor_load_tile (const tree_node *node, void *arg)
         tile_pool = WID_TILE_MODE_DOORS;
     } else if (tp_is_dungeon_floor(tp) || 
                tp_is_ladder(tp) || 
+               tp_is_rope(tp) || 
                tp_is_corridor(tp) || 
                tp_is_lava(tp) || 
                tp_is_water(tp) || 

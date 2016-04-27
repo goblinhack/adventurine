@@ -348,6 +348,10 @@ void level_trigger_move_thing (levelp level,
         return;
     }
 
+    if (thing_is_rope(t)) {
+        return;
+    }
+
     if (tp_is_action_left(me)) {
         t->dx = -speed;
         t->dy = 0;

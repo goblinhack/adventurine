@@ -879,11 +879,11 @@ static inline uint8_t thing_is_rrr1 (thingp t)
     return (tp_is_rrr1(thing_tp(t)));
 }
 
-static inline uint8_t thing_is_rrr2 (thingp t)
+static inline uint8_t thing_is_climbable (thingp t)
 {
     verify(t);
 
-    return (tp_is_rrr2(thing_tp(t)));
+    return (tp_is_climbable(thing_tp(t)));
 }
 
 static inline uint8_t thing_is_smallrock (thingp t)

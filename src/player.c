@@ -197,9 +197,9 @@ uint8_t player_move (levelp level)
 
     if (up) {
         if (!thing_overlaps(level, player, player->x, player->y -0.5, 
-                            thing_is_ladder) &&
+                            thing_is_climbable) &&
             !thing_overlaps(level, player, player->x, player->y,      
-                            thing_is_ladder)) {
+                            thing_is_climbable)) {
             up = 0;
         }
     }
@@ -208,7 +208,7 @@ uint8_t player_move (levelp level)
         player->momentum = 0;
 
         if (!thing_overlaps(level, player, player->x, player->y + 0.5, 
-                            thing_is_ladder)) {
+                            thing_is_climbable)) {
             up = 0;
         }
     }
