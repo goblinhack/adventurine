@@ -666,15 +666,16 @@ CON("  overlap %s vs %s",thing_logname(me), thing_logname(it));
                  */
             } else {
                 if (thing_is_bomb(it)) {
-                    it->bombs++;
+                    me->bombs++;
                 }
 
                 if (thing_is_key(it)) {
-                    it->bombs++;
+                    me->keys++;
+CON("%d keys",me->keys);
                 }
 
                 if (thing_is_torch(it)) {
-                    it->torches++;
+                    me->torches++;
                 }
 
                 thing_dead(level, it, me, "collected");
