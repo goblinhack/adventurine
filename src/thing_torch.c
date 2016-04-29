@@ -39,3 +39,33 @@ void thing_torch_update_count (levelp level, thingp t, int force)
         t->torch_light_radius_set = true;
     }
 }
+
+thingp level_place_torch (levelp level, 
+                         thingp owner,
+                         double x, double y)
+{
+    if (!owner->torches) {
+        return (0);
+    }
+    owner->torches--;
+
+    widp w = thing_place(level,
+                         owner,
+                         id_to_tp(THING_TORCH));
+    if (!w) {
+        ERR("could not place torch");
+        return (0);
+    }
+
+    thingp t = wid_get_thing(w);
+
+    /*
+     * Set no owner. torchs should kill their owner too!
+     *
+    thing_set_owner(t, owner);
+     */
+
+    thing_wake(level, t);
+
+    return (t);
+}

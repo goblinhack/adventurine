@@ -12,6 +12,11 @@ thingp level_place_ropetop (levelp level,
                             thingp owner,
                             double x, double y)
 {
+    if (!owner->ropes) {
+        return (0);
+    }
+    owner->ropes--;
+
     widp w = wid_game_map_replace_tile(level, x, y, 
                                        0, /* thing */
                                        id_to_tp(THING_ROPETOP),

@@ -91,7 +91,7 @@ static void wid_intro_help_create (void)
                 0.5, /* y */
                 2, /* columns */
                 4, /* focus */
-                8, /* items */
+                9, /* items */
 
                 /*
                  * Column widths
@@ -121,6 +121,11 @@ static void wid_intro_help_create (void)
                 (int) '0', 
                 "%%fmt=left$%%fg=white$Fire rope",
                 "%%fg=purple$r", 
+                (void*) 0,
+
+                (int) '0', 
+                "%%fmt=left$%%fg=white$Drop torch",
+                "%%fg=purple$t", 
                 (void*) 0,
 
                 (int) '0', 

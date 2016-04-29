@@ -671,7 +671,6 @@ CON("  overlap %s vs %s",thing_logname(me), thing_logname(it));
 
                 if (thing_is_key(it)) {
                     me->keys++;
-CON("%d keys",me->keys);
                 }
 
                 if (thing_is_torch(it)) {

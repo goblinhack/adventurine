@@ -12,6 +12,11 @@ thingp level_place_bomb (levelp level,
                          thingp owner,
                          double x, double y)
 {
+    if (!owner->bombs) {
+        return (0);
+    }
+    owner->bombs--;
+
     widp w = thing_place(level,
                          owner,
                          id_to_tp(THING_BOMB));

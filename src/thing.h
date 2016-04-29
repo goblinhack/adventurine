@@ -1751,6 +1751,10 @@ int thing_angle_to_dir(double dx, double dy);
  */
 void thing_torch_update_count(levelp, thingp t, int force);
 
+thingp level_place_torch(levelp level, 
+                         thingp owner,
+                         double x, double y);
+
 /*
  * thing_weapon.c
  */

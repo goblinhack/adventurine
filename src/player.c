@@ -42,33 +42,36 @@ uint8_t player_move (levelp level)
     uint8_t jump  = 0;
     uint8_t bomb  = 0;
     uint8_t rope  = 0;
+    uint8_t torch  = 0;
     uint8_t run = sdl_shift_held;
 
 #if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION == 2 /* { */
     {
         uint8_t *state = SDL_GetKeyState(0);
 
-        right = state[SDLK_RIGHT] ? 1 : 0;
-        left  = state[SDLK_LEFT] ? 1 : 0;
-        up    = state[SDLK_UP] ? 1 : 0;
-        down  = state[SDLK_DOWN] ? 1 : 0;
-        fire  = state[SDLK_SPACE] ? 1 : 0;
-        jump  = state[SDLK_z] ? 1 : 0;
-        bomb  = state[SDLK_b] ? 1 : 0;
-        rope  = state[SDLK_s] ? 1 : 0;
+        right  = state[SDLK_RIGHT] ? 1 : 0;
+        left   = state[SDLK_LEFT] ? 1 : 0;
+        up     = state[SDLK_UP] ? 1 : 0;
+        down   = state[SDLK_DOWN] ? 1 : 0;
+        fire   = state[SDLK_SPACE] ? 1 : 0;
+        jump   = state[SDLK_z] ? 1 : 0;
+        bomb   = state[SDLK_b] ? 1 : 0;
+        rope   = state[SDLK_s] ? 1 : 0;
+        torch  = state[SDLK_t] ? 1 : 0;
     }
 #else /* } { */
     {
         const uint8_t *state = SDL_GetKeyboardState(0);
 
-        right = state[SDL_SCANCODE_RIGHT] ? 1 : 0;
-        left  = state[SDL_SCANCODE_LEFT] ? 1 : 0;
-        up    = state[SDL_SCANCODE_UP] ? 1 : 0;
-        down  = state[SDL_SCANCODE_DOWN] ? 1 : 0;
-        fire  = state[SDL_SCANCODE_SPACE] ? 1 : 0;
-        jump  = state[SDL_SCANCODE_Z] ? 1 : 0;
-        bomb  = state[SDL_SCANCODE_B] ? 1 : 0;
-        rope  = state[SDL_SCANCODE_R] ? 1 : 0;
+        right  = state[SDL_SCANCODE_RIGHT] ? 1 : 0;
+        left   = state[SDL_SCANCODE_LEFT] ? 1 : 0;
+        up     = state[SDL_SCANCODE_UP] ? 1 : 0;
+        down   = state[SDL_SCANCODE_DOWN] ? 1 : 0;
+        fire   = state[SDL_SCANCODE_SPACE] ? 1 : 0;
+        jump   = state[SDL_SCANCODE_Z] ? 1 : 0;
+        bomb   = state[SDL_SCANCODE_B] ? 1 : 0;
+        rope   = state[SDL_SCANCODE_R] ? 1 : 0;
+        torch  = state[SDL_SCANCODE_T] ? 1 : 0;
     }
 #endif /* } */
 
@@ -96,6 +99,8 @@ uint8_t player_move (levelp level)
         rope = true;
     } else if (sdl_joy_buttons[SDL_JOY_BUTTON_X]) {
         bomb = true;
+    } else if (sdl_joy_buttons[SDL_JOY_BUTTON_Y]) {
+        torch = true;
     }
 
     if (sdl_joy_axes) {
@@ -146,7 +151,12 @@ uint8_t player_move (levelp level)
         return (false);
     }
 
-    if (!up && !down && !left && !right && !fire && !jump && !bomb && !rope) {
+    if (!up && !down && !left && !right && 
+        !fire && 
+        !jump && 
+        !bomb && 
+        !rope && 
+        !torch) {
         return (false);
     }
 
@@ -218,6 +228,7 @@ uint8_t player_move (levelp level)
     static uint32_t last_jumped = 0;
     static uint32_t last_bomb = 0;
     static uint32_t last_rope = 0;
+    static uint32_t last_torch = 0;
 
     if (!time_have_x_hundredths_passed_since(2, last_moved)) {
         double x = player->x;
@@ -320,6 +331,18 @@ uint8_t player_move (levelp level)
             last_rope = time_get_time_ms();
 
             level_place_ropetop(level, player, player->x, player->y);
+        }
+    }
+
+    if (torch) {
+        if (!time_have_x_hundredths_passed_since(15, last_torch)) {
+            torch = 0;
+        }
+
+        if (torch) {
+            last_torch = time_get_time_ms();
+
+            level_place_torch(level, player, player->x, player->y);
         }
     }
 
