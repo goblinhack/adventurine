@@ -2,6 +2,14 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 april
 -----
+- collect keys does not work
+- hangs on start - spinning ball
+- gems fall at start 
+- rope gap beneath when thrown
+- rope collision map small
+- bottom of level needs hard rock
+- death anim appears when moving down
+- idle anim appears when on ladders
 - place sleeping dynamite
 - rocks fall on head
 - can fall out of bottom of level!

@@ -1309,6 +1309,9 @@ void thing_teleport (levelp level, thingp t, int32_t x, int32_t y)
 
 void thing_move_to (thingp t, double x, double y)
 {
+if (thing_is_rope(t)) {
+    CON("     %f %f",x,y);
+}
     verify(t);
 
     if ((t->last_x == -1.0) && (t->last_y == -1.0)) {

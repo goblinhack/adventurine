@@ -118,9 +118,9 @@ int thing_fall (levelp level, thingp t)
     thingp it;
 
     if (thing_is_rope(t)) {
-        if (!thing_hit_any_obstacle(level, t,  t->x, t->y + 1)) {
-CON("rope at %f %f no obs below", t->x, t->y);
-            level_place_rope(level, t, t->x, t->y + 1);
+        if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y + 1.0)) {
+            level_place_rope(level, t, t->x, (int) t->y + 1.0);
+            return (false);
         }
     }
 
@@ -199,6 +199,23 @@ CON("rope at %f %f no obs below", t->x, t->y);
     return (true);
 }
 
+static void thing_jump_end (levelp level, thingp t)
+{
+    t->jump_speed = 0;
+
+    if (thing_is_ropetop(t)) {
+        if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y)) {
+            level_place_rope(level, t, t->x, (int) t->y);
+        }
+    }
+
+    if (thing_is_rope(t)) {
+        if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y + 1.0)) {
+            level_place_rope(level, t, t->x, (int) t->y + 1.0);
+        }
+    }
+}
+
 /*
  * Try to fall down
  */
@@ -211,21 +228,17 @@ int thing_jump (levelp level, thingp t)
 
     if (thing_hit_solid_obstacle(level, t, x, y)) {
         t->jump_speed = 0;
-        if (!thing_is_rope(t)) {
-            return (false);
-        } else {
-            if (!thing_hit_solid_obstacle(level, t, x, y + 1)) {
-CON("hit obs %f %f, place rope", x, y+1);
-                level_place_rope(level, t, t->x, t->y + 1);
-            }
-        }
+        thing_jump_end(level, t);
+        return (true);
     }
 
     thing_wid_update(level, t, x, y, true, false /* is new */);
 
     t->jump_speed *= 0.90;
+
     if (fabs(t->jump_speed) < 0.01) {
         t->jump_speed = 0;
+        thing_jump_end(level, t);
         return (true);
     }
 

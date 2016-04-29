@@ -879,6 +879,216 @@ static inline uint8_t thing_is_rrr1 (thingp t)
     return (tp_is_rrr1(thing_tp(t)));
 }
 
+static inline uint8_t thing_is_rrr2 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr2(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr3 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr3(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr4 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr4(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr5 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr5(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr6 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr6(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr7 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr7(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr8 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr8(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr9 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr9(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr10 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr10(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr11 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr11(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr12 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr12(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr13 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr13(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr14 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr14(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr15 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr15(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr16 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr16(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr17 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr17(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr18 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr18(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr19 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr19(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr20 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr20(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr21 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr21(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr22 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr22(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr23 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr23(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr24 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr24(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr25 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr25(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr26 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr26(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr27 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr27(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr28 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr28(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr29 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr29(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_rrr30 (thingp t)
+{
+    verify(t);
+
+    return (tp_is_rrr30(thing_tp(t)));
+}
+
+static inline uint8_t thing_is_ropetop (thingp t)
+{
+    verify(t);
+
+    return (tp_is_ropetop(thing_tp(t)));
+}
+
 static inline uint8_t thing_is_climbable (thingp t)
 {
     verify(t);

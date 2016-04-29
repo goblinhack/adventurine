@@ -1272,6 +1272,7 @@ thingp thing_hit_solid_obstacle (levelp level,
             }
 
             if (thing_is_wall(me)     || 
+                thing_is_rope(me)     ||
                 thing_is_sawblade(me)) {
                 /*
                  * Allow moving walls to crush most things except walls and 
