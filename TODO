@@ -1,32 +1,24 @@
 theme - The evil hashtag has captured princeess asterisk? 8)
 
-april
------
+may
+---
 - collect keys does not work
 - hangs on start - spinning ball
 - gems fall at start 
-- rope gap beneath when thrown
-- rope collision map small
-- bottom of level needs hard rock
 - death anim appears when moving down
 - idle anim appears when on ladders
 - place sleeping dynamite
 - rocks fall on head
-- can fall out of bottom of level!
+- bottom of level needs hard rock
 - explosion on spikes fizzled out - seen with 2 spikes side by side
 - hp per level
 - level end crash
 - sparks effect
 - miss effects
 - ladders should fall when damaged
-
-may
----
-- ropes
 - sparks on hitting
 - flying bounders
 - have boulder roll 
-- decrease hit points to rally small
 - fix level exit
 - float in water
 - float graphics
@@ -35,6 +27,7 @@ may
 june
 ----
 - snake
+- rope spikes should hit monsts for damage
 - spider
 - bat
 - cobwebs
@@ -64,6 +57,10 @@ sep
 
 april
 -----
+- decrease hit points to really small
+- ropes
+- rope gap beneath when thrown
+- rope collision map small
 - spikes should not hurt on small jumps
 - throw character in air if too close to bombs
 - sound for epicenter explosion failing

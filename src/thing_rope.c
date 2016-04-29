@@ -12,7 +12,6 @@ thingp level_place_ropetop (levelp level,
                             thingp owner,
                             double x, double y)
 {
-CON("place rope top %f %f",x,y);
     widp w = wid_game_map_replace_tile(level, x, y, 
                                        0, /* thing */
                                        id_to_tp(THING_ROPETOP),
@@ -23,7 +22,6 @@ CON("place rope top %f %f",x,y);
     }
 
     thingp t = wid_get_thing(w);
-CON("   %f %f",t->x,t->y);
 
     thing_wake(level, t);
 
@@ -36,7 +34,6 @@ thingp level_place_rope (levelp level,
                          thingp owner,
                          double x, double y)
 {
-CON("place rope %f %f",x,y);
     widp w = wid_game_map_replace_tile(level, x, y, 
                                        0, /* thing */
                                        id_to_tp(THING_ROPE),
@@ -47,7 +44,6 @@ CON("place rope %f %f",x,y);
     }
 
     thingp t = wid_get_thing(w);
-CON("   %f %f",t->x,t->y);
 
     thing_wake(level, t);
 
