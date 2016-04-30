@@ -70,7 +70,7 @@
 /*
  * So we don't hog all the CPU when not in video sync mode
  */
-#define MAIN_LOOP_DELAY             5
+#define MAIN_LOOP_DELAY             10
 
 /*
  * Max long string size

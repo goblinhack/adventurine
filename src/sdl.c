@@ -1271,7 +1271,6 @@ uint8_t sdl_user_exit (tokens_t *tokens, void *context)
 void sdl_loop (void)
 {
     SDL_Event events[10];
-    uint8_t init_done = false;
     int32_t found;
     int32_t i;
     uint16_t frames = 0;
@@ -1306,12 +1305,16 @@ void sdl_loop (void)
 
 #endif /* } */
 
+    uint8_t init_done = false;
+
     while (!init_done) {
 
         /*
          * Clear the screen
          */
+#if 0
         glClear(GL_COLOR_BUFFER_BIT);
+#endif
 
         time_update_time_milli();
 
@@ -1320,6 +1323,7 @@ void sdl_loop (void)
          */
         init_done = !action_init_fns_tick(&init_fns);
 
+#if 0
         sdl_splashscreen_update();
 
         /*
@@ -1340,7 +1344,6 @@ void sdl_loop (void)
         /*
          * Flip
          */
-#if 0
 #ifdef ENABLE_SDL_WINDOW /* { */
         SDL_GL_SwapWindow(window);
 #else /* } { */
@@ -1396,7 +1399,7 @@ void sdl_loop (void)
          */
         int32_t timestamp_now = time_update_time_milli();
 
-        if (timestamp_now - timestamp_then > 10) {
+        if ((timestamp_now - timestamp_then > 10)) {
             if (sdl_do_screenshot) {
                 sdl_do_screenshot = 0;
                 sdl_screenshot_();
@@ -1447,9 +1450,10 @@ void sdl_loop (void)
             }
 
             /*
-             * SDL doesn't seem to like an immediate center.
+             * SDL doesn't seem to like an immediate center. beachball hang if 
+             * we do this.
              */
-            static int first = 1;
+            static int first = 0;
             if (first) {
                 first = 0;
                 sdl_mouse_center();

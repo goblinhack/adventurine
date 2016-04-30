@@ -372,6 +372,8 @@ static uint8_t wid_menu_quick_start_selected (widp w,
                                               int32_t x, int32_t y,
                                               uint32_t button)
 {
+    SDL_ShowCursor(0);
+
     /*
      * Check the level is ready
      */
