@@ -8,6 +8,7 @@
 #include "main.h"
 #include "thing.h"
 #include "time_util.h"
+#include "player.h"
 
 void thing_torch_update_count (levelp level, thingp t, int force)
 {
@@ -40,7 +41,7 @@ void thing_torch_update_count (levelp level, thingp t, int force)
     }
 }
 
-thingp level_place_torch (levelp level, 
+thingp thing_place_torch (levelp level, 
                          thingp owner,
                          double x, double y)
 {
@@ -48,6 +49,8 @@ thingp level_place_torch (levelp level,
         return (0);
     }
     owner->torches--;
+
+    player_wid_update(level);
 
     widp w = thing_place(level,
                          owner,
@@ -68,4 +71,15 @@ thingp level_place_torch (levelp level,
     thing_wake(level, t);
 
     return (t);
+}
+
+void thing_collect_torch (levelp level, 
+                         thingp owner,
+                         thingp it)
+{
+    owner->torches++;
+
+    player_wid_update(level);
+
+    thing_dead(level, it, owner, "collected");
 }

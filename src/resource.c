@@ -5485,7 +5485,7 @@ static uint8_t resource_init_last (void *context)
         "chest1",
         0,
         0,
-        "rope-pile",
+        "ropepile",
         "rope4",
         // --------------------------------------------------------------------
         "torch-lit1-1",
@@ -5537,7 +5537,7 @@ static uint8_t resource_init_last (void *context)
         "cobweb1-1-1",
         "cobweb1-1-2",
         "cobweb1-1-3",
-        "food1",
+        "chocolatefrog",
         // --------------------------------------------------------------------
         "gold1.1",
         "gem1.1",
@@ -6497,11 +6497,13 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_SMALLROCK5, "smallrock5");
     tp_load(THING_SMALLROCK6, "smallrock6");
     tp_load(THING_BOULDER1, "boulder1");
+    tp_load(THING_CHOCOLATEFROG, "chocolatefrog");
     tp_load(THING_GOLD1, "gold1");
     tp_load(THING_GOLD2, "gold2");
     tp_load(THING_GOLD3, "gold3");
     tp_load(THING_ROPETOP, "ropetop");
     tp_load(THING_ROPE, "rope");
+    tp_load(THING_ROPEPILE, "ropepile");
     tp_load(THING_LADDER1, "ladder1");
     tp_load(THING_LADDER1_DECO, "ladder1_deco");
     tp_load(THING_SHOP_FLOOR1, "shop_floor1");

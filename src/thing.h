@@ -80,10 +80,6 @@ void thing_set_is_light_source(thingp t, uint8_t val);
 uint8_t thing_is_light_source(thingp t);
 void thing_set_is_candle_light(thingp t, uint8_t val);
 uint8_t thing_is_candle_light(thingp t);
-void thing_set_is_key4(thingp t, uint8_t val);
-uint8_t thing_is_key4(thingp t);
-void thing_set_is_key5(thingp t, uint8_t val);
-uint8_t thing_is_key5(thingp t);
 void thing_set_is_sleeping(thingp t, uint8_t val);
 void thing_set_is_collected(thingp t, uint8_t val);
 uint8_t thing_is_collected(thingp t);
@@ -230,11 +226,13 @@ enum {
     THING_SMALLROCK5,
     THING_SMALLROCK6,
     THING_BOULDER1,
+    THING_CHOCOLATEFROG,
     THING_GOLD1,
     THING_GOLD2,
     THING_GOLD3,
     THING_ROPE,
     THING_ROPETOP,
+    THING_ROPEPILE,
     THING_LADDER1,
     THING_LADDER1_DECO,
     THING_DOOR1,
@@ -1075,11 +1073,11 @@ static inline uint8_t thing_is_rrr29 (thingp t)
     return (tp_is_rrr29(thing_tp(t)));
 }
 
-static inline uint8_t thing_is_rrr30 (thingp t)
+static inline uint8_t thing_is_ropepile (thingp t)
 {
     verify(t);
 
-    return (tp_is_rrr30(thing_tp(t)));
+    return (tp_is_ropepile(thing_tp(t)));
 }
 
 static inline uint8_t thing_is_ropetop (thingp t)
@@ -1747,15 +1745,6 @@ void thing_dir(thingp t, double *dx, double *dy);
 int thing_angle_to_dir(double dx, double dy);
 
 /*
- * thing_torch.c
- */
-void thing_torch_update_count(levelp, thingp t, int force);
-
-thingp level_place_torch(levelp level, 
-                         thingp owner,
-                         double x, double y);
-
-/*
  * thing_weapon.c
  */
 void thing_unwield(levelp, thingp t, const char *why);
@@ -1826,18 +1815,52 @@ void level_place_blood_crit(levelp level,
 /*
  * thing_bomb.c
  */
-thingp level_place_bomb(levelp level, 
+thingp thing_place_bomb(levelp level, 
                         thingp owner,
                         double x, double y);
+void thing_collect_bomb(levelp level, 
+                         thingp owner,
+                         thingp it);
+/*
+ * thing_torch.c
+ */
+void thing_torch_update_count(levelp, thingp t, int force);
+
+thingp thing_place_torch(levelp level, 
+                         thingp owner,
+                         double x, double y);
+void thing_collect_torch(levelp level, 
+                         thingp owner,
+                         thingp it);
+
 /*
  * thing_rope.c
  */
-thingp level_place_ropetop(levelp level, 
+thingp thing_place_ropetop(levelp level, 
                            thingp owner,
                            double x, double y);
-thingp level_place_rope(levelp level, 
+thingp thing_place_rope(levelp level, 
                         thingp owner,
                         double x, double y);
+void thing_collect_rope(levelp level, 
+                        thingp owner,
+                        thingp it);
+/*
+ * thing_key.c
+ */
+void thing_use_key(levelp level, 
+                   thingp owner,
+                   double x, double y);
+void thing_collect_key(levelp level, 
+                        thingp owner,
+                        thingp it);
+/*
+ * thing_collect.c
+ */
+void thing_collect(levelp level, 
+                   thingp owner,
+                   thingp it);
+
 /*
  * thing_collision.c
  */

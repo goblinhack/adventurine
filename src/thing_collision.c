@@ -666,18 +666,26 @@ CON("  overlap %s vs %s",thing_logname(me), thing_logname(it));
                  */
             } else {
                 if (thing_is_bomb(it)) {
-                    me->bombs++;
+                    thing_collect_bomb(level, me, it);
+                    return (true);
+                }
+
+                if (thing_is_ropepile(it)) {
+                    thing_collect_rope(level, me, it);
+                    return (true);
                 }
 
                 if (thing_is_key(it)) {
-                    me->keys++;
+                    thing_collect_key(level, me, it);
+                    return (true);
                 }
 
                 if (thing_is_torch(it)) {
-                    me->torches++;
+                    thing_collect_torch(level, me, it);
+                    return (true);
                 }
 
-                thing_dead(level, it, me, "collected");
+                thing_collect(level, me, it);
                 return (true);
             }
         }
@@ -686,11 +694,8 @@ CON("  overlap %s vs %s",thing_logname(me), thing_logname(it));
          * Open doors if you have a key.
          */
         if (thing_is_door(it)) {
-            if (me->keys) {
-                me->keys--;
-                level_open_door(level, x, y);
-                return (true);
-            }
+            thing_use_key(level, it, x, y);
+            return (true);
         }
 
         /*

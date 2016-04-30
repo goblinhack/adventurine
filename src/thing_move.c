@@ -119,7 +119,7 @@ int thing_fall (levelp level, thingp t)
 
     if (thing_is_rope(t)) {
         if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y + 1.0)) {
-            level_place_rope(level, t, t->x, (int) t->y + 1.0);
+            thing_place_rope(level, t, t->x, (int) t->y + 1.0);
             return (false);
         }
     }
@@ -205,13 +205,13 @@ static void thing_jump_end (levelp level, thingp t)
 
     if (thing_is_ropetop(t)) {
         if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y)) {
-            level_place_rope(level, t, t->x, (int) t->y);
+            thing_place_rope(level, t, t->x, (int) t->y);
         }
     }
 
     if (thing_is_rope(t)) {
         if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y + 1.0)) {
-            level_place_rope(level, t, t->x, (int) t->y + 1.0);
+            thing_place_rope(level, t, t->x, (int) t->y + 1.0);
         }
     }
 }

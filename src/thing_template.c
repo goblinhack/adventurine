@@ -539,7 +539,7 @@ void demarshal_thing_template (demarshal_p ctx, tpp t)
         GET_OPT_NAMED_UINT8(ctx, "approach_distance", t->approach_distance);
         GET_OPT_NAMED_INT32(ctx, "bonus_score_on_death", t->bonus_score_on_death);
         GET_OPT_NAMED_INT32(ctx, "bonus_gold_on_collect", t->bonus_gold_on_collect);
-        GET_OPT_NAMED_INT16(ctx, "bonus_hp_on_use", t->bonus_hp_on_use);
+        GET_OPT_NAMED_INT16(ctx, "bonus_hp_on_collect", t->bonus_hp_on_collect);
         GET_OPT_NAMED_UINT32(ctx, "d10000_chance_of_appearing", t->d10000_chance_of_appearing);
         GET_OPT_NAMED_INT32(ctx, "blit_top_off", t->blit_top_off);
         GET_OPT_NAMED_INT32(ctx, "blit_bot_off", t->blit_bot_off);
@@ -627,7 +627,7 @@ void demarshal_thing_template (demarshal_p ctx, tpp t)
         GET_OPT_NAMED_BITFIELD(ctx, "is_rrr27", t->is_rrr27);
         GET_OPT_NAMED_BITFIELD(ctx, "is_rrr28", t->is_rrr28);
         GET_OPT_NAMED_BITFIELD(ctx, "is_rrr29", t->is_rrr29);
-        GET_OPT_NAMED_BITFIELD(ctx, "is_rrr30", t->is_rrr30);
+        GET_OPT_NAMED_BITFIELD(ctx, "is_ropepile", t->is_ropepile);
         GET_OPT_NAMED_BITFIELD(ctx, "is_ropetop", t->is_ropetop);
         GET_OPT_NAMED_BITFIELD(ctx, "is_climbable", t->is_climbable);
         GET_OPT_NAMED_BITFIELD(ctx, "is_smallrock", t->is_smallrock);
@@ -794,7 +794,7 @@ void marshal_thing_template (marshal_p ctx, tpp t)
     PUT_NAMED_INT32(ctx, "weapon_fire_delay_hundredths", t->weapon_fire_delay_hundredths);
     PUT_NAMED_INT32(ctx, "sound_random_delay_secs", t->sound_random_delay_secs);
     PUT_NAMED_INT32(ctx, "swing_distance_from_player", t->swing_distance_from_player);
-    PUT_NAMED_INT32(ctx, "bonus_hp_on_use", t->bonus_hp_on_use);
+    PUT_NAMED_INT32(ctx, "bonus_hp_on_collect", t->bonus_hp_on_collect);
     PUT_NAMED_INT32(ctx, "can_be_hit_chance", t->can_be_hit_chance);
     PUT_NAMED_INT32(ctx, "hit_delay_tenths", t->hit_delay_tenths);
     PUT_NAMED_INT32(ctx, "mob_spawn_delay_tenths", t->mob_spawn_delay_tenths);
@@ -855,7 +855,7 @@ void marshal_thing_template (marshal_p ctx, tpp t)
     PUT_NAMED_BITFIELD(ctx, "is_rrr27", t->is_rrr27);
     PUT_NAMED_BITFIELD(ctx, "is_rrr28", t->is_rrr28);
     PUT_NAMED_BITFIELD(ctx, "is_rrr29", t->is_rrr29);
-    PUT_NAMED_BITFIELD(ctx, "is_rrr30", t->is_rrr30);
+    PUT_NAMED_BITFIELD(ctx, "is_ropepile", t->is_ropepile);
     PUT_NAMED_BITFIELD(ctx, "is_ropetop", t->is_ropetop);
     PUT_NAMED_BITFIELD(ctx, "is_climbable", t->is_climbable);
     PUT_NAMED_BITFIELD(ctx, "is_smallrock", t->is_smallrock);
@@ -1241,9 +1241,9 @@ uint32_t tp_get_swing_distance_from_player (tpp t)
     return (t->swing_distance_from_player);
 }
 
-int16_t tp_get_bonus_hp_on_use (tpp t)
+int16_t tp_get_bonus_hp_on_collect (tpp t)
 {
-    return (t->bonus_hp_on_use);
+    return (t->bonus_hp_on_collect);
 }
 
 uint32_t tp_get_can_be_hit_chance (tpp t)

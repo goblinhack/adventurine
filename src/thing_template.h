@@ -214,7 +214,7 @@ typedef struct tp_ {
      */
     int32_t bonus_score_on_death;
     int32_t bonus_gold_on_collect;
-    int16_t bonus_hp_on_use;
+    int16_t bonus_hp_on_collect;
 
     int32_t blit_top_off;
     int32_t blit_bot_off;
@@ -371,7 +371,7 @@ typedef struct tp_ {
     uint8_t is_rrr27:1;
     uint8_t is_rrr28:1;
     uint8_t is_rrr29:1;
-    uint8_t is_rrr30:1;
+    uint8_t is_ropepile:1;
     uint8_t is_ropetop:1;
     uint8_t is_climbable:1;
     uint8_t is_smallrock:1;
@@ -488,7 +488,7 @@ uint32_t tp_get_sound_random_delay_secs(tpp);
 uint32_t tp_get_swing_distance_from_player(tpp);
 int16_t tp_get_stats_max_hp(tpp);
 uint32_t tp_get_hp_per_level(tpp);
-int16_t tp_get_bonus_hp_on_use(tpp);
+int16_t tp_get_bonus_hp_on_collect(tpp);
 
 uint32_t tp_get_tx_map_update_delay_thousandths(tpp);
 uint32_t tp_get_can_be_hit_chance(tpp);
@@ -796,9 +796,9 @@ static inline uint8_t tp_is_rrr29 (tpp t)
     return (t->is_rrr29);
 }
 
-static inline uint8_t tp_is_rrr30 (tpp t)
+static inline uint8_t tp_is_ropepile (tpp t)
 {
-    return (t->is_rrr30);
+    return (t->is_ropepile);
 }
 
 static inline uint8_t tp_is_ropetop (tpp t)

@@ -7,8 +7,9 @@
 #include "main.h"
 #include "thing.h"
 #include "wid_game_map.h"
+#include "player.h"
 
-thingp level_place_ropetop (levelp level, 
+thingp thing_place_ropetop (levelp level, 
                             thingp owner,
                             double x, double y)
 {
@@ -16,6 +17,8 @@ thingp level_place_ropetop (levelp level,
         return (0);
     }
     owner->ropes--;
+
+    player_wid_update(level);
 
     widp w = wid_game_map_replace_tile(level, x, y, 
                                        0, /* thing */
@@ -35,7 +38,7 @@ thingp level_place_ropetop (levelp level,
     return (t);
 }
 
-thingp level_place_rope (levelp level, 
+thingp thing_place_rope (levelp level, 
                          thingp owner,
                          double x, double y)
 {
@@ -53,4 +56,15 @@ thingp level_place_rope (levelp level,
     thing_wake(level, t);
 
     return (t);
+}
+
+void thing_collect_rope (levelp level, 
+                         thingp owner,
+                         thingp it)
+{
+    owner->ropes++;
+
+    player_wid_update(level);
+
+    thing_dead(level, it, owner, "collected");
 }

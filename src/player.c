@@ -173,7 +173,11 @@ uint8_t player_move (levelp level)
         return (false);
     }
 
-    player_wid_update(level);
+    static uint32_t last_tick;
+    if (time_have_x_tenths_passed_since(1, last_tick)) {
+        player_wid_update(level);
+        last_tick = time_get_time_ms();
+    }
 
     /*
      * Check if we are allowed to fire our gun again so soon.
@@ -318,7 +322,7 @@ uint8_t player_move (levelp level)
         if (bomb) {
             last_bomb = time_get_time_ms();
 
-            level_place_bomb(level, player, player->x, player->y);
+            thing_place_bomb(level, player, player->x, player->y);
         }
     }
 
@@ -330,7 +334,7 @@ uint8_t player_move (levelp level)
         if (rope) {
             last_rope = time_get_time_ms();
 
-            level_place_ropetop(level, player, player->x, player->y);
+            thing_place_ropetop(level, player, player->x, player->y);
         }
     }
 
@@ -342,7 +346,7 @@ uint8_t player_move (levelp level)
         if (torch) {
             last_torch = time_get_time_ms();
 
-            level_place_torch(level, player, player->x, player->y);
+            thing_place_torch(level, player, player->x, player->y);
         }
     }
 
@@ -508,13 +512,6 @@ uint8_t player_joy (widp w, int x, int y)
 
 void player_wid_update (levelp level)
 {
-    static uint32_t last_tick;
-    if (!time_have_x_tenths_passed_since(1, last_tick)) {
-        return;
-    }
-
-    last_tick = time_get_time_ms();
-
     static char tmp[MAXSTR];
 
     if (!player) {

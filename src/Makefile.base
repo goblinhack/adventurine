@@ -57,6 +57,8 @@ GAME_OBJECTS=				\
     $(OBJDIR)/thing_blood.o 		\
     $(OBJDIR)/thing_bomb.o 		\
     $(OBJDIR)/thing_rope.o 		\
+    $(OBJDIR)/thing_key.o 		\
+    $(OBJDIR)/thing_collect.o 		\
     $(OBJDIR)/thing_move.o 		\
     $(OBJDIR)/thing_collision.o 	\
     $(OBJDIR)/thing_damage.o 		\

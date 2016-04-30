@@ -7,8 +7,9 @@
 
 #include "main.h"
 #include "thing.h"
+#include "player.h"
 
-thingp level_place_bomb (levelp level, 
+thingp thing_place_bomb (levelp level, 
                          thingp owner,
                          double x, double y)
 {
@@ -16,6 +17,8 @@ thingp level_place_bomb (levelp level,
         return (0);
     }
     owner->bombs--;
+
+    player_wid_update(level);
 
     widp w = thing_place(level,
                          owner,
@@ -36,4 +39,15 @@ thingp level_place_bomb (levelp level,
     thing_wake(level, t);
 
     return (t);
+}
+
+void thing_collect_bomb (levelp level, 
+                         thingp owner,
+                         thingp it)
+{
+    owner->bombs++;
+
+    player_wid_update(level);
+
+    thing_dead(level, it, owner, "collected");
 }
