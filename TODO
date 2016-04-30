@@ -3,7 +3,6 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 may
 ---
 - level end crash
-- explosion on spikes fizzled out - seen with 2 spikes side by side
 - idle anim appears when on ladders
 - place sleeping dynamite
 - rocks fall on head
@@ -52,6 +51,7 @@ sep
 
 april
 -----
+- explosion on spikes fizzled out - seen with 2 spikes side by side
 - bottom of level needs hard rock
 - death anim appears when moving down
 - collect keys does not work
