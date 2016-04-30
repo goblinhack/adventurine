@@ -158,8 +158,8 @@
  * Padding for tiles on the edge of the smooth scroll. Has to be quite wide so 
  * that we can see the light from other player when off screen.
  */
-#define TILES_SCREEN_WIDTH_PAD      TILES_SCREEN_WIDTH
-#define TILES_SCREEN_HEIGHT_PAD     TILES_SCREEN_HEIGHT
+#define TILES_SCREEN_WIDTH_PAD      2
+#define TILES_SCREEN_HEIGHT_PAD     2
 
 /*
  * Console

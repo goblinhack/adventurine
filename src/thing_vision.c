@@ -19,8 +19,8 @@
 
 void level_place_light (levelp level, double x, double y)
 {
-    int ix = (int)x;
-    int iy = (int)y;
+    int ix = (int)x & ~7;
+    int iy = (int)y & ~7;
 
     if (level->map_grid.lit[ix][iy]) {
         return;

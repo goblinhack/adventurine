@@ -55,7 +55,7 @@ FILE *LOG_STDOUT;
 FILE *LOG_STDERR;
 
 uint8_t quitting;
-uint8_t opt_seed;
+uint8_t opt_seed = 1;
 
 void quit (void)
 {

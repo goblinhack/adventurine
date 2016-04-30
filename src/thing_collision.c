@@ -1483,11 +1483,8 @@ thingp thing_hit_any_obstacle (levelp level,
                                double nx, 
                                double ny)
 {
-    thingp it;
     thingp me;
-    widp wid_next;
     widp wid_me;
-    widp wid_it;
 
     verify(t);
     wid_me = thing_wid(t);
@@ -1497,9 +1494,7 @@ thingp thing_hit_any_obstacle (levelp level,
 
     me = wid_get_thing(wid_me);
 
-    uint8_t z;
-
-    widp grid = game.wid_grid;
+    thing_map_t *map = level_map(level);
 
     collision_radius = thing_collision_radius(me);
     if (!collision_radius) {
@@ -1507,28 +1502,22 @@ thingp thing_hit_any_obstacle (levelp level,
     }
 
     for (dx = -collision_radius; dx <= collision_radius; dx++) 
-    for (dy = -collision_radius; dy <= collision_radius; dy++)
-    for (z = MAP_DEPTH_OBJ; z < MAP_DEPTH; z++) {
-        int32_t x = (int32_t)nx + dx;
-        int32_t y = (int32_t)ny + dy;
+    for (dy = -collision_radius; dy <= collision_radius; dy++) {
+        int32_t x = (int32_t)me->x + dx;
+        int32_t y = (int32_t)me->y + dy;
 
         if ((x < 0) || (y < 0) || (x >= MAP_WIDTH) || (y >= MAP_HEIGHT)) {
             continue;
         }
 
-        wid_it = wid_grid_find_first(grid, x, y, z);
-        while (wid_it) {
-            verify(wid_it);
+        thing_map_cell *cell = &map->cells[x][y];
 
-            wid_next = wid_grid_find_next(grid, wid_it, x, y, z);
-            if (wid_me == wid_it) {
-                wid_it = wid_next;
-                continue;
-            }
-
-            it = wid_get_thing(wid_it);
-            if (!it) {
-                wid_it = wid_next;
+        uint32_t i;
+        for (i = 0; i < cell->count; i++) {
+            thingp it;
+            
+            it = id_to_thing(cell->id[i]);
+            if (me == it) {
                 continue;
             }
 
@@ -1538,7 +1527,6 @@ thingp thing_hit_any_obstacle (levelp level,
             if (thing_is_hidden(it) ||
                 thing_is_wall_deco(it) ||
                 thing_is_ladder_deco(it)) {
-                wid_it = wid_next;
                 continue;
             }
 
@@ -1547,7 +1535,6 @@ thingp thing_hit_any_obstacle (levelp level,
              */
             if (thing_is_dungeon_floor(it) ||
                 thing_is_ladder(it)) {
-                wid_it = wid_next;
                 continue;
             }
 
@@ -1555,12 +1542,10 @@ thingp thing_hit_any_obstacle (levelp level,
              * Allow dead ghosts to walk over each other!
              */
             if (thing_is_dead(it)) {
-                wid_it = wid_next;
                 continue;
             }
 
             if (!things_overlap(me, nx, ny, it)) {
-                wid_it = wid_next;
                 continue;
             }
 
@@ -1568,7 +1553,6 @@ thingp thing_hit_any_obstacle (levelp level,
              * You can walk closer to a cobweb, but not back out...
              */
             if (thing_is_cobweb(it)) {
-                wid_it = wid_next;
                 continue;
             }
 
@@ -1590,11 +1574,8 @@ thingp thing_overlaps (levelp level,
                        double ny,
                        thing_is_fn fn)
 {
-    thingp it;
     thingp me;
-    widp wid_next;
     widp wid_me;
-    widp wid_it;
 
     verify(t);
     wid_me = thing_wid(t);
@@ -1604,9 +1585,7 @@ thingp thing_overlaps (levelp level,
 
     me = wid_get_thing(wid_me);
 
-    uint8_t z;
-
-    widp grid = game.wid_grid;
+    thing_map_t *map = level_map(level);
 
     collision_radius = thing_collision_radius(me);
     if (!collision_radius) {
@@ -1614,40 +1593,32 @@ thingp thing_overlaps (levelp level,
     }
 
     for (dx = -collision_radius; dx <= collision_radius; dx++) 
-    for (dy = -collision_radius; dy <= collision_radius; dy++)
-    for (z = MAP_DEPTH_OBJ; z < MAP_DEPTH; z++) {
-        int32_t x = (int32_t)nx + dx;
-        int32_t y = (int32_t)ny + dy;
+    for (dy = -collision_radius; dy <= collision_radius; dy++) {
+        int32_t x = (int32_t)me->x + dx;
+        int32_t y = (int32_t)me->y + dy;
 
         if ((x < 0) || (y < 0) || (x >= MAP_WIDTH) || (y >= MAP_HEIGHT)) {
             continue;
         }
 
-        wid_it = wid_grid_find_first(grid, x, y, z);
-        while (wid_it) {
-            verify(wid_it);
+        thing_map_cell *cell = &map->cells[x][y];
 
-            wid_next = wid_grid_find_next(grid, wid_it, x, y, z);
-            if (wid_me == wid_it) {
-                wid_it = wid_next;
-                continue;
-            }
-
-            it = wid_get_thing(wid_it);
-            if (!it) {
-                wid_it = wid_next;
+        uint32_t i;
+        for (i = 0; i < cell->count; i++) {
+            thingp it;
+            
+            it = id_to_thing(cell->id[i]);
+            if (me == it) {
                 continue;
             }
 
             if (thing_is_hidden(it) ||
                 thing_is_wall_deco(it) ||
                 thing_is_ladder_deco(it)) {
-                wid_it = wid_next;
                 continue;
             }
 
             if (!things_overlap(me, nx, ny, it)) {
-                wid_it = wid_next;
                 continue;
             }
 
@@ -1655,7 +1626,6 @@ thingp thing_overlaps (levelp level,
                 return (it);
             }
 
-            wid_it = wid_next;
             continue;
         }
     }

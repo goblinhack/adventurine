@@ -9257,18 +9257,21 @@ static void wid_display (widp w,
             maxy = player->y + visible_height;
             miny = player->y - visible_height;
 
-            if (minx < 0) {
-                minx = 0;
+            while (maxx > MAP_WIDTH) {
+                maxx--;
+                minx--;
             }
-            if (maxx > MAP_WIDTH) {
-                maxx = MAP_WIDTH;
+            while (maxy > MAP_HEIGHT) {
+                maxy--;
+                miny--;
             }
-
-            if (miny < 0) {
-                miny = 0;
+            while (minx < 0) {
+                maxx++;
+                minx++;
             }
-            if (maxy > MAP_HEIGHT) {
-                maxy = MAP_HEIGHT;
+            while (miny < 0) {
+                maxy++;
+                miny++;
             }
         } else {
             minx = 0;
