@@ -2,17 +2,12 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
-- collect keys does not work
-- hangs on start - spinning ball
-- gems fall at start 
-- death anim appears when moving down
+- level end crash
+- explosion on spikes fizzled out - seen with 2 spikes side by side
 - idle anim appears when on ladders
 - place sleeping dynamite
 - rocks fall on head
-- bottom of level needs hard rock
-- explosion on spikes fizzled out - seen with 2 spikes side by side
 - hp per level
-- level end crash
 - sparks effect
 - miss effects
 - ladders should fall when damaged
@@ -57,6 +52,10 @@ sep
 
 april
 -----
+- bottom of level needs hard rock
+- death anim appears when moving down
+- collect keys does not work
+- hangs on start - spinning ball
 - decrease hit points to really small
 - ropes
 - rope gap beneath when thrown

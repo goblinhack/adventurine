@@ -52,7 +52,6 @@ static widp thing_place__ (levelp level,
     }
 
     dx /= 2.0;
-    dy /= 2.0;
 
     /*
      * The player sinks into the ground a bit.
@@ -73,6 +72,7 @@ static widp thing_place__ (levelp level,
         ERR("cannot place thing, no grid map");
     }
 
+CON(" try %f %f",dx,dy);
     if (!(*fn)(level, t, x, y)) {
         widp w = wid_game_map_replace_tile(level, x, y,
                                            0, /* thing */
@@ -81,8 +81,7 @@ static widp thing_place__ (levelp level,
         return (w);
     }
 
-    dx *= 2.0;
-    dy *= 2.0;
+    dx /= 2.0;
 
     thing_real_to_fmap(t, &x, &y);
 
@@ -92,12 +91,36 @@ static widp thing_place__ (levelp level,
     /*
      * Try to place in front of the player.
      */
+CON(" try2 %f %f",dx,dy);
     if (!(*fn)(level, t, x, y)) {
         widp w = wid_game_map_replace_tile(level, x, y,
                                            0, /* thing */
                                            tp,
                                            0 /* tpp_data */);
         return (w);
+    }
+
+    dx *= 3.0;
+
+    thing_real_to_fmap(t, &x, &y);
+
+    x += dx;
+    y += dy;
+
+    /*
+     * Try to place in front of the player.
+     */
+CON(" try3 %f %f",dx,dy);
+    if (!(*fn)(level, t, x, y)) {
+        widp w = wid_game_map_replace_tile(level, x, y,
+                                           0, /* thing */
+                                           tp,
+                                           0 /* tpp_data */);
+        return (w);
+    }
+
+    if (!behind) {
+        return (0);
     }
 
     /*
@@ -159,7 +182,9 @@ static widp thing_place_ (levelp level,
 {
     thing_hit_obstacle_fn fn;
 
-    if (thing_is_bomb(t) || thing_is_rope(t)) {
+    if (thing_is_bomb(t)) {
+        fn = thing_hit_solid_obstacle;
+    } else if (thing_is_rope(t)) {
         fn = thing_hit_fall_obstacle;
     } else {
         fn = thing_hit_any_obstacle;

@@ -142,6 +142,38 @@ void thing_dead (levelp level,
     }
 
     /*
+     * If a wall is gone, remove the decorations.
+     */
+    if (thing_is_wall(t)) {
+        if (!level->is_being_destroyed) {
+            /*
+             * Keep walls on edge of level to stop things falling off.
+             */
+            if ((int)t->x <= 0) {
+                return;
+            }
+            if ((int)t->x >= MAP_WIDTH-1) {
+                return;
+            }
+            if ((int)t->y <= 0) {
+                return;
+            }
+            if ((int)t->y >= MAP_HEIGHT-1) {
+                return;
+            }
+
+            int dx, dy;
+            for (dx = -1; dx <= 1; dx++) {
+                for (dy = -1; dy <= 1; dy++) {
+                    widp w;
+                    while (map_find_wall_deco_at(level, t->x + dx, t->y + dy, &w)) {
+                        thing_destroy(level, wid_get_thing(w), __FUNCTION__);
+                    }
+                }
+            }
+        }
+    }
+    /*
      * You only die once.
      */
     if (thing_is_dead(t)) {
@@ -201,23 +233,6 @@ void thing_dead (levelp level,
             wid_set_mode(w, WID_MODE_ACTIVE);
             if (!wid_is_hidden(w)) {
                 wid_set_color(w, WID_COLOR_BLIT, RED);
-            }
-        }
-    }
-
-    /*
-     * If a wall is gone, remove the decorations.
-     */
-    if (thing_is_wall(t)) {
-        if (!level->is_being_destroyed) {
-            int dx, dy;
-            for (dx = -1; dx <= 1; dx++) {
-                for (dy = -1; dy <= 1; dy++) {
-                    widp w;
-                    while (map_find_wall_deco_at(level, t->x + dx, t->y + dy, &w)) {
-                        thing_destroy(level, wid_get_thing(w), __FUNCTION__);
-                    }
-                }
             }
         }
     }
