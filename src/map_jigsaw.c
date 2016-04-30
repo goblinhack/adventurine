@@ -915,7 +915,9 @@ static int32_t jigpiece_char_is_suitable_for_exit (char c)
 
 static int32_t jigpiece_char_is_suitable_for_exit_base (char c)
 {
-    return (c == MAP_WALL);
+    return (c == MAP_WALL) ||
+           (c == MAP_OBSTACLE)          ||
+           (c == MAP_OBSTACLE_RANDOM);
 }
 
 /*
