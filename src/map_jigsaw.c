@@ -3774,7 +3774,7 @@ static tpp map_char_to_tp (char c,
         if (shop_floor) {
             tp = random_treasure(shop_floor);
         } else {
-            if (r < 20) {
+            if (r < 10) {
                 tp = tp_find("torch");
             } else {
                 tp = random_treasure(shop_floor);
