@@ -35,25 +35,29 @@ static uint8_t wid_intro_settings_toggle_mouse_event(widp w,
                                                    int32_t x, int32_t y);
 static int saved_focus;
 
-#define WID_INTRO_MAX_SETTINGS  6
+#define WID_INTRO_MAX_SETTINGS  5 // minus display sync
 #define WID_INTRO_MAX_VAL      30 
 
 enum {
     WID_INTRO_SETTINGS_ROW_WINDOW,
     WID_INTRO_SETTINGS_ROW_SOUND,
     WID_INTRO_SETTINGS_ROW_MUSIC,
-    WID_INTRO_SETTINGS_ROW_DISPLAY_SYNC,
     WID_INTRO_SETTINGS_ROW_FULL_SCREEN,
     WID_INTRO_SETTINGS_ROW_FPS_COUNTER,
+#if 0
+    WID_INTRO_SETTINGS_ROW_DISPLAY_SYNC,
+#endif
 };
 
 static const char *wid_intro_button_name[WID_INTRO_MAX_SETTINGS] = {
     "Window",
     "Sound",
     "Music",
-    "Display sync",
     "Full screen",
     "FPS counter",
+#if 0
+    "Display sync",
+#endif
 };
 
 const char *wid_intro_button_value_string
@@ -119,7 +123,9 @@ const char *wid_intro_button_value_string
 
     { "Off", "On", 0 },
     { "Off", "On", 0 },
+#if 0
     { "Off", "On", 0 },
+#endif
 };
 
 static int wid_intro_button_value_toggle[WID_INTRO_MAX_SETTINGS] = {
@@ -128,7 +134,9 @@ static int wid_intro_button_value_toggle[WID_INTRO_MAX_SETTINGS] = {
     0,
     1,
     1,
+#if 0
     1,
+#endif
 };
 
 static uint32_t wid_intro_button_val[WID_INTRO_MAX_SETTINGS];
@@ -447,8 +455,10 @@ static void wid_intro_settings_read (void)
     /*
      * display_sync.
      */
+#if 0
     val = wid_intro_button_val[WID_INTRO_SETTINGS_ROW_DISPLAY_SYNC] =
         game.display_sync;
+#endif
 
     /*
      * full_screen.
@@ -531,8 +541,11 @@ static void wid_intro_settings_save (void)
     game.sound_volume =
         wid_intro_button_val[WID_INTRO_SETTINGS_ROW_SOUND];
 
+#if 0
     game.display_sync =
         wid_intro_button_val[WID_INTRO_SETTINGS_ROW_DISPLAY_SYNC];
+#endif
+    game.display_sync = 1;
 
     game.full_screen =
         wid_intro_button_val[WID_INTRO_SETTINGS_ROW_FULL_SCREEN];
@@ -650,11 +663,6 @@ static void wid_intro_settings_create (void)
                 (int) '5', 
                 keys[i + 4], 
                 values[i + 4], 
-                wid_intro_settings_mouse_event,
-
-                (int) '6', 
-                keys[i + 5], 
-                values[i + 5], 
                 wid_intro_settings_mouse_event,
 
                 (int) 'b', 

@@ -335,15 +335,6 @@ int thing_tick_all (levelp level)
         return (false);
     }
 
-#if 0
-    static uint32_t last_tick;
-    if (!time_have_x_hundredths_passed_since(1, last_tick)) {
-        return (true);
-    }
-
-    last_tick = time_get_time_ms();
-#endif
-
     /*
      * Do per tick stuff for the level
      */
