@@ -717,7 +717,7 @@ LOG("add poss me %s hitter %s",thing_logname(me), thing_logname(it));
         }
 
         if (thing_is_exit(it)) {
-            thing_reached_exit(level, me, it);
+            level->reached_exit = true;
             return (false);
         }
 

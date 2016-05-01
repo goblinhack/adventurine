@@ -80,15 +80,49 @@ void tile_blit_fat (tpp tp, tile *tile, char *name, fpoint tl, fpoint br)
         y2 += bot_off   * pct_h;
     }
 
-    /*
-     * Else we get little lines of white sometimes.
-     */
+    blit(tile->gl_surface_binding,
+         x1, y2, x2, y1, tl.x, br.y, br.x, tl.y);
+}
+
+/*
+ * Blits a whole tile. Y co-ords are inverted. Does not expand tl, br.
+ */
+static inline
+void tile_blit_fat2 (tpp tp, tile *tile, char *name, const fpoint tl, const fpoint br)
+{
 #if 0
-    tl.x = (int)tl.x;
-    tl.y = (int)tl.y;
-    br.x = (int)br.x;
-    br.y = (int)br.y;
+    if (!tile) {
+        if (!name) {
+            DIE("no name for tile blit");
+        }
+
+        tile = tile_find(name);
+    }
+
+    if (!tile) {
+        return;
+    }
 #endif
+
+    double x1 = tile->x1;
+    double x2 = tile->x2;
+    double y1 = tile->y1;
+    double y2 = tile->y2;
+
+    if (unlikely(tp != 0)) {
+        double left_off  = (double)tp_get_blit_left_off(tp);
+        double right_off = (double)tp_get_blit_right_off(tp);
+        double top_off   = (double)tp_get_blit_top_off(tp);
+        double bot_off   = (double)tp_get_blit_bot_off(tp);
+
+        double pct_w     = tile->pct_width;
+        double pct_h     = tile->pct_height;
+
+        x1 -= left_off  * pct_w;
+        x2 += right_off * pct_w;
+        y1 -= top_off   * pct_h;
+        y2 += bot_off   * pct_h;
+    }
 
     blit(tile->gl_surface_binding,
          x1, y2, x2, y1, tl.x, br.y, br.x, tl.y);
@@ -139,16 +173,6 @@ void tile_blit_fat_black_and_white (tpp tp, tile *tile, char *name, fpoint tl, f
         y1 -= top_off   * pct_h;
         y2 += bot_off   * pct_h;
     }
-
-    /*
-     * Else we get little lines of white sometimes.
-     */
-#if 0
-    tl.x = (int)tl.x;
-    tl.y = (int)tl.y;
-    br.x = (int)br.x;
-    br.y = (int)br.y;
-#endif
 
     if (!tile->gl_surface_binding_black_and_white) {
         blit(tile->gl_surface_binding,

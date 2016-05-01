@@ -1917,7 +1917,7 @@ void thing_reached_teleport(levelp, thingp t, thingp teleport);
 /*
  * thing_exit.c
  */
-void thing_reached_exit(levelp, thingp t, thingp exit);
+void thing_reached_exit(levelp, thingp t);
 
 /*
  * round the thing coords and find out what floor tile we are really on.

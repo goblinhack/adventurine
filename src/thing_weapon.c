@@ -273,32 +273,26 @@ void thing_sheath (levelp level, thingp t)
      */
     thingp weapon_carry_anim = thing_weapon_carry_anim(level, t);
     if (weapon_carry_anim) {
-        THING_LOG(t, "Unwield, carry anim %s", 
-                  thing_logname(weapon_carry_anim));
         thing_dead(level, weapon_carry_anim, 0, "owner weapon");
         thing_set_weapon_carry_anim(level, t, 0);
     }
 
     thingp weapon_swing_anim = thing_weapon_swing_anim(level, t);
     if (weapon_swing_anim) {
-        THING_LOG(t, "Unwield, swing anim %s", 
-                  thing_logname(weapon_swing_anim));
         thing_dead(level, weapon_swing_anim, 0, "owner weapon");
         thing_set_weapon_swing_anim(level, t, 0);
     }
-
-    t->weapon_tp_id = 0;
 }
 
 void thing_wield (levelp level,
                   thingp t, tpp weapon)
 {
     if (thing_weapon(t) == weapon) {
-        /*
-         * Might be in the action bar.
-         */
-        THING_LOG(t, "Already wiedling: %s", tp_short_name(weapon));
-        return;
+        widp weapon_wid = thing_get_weapon_carry_anim_wid(level, t);
+        if (weapon_wid) {
+            THING_LOG(t, "Already wiedling: %s", tp_short_name(weapon));
+            return;
+        }
     }
 
     THING_LOG(t, "Want to wield: %s", tp_short_name(weapon));

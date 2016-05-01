@@ -412,16 +412,9 @@ typedef struct tp_ {
 
 typedef struct tpp_data_ {
     /*
-     * Used for exits to indicate exitting to where...
-     */
-    uint32_t exit;
-
-    /*
      * Color of the thing, mainly used in triggers.
      */
     color col;
-
-    uint8_t exit_set:1;
 } thing_template_data;
 
 uint8_t tp_init(void);

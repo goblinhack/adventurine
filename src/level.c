@@ -73,7 +73,9 @@ levelp level_reinit (uint32_t level_no,
 
     level = &game.level;
     newptr(level, "level");
-    memset(level, 0, sizeof(*level));
+    LOG("Level allocated %p", level);
+
+    level->is_valid = true;
 
     if (!is_editor && !is_map_editor) {
         wid_game_map_grid_create(level);
@@ -102,7 +104,7 @@ void level_destroy (levelp *plevel, uint8_t keep_player)
 
     level = *plevel;
     if (!level) {
-        DIE("no level");
+        DIE("level destroy, no level");
     }
 
     level->is_being_destroyed = true;
@@ -122,7 +124,22 @@ void level_destroy (levelp *plevel, uint8_t keep_player)
 
     *plevel = 0;
 
+    thing tmp;
+    if (keep_player) {
+        thing_leave_level(level, player);
+        memcpy(&tmp, player, sizeof(tmp));
+    }
+
     memset(level, 0, sizeof(*level));
+
+    if (keep_player) {
+        memcpy(player, &tmp, sizeof(tmp));
+        LOG("Level freed %p but kept player %p", level, player);
+
+        THING_LOG(player, "Player lives on beyond end of level");
+    } else {
+        LOG("Level freed %p", level);
+    }
 
     oldptr(level);
 
@@ -538,8 +555,11 @@ void level_reset_player (levelp level)
 
     FOR_ALL_THINGS(level, t) {
         if (thing_is_player(t)) {
+            THING_LOG(t, "Reset player thing at start of level");
+
             tpp weapon = thing_weapon(t);
             if (weapon) {
+                THING_LOG(t, "Rewield weapon at start of level");
                 thing_wield(level, t, weapon);
             }
 
@@ -558,14 +578,21 @@ void level_reset_player (levelp level)
  */
 levelp level_finished (levelp level, int keep_player)
 {
+    if (keep_player) {
+        LEVEL_LOG(level, "Finish level but keep player");
+    } else {
+        LEVEL_LOG(level, "Finish level and kill player");
+    }
 
-    /*
-     * Is this needed ? Kind of obvious and overlaps with spending points 
-     * update often.
-     */
+    if (!level->is_valid) {
+        LEVEL_LOG(level, "Level is no longer valid, do not free");
+        return (0);
+    }
+
     if (level->is_test_level) {
         LEVEL_LOG(level, "Test level finished");
         level_destroy(&level, false /* keep player */);
+        wid_game_map_go_back_to_editor();
         return (0);
     }
 
@@ -581,12 +608,6 @@ levelp level_finished (levelp level, int keep_player)
         }
     }
     FOR_ALL_THINGS_END
-
-    if (keep_player) {
-        LOG("Destroy level but keep player");
-    } else {
-        LOG("Destroy level and kill player");
-    }
 
     wid_detach_from_grid(game.wid_grid);
     wid_destroy_grid(game.wid_grid);
@@ -613,6 +634,8 @@ levelp level_finished (levelp level, int keep_player)
      */
     level = level_load_new(next_level);
 
+    LEVEL_LOG(level, "Move player to new level");
+
     /*
      * Move player to the new level.
      */
@@ -631,10 +654,32 @@ levelp level_finished (levelp level, int keep_player)
                 0 /* tpp_data */);
 
         thing_join_level(level, t);
+
+        level_reset_player(level);
     }
     FOR_ALL_THINGS_END
 
     level_update_slow(level);
+
+    sound_play_level_end();
+
+    /*
+     * To allow the player to be centered in the new level if it is a
+     * different size.
+     */
+    if (game.wid_grid &&
+        game.wid_grid->grid) {
+        game.wid_grid->grid->bounds_locked = 0;
+    }
+
+    /*
+     * Fluid code needs the level pointer.
+     */
+    game.wid_grid->level = level;
+
+    verify(player);
+
+    thing_move(level, player, player->x, player->y, false, false, false, false, false);
 
     return (level);
 }

@@ -34,14 +34,6 @@ typedef struct wid_map_cell_ {
     int px;
     int py;
     int player_count;
-
-    /*
-     * Level exits
-     */
-    int exit_at_mx[WID_MAP_EXITS_MAX]; // start tile in the map
-    int exit_at_my[WID_MAP_EXITS_MAX];
-    int exit_level_no[WID_MAP_EXITS_MAX]; // destination level
-    int exit_count;
 } wid_map_level;
 
 typedef void(*wid_map_event_t)(widp);

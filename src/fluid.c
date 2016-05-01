@@ -733,7 +733,7 @@ void fluid_render (widp w, int minx, int miny, int maxx, int maxy)
     levelp level = w->level;
 
     if (!level) {
-        ERR("no level");
+        DIE("fluid render, no level");
         return;
     }
 

@@ -2,8 +2,6 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
-- level end crash
-- idle anim appears when on ladders
 - place sleeping dynamite
 - rocks fall on head
 - hp per level
@@ -13,7 +11,6 @@ may
 - sparks on hitting
 - flying bounders
 - have boulder roll 
-- fix level exit
 - float in water
 - float graphics
 - monster patrol left/right
@@ -42,12 +39,21 @@ aug
 - glowing gold
 - mine gold 
 - mine gems 
+- hiscores
 
 sep
 ---
-- level editor
 - secret levels
 - GIANT treasure/diamonds
+
+
+
+may
+---
+- level end crash
+- idle anim appears when on ladders
+- fix level exit
+- level editor
 
 april
 -----

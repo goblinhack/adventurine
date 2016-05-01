@@ -818,6 +818,10 @@ uint8_t thing_is_visible (levelp level, thingp t)
 
 void thing_leave_level (levelp level, thingp t)
 {
+    if (thing_is_player(t)) {
+        THING_LOG(t, "Leave level");
+    }
+
     /*
      * Make the weapon leave too
      */
@@ -831,6 +835,9 @@ void thing_leave_level (levelp level, thingp t)
      */
     t->gold_owed = 0;
     t->in_shop_owned_by_thing_id = 0;
+    t->momentum = 0;
+    t->fall_speed = 0;
+    t->jump_speed = 0;
 
     thing_map_remove(level, t);
     thing_set_wid(level, t, 0);
@@ -838,6 +845,10 @@ void thing_leave_level (levelp level, thingp t)
 
 void thing_join_level (levelp level, thingp t)
 {
+    if (thing_is_player(t)) {
+        THING_LOG(t, "Join level");
+    }
+
     /*
      * Make the weapon leave to
      */

@@ -352,6 +352,11 @@ int thing_tick_all (levelp level)
         return (false);
     }
 
+    if (level->reached_exit) {
+        level->reached_exit = false;
+        thing_reached_exit(level, player);
+    }
+
     return (true);
 }
 

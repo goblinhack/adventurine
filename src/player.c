@@ -415,6 +415,7 @@ uint8_t player_key (widp w, const SDL_KEYSYM *key)
 
         case 'q':
             if (level && level->is_test_level) {
+                level_destroy(&level, false /* keep player */);
                 wid_game_map_go_back_to_editor();
                 return (true);
             }

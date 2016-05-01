@@ -120,6 +120,8 @@ typedef struct level_t_ {
      */
     uint8_t has_shop;
 
+    uint8_t is_valid:1;
+
     /*
      * Being used in level editor.
      */
@@ -134,6 +136,8 @@ typedef struct level_t_ {
     uint8_t is_test_level:1;
 
     uint8_t is_being_destroyed:1;
+
+    uint8_t reached_exit:1;
 
 } level_t;
 

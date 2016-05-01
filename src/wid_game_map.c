@@ -648,18 +648,6 @@ wid_game_map_replace_tile (levelp level,
 
     if (data) {
         memcpy(&t->data, data, sizeof(thing_template_data));
-
-        if (thing_is_exit(t)) {
-            if (t->data.exit_set) {
-                LOG("Create exit to level %d", t->data.exit);
-            } else {
-                /*
-                 * Not an issue, just choose the next one.
-                 */
-                LEVEL_LOG(level, "An exit was present with no exit level set");
-            }
-        }
-
         if (!color_none(t->data.col)) {
             wid_set_color(child, WID_COLOR_BLIT, t->data.col);
         }

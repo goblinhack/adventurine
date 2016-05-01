@@ -1174,13 +1174,6 @@ static void wid_editor_button_display (widp w, fpoint tl, fpoint br)
         fpoint btl = tl;
         fpoint bbr = br;
 
-#if 0
-        if (tp_is_wall(tp) || tp_is_door(tp)) {
-            btl.y -= height / 3.0;
-            bbr.x += width / 3.0;
-        }
-#endif
-
         if (z == MAP_DEPTH_WALL) {
             tilep tile = ctx->map.map_tile[x][y];
             if (tile) {
@@ -1482,45 +1475,6 @@ static void wid_editor_mx_my (int *mx, int *my)
     }
 }
                               
-static void wid_editor_exit_selected (uint32_t p)
-{
-    wid_editor_map_dialog = 0;
-
-    wid_editor_ctx *ctx = wid_editor_window_ctx;
-    int mx;
-    int my;
-    int z;
-
-    wid_editor_mx_my(&mx, &my);
-
-    /*
-     * Find the exit and update its position.
-     */
-    for (z = MAP_DEPTH - 1; z >= 0; z--) {
-        tpp tp = ctx->map.tile[mx][my][z].tp;
-        if (!tp) {
-            continue;
-        }
-
-        if (tp_is_exit(tp)) {
-            wid_editor_map_tile *tile = &ctx->map.tile[mx][my][z];
-            thing_template_data *data = &tile->data;
-
-            data->exit = p;
-            data->exit_set = true;
-        }
-    }
-
-    map_editor_fixup();
-
-    wid_editor_undo_save();
-}
-
-static void wid_editor_exit_cancelled (void)
-{
-    wid_editor_map_dialog = 0;
-}
-
 static void wid_editor_map_thing_replace (int x, int y, int interactive)
 {
     wid_editor_ctx *ctx = wid_editor_window_ctx;
@@ -1539,19 +1493,7 @@ static void wid_editor_map_thing_replace (int x, int y, int interactive)
 
     int z = tp_get_z_depth(tp);
 
-    if (tp_is_exit(tp)) {
-        if (wid_editor_map_dialog) {
-            return;
-        }
-
-        wid_editor_set_new_tp(x, y, z, tp, 0);
-
-        wid_editor_map_dialog = wid_map("Choose optional destination",
-                                        wid_editor_exit_selected, 
-                                        wid_editor_exit_cancelled);
-    } else {
-        wid_editor_set_new_tp(x, y, z, tp, 0);
-    }
+    wid_editor_set_new_tp(x, y, z, tp, 0);
 }
 
 static void wid_editor_map_thing_paint (int x, int y)
@@ -2088,10 +2030,15 @@ static void wid_editor_nuke (void)
 
 static void wid_editor_test (void)
 {
+    LOG("Entering test mode");
+    LOG("==================");
+
     uint32_t level_no;
     level_no = TEST_LEVEL;
 
+    levelp level = &game.level;
     wid_game_map_fini();
+    level->is_test_level = false;
     level_finished_all();
 
     char *tmp = dynprintf("%s%d", LEVELS_PATH, level_no);
@@ -2107,8 +2054,8 @@ static void wid_editor_test (void)
 
     wid_game_map_init();
 
-    levelp level = &game.level;
     level_resume(level);
+    level->is_test_level = true;
 }
 
 static void wid_editor_outline (void)
@@ -2179,93 +2126,6 @@ static void wid_editor_outline (void)
     wid_editor_chosen_tile[ctx->tile_pool] = wall;
     wid_editor_undo_save();
 }
-
-#if 0
-static void wid_editor_center (void)
-{
-    wid_editor_ctx *ctx = wid_editor_window_ctx;
-
-    int minx = -1;
-    int x, y, z;
-
-    for (x = 0; (x < MAP_WIDTH) && (minx == -1); x++) {
-        for (y = 0; (y < MAP_HEIGHT) && (minx == -1); y++) {
-            for (z = 0; (z < MAP_DEPTH) && (minx == -1); z++) {
-                if (ctx->map.tile[x][y][z].tp) {
-                    minx = x;
-                }
-            }
-        }
-    }
-
-    if (minx == -1) {
-        return;
-    }
-
-    int maxx = -1;
-
-    for (x = MAP_WIDTH - 1; (x >= 0) && (maxx == -1); x--) {
-        for (y = 0; (y < MAP_HEIGHT) && (maxx == -1); y++) {
-            for (z = 0; (z < MAP_DEPTH) && (maxx == -1); z++) {
-                if (ctx->map.tile[x][y][z].tp) {
-                    maxx = x;
-                }
-            }
-        }
-    }
-
-    if (maxx == -1) {
-        return;
-    }
-
-    int miny = -1;
-
-    for (y = 0; (y < MAP_HEIGHT) && (miny == -1); y++) {
-        for (x = 0; (x < MAP_WIDTH) && (miny == -1); x++) {
-            for (z = 0; (z < MAP_DEPTH) && (miny == -1); z++) {
-                if (ctx->map.tile[x][y][z].tp) {
-                    miny = y;
-                }
-            }
-        }
-    }
-
-    if (miny == -1) {
-        return;
-    }
-
-    int maxy = -1;
-
-    for (y = (MAP_HEIGHT - 1); (y >= 0) && (maxy == -1); y--) {
-        for (x = 0; (x < MAP_WIDTH) && (maxy == -1); x++) {
-            for (z = 0; (z < MAP_DEPTH) && (maxy == -1); z++) {
-                if (ctx->map.tile[x][y][z].tp) {
-                    maxy = y;
-                }
-            }
-        }
-    }
-
-    if (maxy == -1) {
-        return;
-    }
-
-    ctx->cut_start_x = minx;
-    ctx->cut_start_y = miny;
-    ctx->cut_end_x = maxx;
-    ctx->cut_end_y = maxy;
-
-    memcpy(&ctx->map_copy, &ctx->map, sizeof(ctx->map));
-    wid_editor_cut();
-
-    int mx = (minx + (MAP_WIDTH - maxx)) / 2;
-    int my = (miny + (MAP_HEIGHT - maxy)) / 2;
-    mx--;
-    my--;
-
-    wid_editor_paste(mx, my);
-}
-#endif
 
 static void wid_editor_style (void)
 {
@@ -3744,13 +3604,6 @@ static void wid_editor_save (const char *dir_and_file, int is_test_level)
                 wid_editor_map_tile *tile = &ed->map.tile[x][y][z];
                 thing_template_data *data = &tile->data;
 
-                if (data->exit_set) {
-                    PUT_NAME(ctx, "exit");
-                    PUT_BRA(ctx);
-                    PUT_NAMED_UINT32(ctx, "level_no", data->exit);
-                    PUT_KET(ctx);
-                }
-
                 if (!color_none(data->col) &&
                     !color_cmp(data->col, WHITE)) {
                     PUT_NAME(ctx, "color");
@@ -3796,7 +3649,9 @@ static void wid_editor_go_back (void)
     wid_destroy(&wid_editor_background);
     wid_destroy(&wid_editor_window);
 
+    levelp level = &game.level;
     wid_game_map_fini();
+    level->is_test_level = false;
     level_finished_all();
 
     wid_map("Choose epic level", 0, 0);
@@ -3817,6 +3672,7 @@ static void wid_editor_save_level (void)
 
     uint32_t level_no = ctx->level_no;
     char *tmp = dynprintf("%s%d", LEVELS_PATH, level_no);
+    LOG("Save editor level %s", tmp);
     CON("Save editor level %s", tmp);
     wid_editor_save(tmp, false /* is_test_level */);
     myfree(tmp);
@@ -3886,6 +3742,9 @@ static void wid_editor_hide (void)
 
 void wid_editor (uint32_t level_no)
 {
+    LOG("Entering level editor for level %u", level_no);
+    LOG("====================================== ");
+
     /*
      * Create a context to hold button info so we can update it when the focus 
      * changes

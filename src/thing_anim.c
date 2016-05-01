@@ -172,6 +172,7 @@ void thing_animate (levelp level, thingp t)
                     tile = thing_tile_next(tiles, tile);
                     continue;
                 }
+#if 0
             } else if (tp->has_dir_anim && thing_is_dir_tl(t)) {
                 if (!thing_tile_is_dir_tl(tile)) {
                     tile = thing_tile_next(tiles, tile);
@@ -192,6 +193,7 @@ void thing_animate (levelp level, thingp t)
                     tile = thing_tile_next(tiles, tile);
                     continue;
                 }
+#endif
             } else if (tp->has_dir_anim && thing_is_dir_up(t)) {
                 if (!thing_tile_is_dir_up(tile)) {
                     tile = thing_tile_next(tiles, tile);

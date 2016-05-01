@@ -1862,16 +1862,6 @@ void wid_set_text_outline (widp w, uint8_t val)
     w->text_outline = val;
 }
 
-uint8_t wid_get_blit_center (widp w)
-{
-    return (w->blit_center);
-}
-
-void wid_set_blit_center (widp w, uint8_t val)
-{
-    w->blit_center = val ? 1 : 0;
-}
-
 /*
  * Look at all the wid modes and return the most relevent setting
  */
@@ -4045,15 +4035,6 @@ uint8_t demarshal_wid_grid (levelp level,
         int gotdata = false;
 
         memset(&data, 0, sizeof(data));
-
-        if (GET_PEEK_NAME(ctx, "exit")) {
-            GET_NAME(ctx, "exit");
-            GET_BRA(ctx);
-            GET_NAMED_UINT32(ctx, "level_no", data.exit);
-            GET_KET(ctx);
-            data.exit_set = true;
-            gotdata = true;
-        }
 
         if (GET_PEEK_NAME(ctx, "color")) {
             GET_NAME(ctx, "color");
@@ -7666,6 +7647,7 @@ static void wid_light_add (widp w, fpoint at, double strength, color c)
      * Do a quick dmap check so that lights that are enclosed in a room do not 
      * shine
      */
+#if 1
     if (player && 
                !thing_is_player_or_owned_by_player(level, t)) {
         double sx, sy;
@@ -7673,20 +7655,19 @@ static void wid_light_add (widp w, fpoint at, double strength, color c)
         thing_real_to_map(t, &sx, &sy);
 
         int distance = dmap_distance_to_player(sx, sy);
-        if (distance == -1) {
-            return;
+        if (distance != -1) {
+            /*
+             * Cheap effect, make the light fade away with distance.
+             */
+            double scale = (256.0 - (((double)distance) * 2.0)) / 256.0;
+
+            c.r = (uint8_t) (((double)c.r) * scale);
+            c.g = (uint8_t) (((double)c.g) * scale);
+            c.b = (uint8_t) (((double)c.b) * scale);
+            c.a = (uint8_t) (((double)c.a) * scale);
         }
-
-        /*
-         * Cheap effect, make the light fade away with distance.
-         */
-        double scale = (256.0 - (((double)distance) * 2.0)) / 256.0;
-
-        c.r = (uint8_t) (((double)c.r) * scale);
-        c.g = (uint8_t) (((double)c.g) * scale);
-        c.b = (uint8_t) (((double)c.b) * scale);
-        c.a = (uint8_t) (((double)c.a) * scale);
     }
+#endif
 
     if (wid_light_count >= MAX_LIGHTS) {
         return;
@@ -9071,40 +9052,7 @@ static void wid_display (widp w,
             br = new_br;
         }
 
-        /*
-         * Center the texture, on the position we want, to tiles that have 
-         * padding on one side are put in the middle. i.e. small block of 
-         * cheese drawn in the bottom left of a tile for the game is now being 
-         * drawn in an item slot is not center.
-         */
-
-        if (w->blit_center) {
-            double twidth = br.x - tl.x;
-            double theight = br.y - tl.y;
-
-            /*
-             * Use the first tile else things like torches jump around.
-             */
-            tilep ftile = w->first_tile ? w->first_tile : w->tile;
-
-            /*
-             * Work out the center of the tile and how far from center it is.
-             */
-            double mpx = (ftile->px2 + ftile->px1) / 2.0;
-            double mpy = (ftile->py2 + ftile->py1) / 2.0;
-            double dx = (0.5 - mpx) * twidth;
-            double dy = (0.5 - mpy) * theight;
-
-            fpoint a, b;
-            a.x = tl.x + dx;
-            b.x = br.x + dx;
-            a.y = tl.y + dy;
-            b.y = br.y + dy;
-
-            tile_blit_fat(0, tile, 0, a, b);
-        } else {
-            tile_blit_fat(0, tile, 0, tl, br);
-        }
+        tile_blit_fat2(wid_get_thing_template(w), tile, 0, tl, br);
 
         glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -9472,10 +9420,12 @@ static void wid_display (widp w,
                                             double sx, sy;
                                             thing_real_to_map(t, &sx, &sy);
 
+#if 0
                                             int distance = dmap_distance_to_player(sx, sy);
                                             if (distance != -1) {
                                                 lit = 1;
                                             }
+#endif
                                         }
                                     } else if ((t->lit == 0) && 
                                         (t->torch_light_radius == 0) &&
