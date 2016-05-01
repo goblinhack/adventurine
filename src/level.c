@@ -288,9 +288,9 @@ static void level_loaded_common (levelp level)
      */
     if (!level->is_editor && !level->is_map_editor) {
         level_trigger_activate_default_triggers(level);
-    }
 
-    fluid_init(level);
+        fluid_init(level);
+    }
 }
 
 levelp level_load (uint32_t level_no, 
@@ -422,19 +422,16 @@ levelp level_load_random (uint32_t level_no,
 
 const char *level_get_title (levelp level)
 {
-
     return (level->title);
 }
 
 void level_set_title (levelp level, const char *val)
 {
-
     strncpy(level->title, val, sizeof(level->title));
 }
 
 widp level_get_map (levelp level)
 {
-
     return (game.wid_grid);
 }
 
@@ -843,9 +840,6 @@ uint8_t demarshal_level (demarshal_p ctx, levelp level)
     }
 
     wid = level_get_map(level);
-    if (!wid) {
-        ERR("no map for level");
-    }
 
 #if 0
     do {
@@ -862,6 +856,10 @@ uint8_t demarshal_level (demarshal_p ctx, levelp level)
                                 ctx, wid,
                                 wid_editor_replace_template);
     } else {
+        if (!wid) {
+            ERR("no map for level");
+        }
+
         rc = demarshal_wid_grid(level,
                                 ctx, wid,
                                 wid_game_map_replace_tile);

@@ -160,6 +160,7 @@
  */
 #define TILES_SCREEN_WIDTH_PAD      2
 #define TILES_SCREEN_HEIGHT_PAD     2
+#define TILE_FLOOR_SCALE            2
 
 /*
  * Console

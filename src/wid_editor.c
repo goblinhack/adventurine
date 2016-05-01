@@ -29,6 +29,7 @@
 #include "wid_cmap.h"
 #include "wid_menu.h"
 #include "wid_keyboard.h"
+#include "wid_game_map.h"
 #include "string_util.h"
 #include "wid_console.h"
 #include "bits.h"
@@ -44,7 +45,6 @@ static void wid_editor_save(const char *dir_and_file, int is_test_level);
 static void wid_editor_button_animate(widp b, tpp tp);
 static void wid_editor_tile_fill(int x, int y);
 static void map_editor_fixup(void);
-static void wid_editor_center(void);
 static void wid_editor_outline(void);
 
 static widp wid_editor_save_popup; // edit wid_editor_tick if you add more
@@ -167,6 +167,20 @@ static void wid_editor_set_new_tp (int x, int y, int z,
     wid_editor_ctx *ctx = wid_editor_window_ctx;
     verify(ctx);
     verify(ctx->w);
+
+    if (tp && tp_is_dungeon_floor(tp)) {
+        int scale = TILE_FLOOR_SCALE;
+        if (!(x % scale) && !(y % scale)) {
+            /*
+             * ok
+             */
+        } else {
+            /*
+             * skip
+             */
+            return;
+        }
+    }
 
     memset(&ctx->map.tile[x][y][z], 0, sizeof(wid_editor_map_tile));
     ctx->map.tile[x][y][z].tp = tp;
@@ -537,7 +551,6 @@ static void wid_editor_update_layer_mode_buttons (void)
             wid_set_color(b, WID_COLOR_BR, RED);
             wid_set_color(b, WID_COLOR_BG, BLACK);
             break;
-        case WID_EDITOR_MODE2_CENTER:
         case WID_EDITOR_MODE2_FILTER_OBJ:
         case WID_EDITOR_MODE2_FILTER_WALL:
         case WID_EDITOR_MODE2_FILTER_ACTIONS:
@@ -1056,9 +1069,51 @@ static void wid_editor_button_display (widp w, fpoint tl, fpoint br)
         return;
     }
 
+    blit_init();
+
     int xy = (typeof(xy)) (uintptr_t) wid_get_context2(w);
     int x = (xy & 0xff);
     int y = (xy & 0xff00) >> 8;
+
+    if ((x == WID_EDITOR_MENU_CELLS_ACROSS - 1) && (y == 0)) {
+        fpoint tl, br;
+        int x, y, z;
+
+        for (x = 0; x < WID_EDITOR_MENU_CELLS_ACROSS; x++) {
+        for (y = 0; y < WID_EDITOR_MENU_CELLS_DOWN; y++) {
+
+            z = MAP_DEPTH_FLOOR;
+
+            widp w = ctx->tile[x][y].button;
+
+            wid_get_tl_br(w, &tl, &br);
+
+            tpp tp = ctx->map.tile[x][y][z].tp;
+            if (!tp) {
+                continue;
+            }
+
+            if (!tp_is_dungeon_floor(tp)) {
+                continue;
+            }
+
+            fpoint btl = tl;
+            fpoint bbr = br;
+
+            tilep tile = wid_editor_tp_to_tile(tp);
+            if (!tp) {
+                continue;
+            }
+
+            color c = WHITE;
+            c.a = 255;
+            glcolor(c);
+
+            bbr.x += (bbr.x - btl.x) * (TILE_FLOOR_SCALE-1);
+            bbr.y += (bbr.y - btl.y) * (TILE_FLOOR_SCALE-1);
+            tile_blit_fat(tp, tile, 0, btl, bbr);
+        } }
+    }
 
     if (ctx->tile_mode) {
         tpp tp = ctx->tile[x][y].tile_tp;
@@ -1099,12 +1154,14 @@ static void wid_editor_button_display (widp w, fpoint tl, fpoint br)
     br.x = tl.x + width;
     tl.y = br.y - height;
 
-    blit_init();
-
     int z;
     for (z = 0; z < MAP_DEPTH; z++) {
         tpp tp = ctx->map.tile[x][y][z].tp;
         if (!tp) {
+            continue;
+        }
+
+        if (tp_is_dungeon_floor(tp)) {
             continue;
         }
 
@@ -2045,12 +2102,15 @@ static void wid_editor_test (void)
     LOG("Test selected level %d", level_no);
     game.level_no = level_no;
 
-    CON("TBD call wid_intro_single_play_selected");
+    wid_game_map_fini();
+    wid_game_map_init();
+
+    levelp level = &game.level;
+    level_resume(level);
 }
 
 static void wid_editor_outline (void)
 {
-    tpp rock;
     tpp floor;
     tpp wall;
 
@@ -2075,21 +2135,7 @@ static void wid_editor_outline (void)
             break;
         }
     }
-
-    for (;;) {
-        uint32_t id = myrand() % TP_MAX_ID;
-
-        tpp tp = id_to_tp(id);
-        if (!tp) {
-            continue;
-        }
-
-        if (tp_is_rock(tp)) {
-            rock = tp;
-            break;
-        }
-    }
-
+    
     for (;;) {
         uint32_t id = myrand() % TP_MAX_ID;
 
@@ -2127,13 +2173,12 @@ static void wid_editor_outline (void)
 
     map_editor_fixup();
 
-    wid_editor_center();
     wid_editor_ctx *ctx = wid_editor_window_ctx;
-    wid_editor_chosen_tile[ctx->tile_pool] = rock;
-    wid_editor_tile_fill(0, 0);
+    wid_editor_chosen_tile[ctx->tile_pool] = wall;
     wid_editor_undo_save();
 }
 
+#if 0
 static void wid_editor_center (void)
 {
     wid_editor_ctx *ctx = wid_editor_window_ctx;
@@ -2218,6 +2263,7 @@ static void wid_editor_center (void)
 
     wid_editor_paste(mx, my);
 }
+#endif
 
 static void wid_editor_style (void)
 {
@@ -2718,11 +2764,6 @@ static void wid_editor_tile_left_button_pressed (int x, int y)
             wid_editor_tile_mode_set(false);
             wid_editor_nuke();
             wid_editor_outline();
-            wid_editor_undo_save();
-            break;
-
-        case WID_EDITOR_MODE2_CENTER:
-            wid_editor_center();
             wid_editor_undo_save();
             break;
         }
@@ -3397,7 +3438,10 @@ static void wid_editor_load_map (uint32_t level_no)
                          false /* is_map_editor */);
         if (!l) {
             ERR("failed to create level");
+
         }
+
+        wid_editor_outline();
     }
 
     ctx->level = l;
@@ -3941,16 +3985,9 @@ void wid_editor (uint32_t level_no)
                     }
                     break;
                 case WID_EDITOR_MODE2_OUTLINE:
-                    wid_set_text(b, "Shell");
+                    wid_set_text(b, "Outline");
                     if (!sdl_joy_axes) {
                         wid_set_tooltip(b, "Create empty shell level",
-                                        vsmall_font);
-                    }
-                    break;
-                case WID_EDITOR_MODE2_CENTER:
-                    wid_set_text(b, "CENTER");
-                    if (!sdl_joy_axes) {
-                        wid_set_tooltip(b, "Center level",
                                         vsmall_font);
                     }
                     break;

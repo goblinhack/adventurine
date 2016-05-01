@@ -4233,7 +4233,7 @@ void map_jigsaw_generate (levelp level,
 
             if (tp) {
                 if (tp_is_dungeon_floor(tp)) {
-                    int scale = 2;
+                    int scale = TILE_FLOOR_SCALE;
                     if (!(x % scale) && !(y % scale)) {
                         /*
                          * ok

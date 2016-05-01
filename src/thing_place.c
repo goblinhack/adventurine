@@ -72,7 +72,6 @@ static widp thing_place__ (levelp level,
         ERR("cannot place thing, no grid map");
     }
 
-CON(" try %f %f",dx,dy);
     if (!(*fn)(level, t, x, y)) {
         widp w = wid_game_map_replace_tile(level, x, y,
                                            0, /* thing */
@@ -91,7 +90,6 @@ CON(" try %f %f",dx,dy);
     /*
      * Try to place in front of the player.
      */
-CON(" try2 %f %f",dx,dy);
     if (!(*fn)(level, t, x, y)) {
         widp w = wid_game_map_replace_tile(level, x, y,
                                            0, /* thing */
@@ -110,7 +108,6 @@ CON(" try2 %f %f",dx,dy);
     /*
      * Try to place in front of the player.
      */
-CON(" try3 %f %f",dx,dy);
     if (!(*fn)(level, t, x, y)) {
         widp w = wid_game_map_replace_tile(level, x, y,
                                            0, /* thing */

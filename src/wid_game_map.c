@@ -610,13 +610,13 @@ wid_game_map_replace_tile (levelp level,
         thing_tilep thing_tile;
 
         /*
-        * Get the first anim tile.
-        */
+         * Get the first anim tile.
+         */
         thing_tile = (typeof(thing_tile)) tree_root_get_random(thing_tiles);
 
         /*
-        * Find the real tile that corresponds to this name.
-        */
+         * Find the real tile that corresponds to this name.
+         */
         tilename = thing_tile_name(thing_tile);
         tile = tile_find(tilename);
 
