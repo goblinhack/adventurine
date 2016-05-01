@@ -7,10 +7,10 @@
 #pragma once
 
 #undef ENABLE_LEAKCHECK           // Memory leak check
-#undef ENABLE_PTRCHECK           // Check validity of pointers too
-#undef ENABLE_PTRCHECK_HISTORY   // Slower
-#undef ENABLE_WID_PTRCHECK       // Check validity of pointers too
-#undef ENABLE_THING_SANITY       // Check what things carry
+#define ENABLE_PTRCHECK           // Check validity of pointers too
+#define ENABLE_PTRCHECK_HISTORY   // Slower
+#define ENABLE_WID_PTRCHECK       // Check validity of pointers too
+#define ENABLE_THING_SANITY       // Check what things carry
 
 #undef ENABLE_MAZE_DEBUG          // Print it as generating
 #undef ENABLE_MAP_SANITY          // Extra map checks
@@ -227,20 +227,10 @@
 /*
  * Thumb in air. Needs to be big enough so wrap arounds and id reuse is less 
  * common.
- *
- * 0  ... 24 * 1024 (walls and obstacles)
- * 24 ... 48 * 1024 (monsters and player)
- * 48 ... 64 * 1024 (client local)
  */
-#define MAX_THINGS_PER_LEVEL        (MAP_WIDTH * MAP_HEIGHT * 8)
+#define MAX_THINGS_PER_LEVEL        0x1fff
+#define THING_ID_RAND_MASK          0xffff0000
 #define MAX_TIMERS_PER_LEVEL        1000
-#define THING_ID_RAND_MASK          0x00ff0000
-
-/*
- * When converting from thing co-ords where 1.0 is one grid, we must convert
- * to int when sending over the network. This is the granularity.
- */
-#define THING_COORD_SCALE                                   100.0
 
 /*
  * Timers

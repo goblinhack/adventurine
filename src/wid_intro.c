@@ -491,6 +491,7 @@ static void wid_version_make_visible (void *context)
     wid_move_to_pct_centered(w, 0.9f, 0.95);
 
     wid_game_map_fini();
+    game.level_no = 0;
     wid_game_map_init();
 
     if (!wid_change_level_timer) {
@@ -510,6 +511,7 @@ static void wid_change_level (void *context)
     wid_change_level_timer = 0;
 
     wid_game_map_fini();
+    game.level_no = 0;
     wid_game_map_init();
 
     wid_change_level_timer = action_timer_create(

@@ -170,6 +170,8 @@ static int level_update_needed (levelp level)
         return (false);
     }
 
+    verify(w);
+
     z = MAP_DEPTH_WALL;
     {
         for (x = 0; x < MAP_WIDTH; x++) {

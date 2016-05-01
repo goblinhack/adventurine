@@ -2091,6 +2091,9 @@ static void wid_editor_test (void)
     uint32_t level_no;
     level_no = TEST_LEVEL;
 
+    wid_game_map_fini();
+    level_finished_all();
+
     char *tmp = dynprintf("%s%d", LEVELS_PATH, level_no);
     LOG("Save test level %s", tmp);
     wid_editor_save(tmp, true /* is_test_level */);
@@ -2102,7 +2105,6 @@ static void wid_editor_test (void)
     LOG("Test selected level %d", level_no);
     game.level_no = level_no;
 
-    wid_game_map_fini();
     wid_game_map_init();
 
     levelp level = &game.level;
@@ -3295,8 +3297,6 @@ static void wid_editor_destroy (widp w)
         }
     }
 
-    level_destroy(&ctx->level, false /* keep player */);
-
     saved_level_no = ctx->level_no;
     saved_focus_x = ctx->focus_x;
     saved_focus_y = ctx->focus_y;
@@ -3795,6 +3795,9 @@ static void wid_editor_go_back (void)
 {
     wid_destroy(&wid_editor_background);
     wid_destroy(&wid_editor_window);
+
+    wid_game_map_fini();
+    level_finished_all();
 
     wid_map("Choose epic level", 0, 0);
 }

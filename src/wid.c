@@ -3801,7 +3801,6 @@ void wid_destroy_grid (widp w)
     uint32_t i;
 
     if (!w) {
-        ERR("no wid");
         return;
     }
 
@@ -3885,7 +3884,6 @@ void wid_detach_from_grid (widp w)
     uint32_t i;
 
     if (!w) {
-        ERR("no wid");
         return;
     }
 

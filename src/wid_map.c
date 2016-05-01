@@ -100,7 +100,7 @@ static void wid_map_update_buttons (void)
 
         wid_map_level *map = &ctx->levels[y][x];
 
-        if (map && map->level) {
+        if (map && map->name[0]) {
             color c;
             c = WHITE;
             c.a = 0;
@@ -225,11 +225,9 @@ static void wid_map_focus_right (wid_map_ctx *ctx)
         ctx->focusx = 0;
     }
 
-    levelp l = ctx->levels[ctx->focusy][ctx->focusx].level;
-    if (l) {
-        char *tmp = dynprintf("%d.%d %s", ctx->focusy, ctx->focusx, level_get_title(l));
+    if (ctx->levels[ctx->focusy][ctx->focusx].name[0]) {
+        char *tmp = ctx->levels[ctx->focusy][ctx->focusx].name;
         wid_tooltip_transient(tmp, 500);
-        myfree(tmp);
     }
 
     wid_map_update_buttons();
@@ -242,11 +240,9 @@ static void wid_map_focus_left (wid_map_ctx *ctx)
         ctx->focusx = LEVELS_DOWN - 1;
     }
 
-    levelp l = ctx->levels[ctx->focusy][ctx->focusx].level;
-    if (l) {
-        char *tmp = dynprintf("%d.%d %s", ctx->focusy, ctx->focusx, level_get_title(l));
+    if (ctx->levels[ctx->focusy][ctx->focusx].name[0]) {
+        char *tmp = ctx->levels[ctx->focusy][ctx->focusx].name;
         wid_tooltip_transient(tmp, 500);
-        myfree(tmp);
     }
 
     wid_map_update_buttons();
@@ -259,11 +255,9 @@ static void wid_map_focus_down (wid_map_ctx *ctx)
         ctx->focusy = 0;
     }
 
-    levelp l = ctx->levels[ctx->focusy][ctx->focusx].level;
-    if (l) {
-        char *tmp = dynprintf("%d.%d %s", ctx->focusy, ctx->focusx, level_get_title(l));
+    if (ctx->levels[ctx->focusy][ctx->focusx].name[0]) {
+        char *tmp = ctx->levels[ctx->focusy][ctx->focusx].name;
         wid_tooltip_transient(tmp, 500);
-        myfree(tmp);
     }
 
     wid_map_update_buttons();
@@ -276,11 +270,9 @@ static void wid_map_focus_up (wid_map_ctx *ctx)
         ctx->focusy = LEVELS_ACROSS - 1;
     }
 
-    levelp l = ctx->levels[ctx->focusy][ctx->focusx].level;
-    if (l) {
-        char *tmp = dynprintf("%d.%d %s", ctx->focusy, ctx->focusx, level_get_title(l));
+    if (ctx->levels[ctx->focusy][ctx->focusx].name[0]) {
+        char *tmp = ctx->levels[ctx->focusy][ctx->focusx].name;
         wid_tooltip_transient(tmp, 500);
-        myfree(tmp);
     }
 
     wid_map_update_buttons();
@@ -571,21 +563,6 @@ static void wid_map_destroy (widp w)
         wid_destroy(&wid_map_background);
     }
 
-    int x, y;
-
-    for (x = 1; x < LEVELS_DOWN; x++) {
-        for (y = 1; y < LEVELS_ACROSS; y++) {
-
-            levelp l = ctx->levels[y][x].level;
-            if (!l) {
-                continue;
-            }
-
-            ctx->levels[y][x].level = 0;
-            level_destroy(&l, false /* keep player */);
-        }
-    }
-
     saved_focus_x = ctx->focusx;
     saved_focus_y = ctx->focusy;
 
@@ -668,18 +645,9 @@ static void wid_map_cell_selected (widp w)
 
     LOG("Edit selected level %d", level_no);
 
-    levelp l = ctx->levels[ctx->focusy][ctx->focusx].level;
-
-    char *tmp = dynprintf("%s, %d.%d",
-                          l ? level_get_title(l) : "Unnamed level",
-                          ctx->focusy,
-                          ctx->focusx);
-
     wid_hide(wid_map_window, 0);
 
     wid_map_cell_load();
-
-    myfree(tmp);
 }
 
 static void wid_map_cell_cancelled (widp w)
@@ -1342,13 +1310,14 @@ static void wid_map_load_level (wid_map_ctx *ctx, const char *name, int level_no
         return;
     }
 
-    ctx->levels[y][x].level = l;
-
     widp b = ctx->buttons[y][x];
 
-    char *tmp = dynprintf("%d.%d %s", y, x, level_get_title(l));
-    wid_set_tooltip(b, tmp, med_font);
-    myfree(tmp);
+    snprintf(ctx->levels[y][x].name,
+             sizeof(ctx->levels[y][x].name),
+             "%d.%d %s", y, x, level_get_title(l));
+    wid_set_tooltip(b, ctx->levels[y][x].name, med_font);
+
+    level_destroy(&l, false /* keep player */);
 
     wid_set_font(b, vsmall_font);
 

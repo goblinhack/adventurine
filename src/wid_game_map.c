@@ -81,8 +81,6 @@ void wid_game_map_init (void)
 
     wid_game_map_wid_create();
 
-    game.level_no = 0;
-
     levelp level = level_load_new(game.level_no);
     if (!level) {
         DIE("no level active");
@@ -767,5 +765,9 @@ static void wid_game_map_wid_destroy (int keep_player)
         LOG("Destroy game window");
 
         wid_destroy(&game.wid_map);
+        game.wid_map = 0;
+        game.wid_grid = 0;
+        game.wid_horiz_scroll = 0;
+        game.wid_vert_scroll = 0;
     }
 }

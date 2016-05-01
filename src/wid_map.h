@@ -19,8 +19,7 @@ typedef struct wid_map_tile_ {
 } wid_map_tile;
 
 typedef struct wid_map_cell_ {
-    levelp level;
-    char *name;
+    char name[MAXSTR];
     int x;
     int y;
 
