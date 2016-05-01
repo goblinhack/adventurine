@@ -52,7 +52,7 @@ static widp wid_editor_map_dialog;
 static widp wid_choose_color_dialog;
 static widp wid_choose_title_dialog;
 static widp wid_choose_text_dialog;
-static widp wid_editor_window;
+widp wid_editor_window;
 static widp wid_editor_background;
 static wid_editor_ctx *wid_editor_window_ctx;
 
@@ -244,6 +244,7 @@ widp wid_editor_replace_template (levelp level,
     return (0);
 }
 
+#if 0
 static tpp map_editor_find_wall_at (int x, int y)
 {
     wid_editor_ctx *ctx = wid_editor_window_ctx;
@@ -275,9 +276,11 @@ static tpp map_editor_find_door_at (int x, int y)
 
     return (0);
 }
+#endif
 
 static void map_editor_fixup (void)
 {
+#if 0
     wid_editor_ctx *ctx = wid_editor_window_ctx;
     verify(ctx);
     verify(ctx->w);
@@ -491,6 +494,7 @@ static void map_editor_fixup (void)
             ctx->map.map_tile[x][y] = tile;
         }
     }
+#endif
 }
 
 /*
@@ -799,7 +803,7 @@ static void wid_editor_update_tile_mode_buttons (void)
     int y = 1;
     int i;
 
-    for (i = THING_FIRST; i < TP_MAX_ID; i++) {
+    for (i = 0; i < TP_MAX_ID; i++) {
         tpp tp = ctx->tile_pools[ctx->tile_pool][i].tile_tp;
         if (!tp) {
             continue;
@@ -936,8 +940,8 @@ static void wid_editor_update_buttons (void)
 
         tl.x = ((double) x) * width;
         tl.y = ((double) y) * height;
-        br.x = ((double) (x+1)) * width;
-        br.y = ((double) (y+1)) * height;
+        br.x = tl.x + 0.95 * width;
+        br.y = tl.y + 0.95 * height;
 
         font = vsmall_font;
 
@@ -960,7 +964,7 @@ static void wid_editor_update_buttons (void)
             }
         }
 
-        double zoom = 0.002;
+        double zoom = 0.000;
         if ((x == ctx->focus_x) && (y == ctx->focus_y)) {
             if (!is_a_map_tile) {
                 tl.x -= zoom;
@@ -978,31 +982,61 @@ static void wid_editor_update_buttons (void)
         wid_set_tl_br_pct(b, tl, br);
         wid_set_color(b, WID_COLOR_TEXT, c);
         wid_set_font(b, font);
-        wid_set_bevel(b, 1);
 
-        c = WHITE;
-        c.a = 10;
-        wid_set_color(b, WID_COLOR_TL, c);
-        wid_set_color(b, WID_COLOR_BR, c);
 
         if ((x < WID_EDITOR_MENU_MAP_ACROSS) && 
             (y < WID_EDITOR_MENU_MAP_DOWN) &&
             (ctx->map_highlight[mx][my])) {
+            c = WHITE;
+            c.a = 5;
+            wid_set_color(b, WID_COLOR_TL, c);
+            wid_set_color(b, WID_COLOR_BR, c);
+            wid_set_bevel(b, 0);
+
             color c = GREEN;
-            c.a = 100;
+            c.a = 200;
             wid_set_color(b, WID_COLOR_BG, c);
         } else if ((x == ctx->focus_x) && (y == ctx->focus_y)) {
+            c = WHITE;
+            c.a = 5;
+            wid_set_color(b, WID_COLOR_TL, c);
+            wid_set_color(b, WID_COLOR_BR, c);
+            wid_set_bevel(b, 0);
+
             color c = RED;
             c.a = 100;
             wid_set_color(b, WID_COLOR_BG, c);
         } else if (is_a_map_tile) {
+            c = WHITE;
+            c.a = 5;
+            wid_set_color(b, WID_COLOR_TL, c);
+            wid_set_color(b, WID_COLOR_BR, c);
+            wid_set_bevel(b, 0);
+
             color c = WHITE;
             c.a = 0;
             wid_set_color(b, WID_COLOR_BG, c);
+
+        } else if ((x < WID_EDITOR_MENU_MAP_ACROSS) && 
+                   (y < WID_EDITOR_MENU_MAP_DOWN)) {
+            c = WHITE;
+            c.a = 20;
+            wid_set_color(b, WID_COLOR_TL, c);
+            wid_set_color(b, WID_COLOR_BR, c);
+            wid_set_color(b, WID_COLOR_BG, c);
+            wid_set_bevel(b, 0);
+
         } else {
+            c = WHITE;
+            c.a = 5;
+            wid_set_color(b, WID_COLOR_TL, c);
+            wid_set_color(b, WID_COLOR_BR, c);
+            wid_set_bevel(b, 0);
+
             color c = GRAY;
             c.a = 50;
             wid_set_color(b, WID_COLOR_BG, c);
+            wid_set_bevel(b, 2);
         }
     } }
 
@@ -2179,6 +2213,8 @@ static void wid_editor_center (void)
 
     int mx = (minx + (MAP_WIDTH - maxx)) / 2;
     int my = (miny + (MAP_HEIGHT - maxy)) / 2;
+    mx--;
+    my--;
 
     wid_editor_paste(mx, my);
 }
@@ -3251,8 +3287,6 @@ static void wid_editor_bg_create (void)
 
         wid_set_tl_br_pct(wid, tl, br);
 
-        wid_set_tex(wid, 0, "title5");
-
         wid_lower(wid);
 
         color c;
@@ -4139,10 +4173,18 @@ void wid_editor (uint32_t level_no)
 
     if (ctx->map_x == -1) {
         ctx->map_x = MAP_WIDTH / 2;
+        ctx->map_x--;
+        ctx->map_x--;
+        ctx->map_x--;
+        ctx->map_x--;
     }
 
     if (ctx->map_y == -1) {
         ctx->map_y = MAP_HEIGHT / 2;
+        ctx->map_y--;
+        ctx->map_y--;
+        ctx->map_y--;
+        ctx->map_y--;
     }
 
     ctx->undo_at = -1;

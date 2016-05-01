@@ -122,11 +122,15 @@ widp wid_tooltip (const char *text, float x, float y, fontp font)
 
         wid_set_tl_br(wid_tooltip_window, tl, br);
 
-#if 0
         wid_set_color(wid_tooltip_window, WID_COLOR_TL, STEELBLUE);
         wid_set_color(wid_tooltip_window, WID_COLOR_BR, STEELBLUE);
         wid_set_bevel(wid_tooltip_window, 2);
-#endif
+
+        {
+            color c = BLACK;
+            c.a = 100;
+            wid_set_color(wid_tooltip_window, WID_COLOR_BG, c);
+        }
     }
 
     {
@@ -202,7 +206,6 @@ widp wid_tooltip (const char *text, float x, float y, fontp font)
 
     wid_update(wid_tooltip_window);
 
-    wid_set_tex(wid_tooltip_window, 0, "gothic_wide");
     wid_set_square(wid_tooltip_window);
 
     return (wid_tooltip_window);

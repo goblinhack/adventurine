@@ -102,7 +102,7 @@ void level_destroy (levelp *plevel, uint8_t keep_player)
 
     level = *plevel;
     if (!level) {
-        ERR("no level");
+        DIE("no level");
     }
 
     level->is_being_destroyed = true;
@@ -268,6 +268,7 @@ levelp level_load_new (int level_no)
 
     if (!level) {
         ERR("failed to load level %d", game.level_no);
+        return (0);
     }
 
     level_update_slow(level);
@@ -351,6 +352,8 @@ levelp level_load (uint32_t level_no,
             myfree(popup_str);
              */
             myfree(dir_and_file);
+
+            level_destroy(&level, false /* keep player */);
 
             return (0);
         } else {

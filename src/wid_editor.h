@@ -259,3 +259,5 @@ widp wid_editor_replace_template(levelp,
 
 extern void wid_editor_preview(widp);
 extern void wid_editor_preview_thumbnail(widp);
+
+extern widp wid_editor_window;

@@ -6480,8 +6480,8 @@ static uint8_t resource_init_last (void *context)
     /*
      * Walls
      */
-    tp_load(THING_WALL1, "wall1");
     tp_load(THING_WALL1_DECO, "wall1_deco");
+    tp_load(THING_WALL1, "wall1");
     tp_load(THING_BLOCK1, "block1");
     tp_load(THING_CRATE1, "crate1");
     tp_load(THING_SPIKES1, "spikes1");
@@ -6593,7 +6593,6 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_TRAP3, "trap3");
     tp_load(THING_COINS1, "coins1");
     tp_load(THING_CHEST1, "chest1");
-    tp_load(THING_CHEST2, "chest2");
 
     /*
      * Heroes. Must come after items they can carry.

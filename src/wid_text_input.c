@@ -491,7 +491,6 @@ widp wid_text_input (const char *title, double x, double y, int32_t args, ...)
 
     wid_update(wid_text_input_window);
 
-    wid_set_tex(wid_text_input_window, 0, "gothic_wide");
     wid_set_square(wid_text_input_window);
 
     wid_move_to_pct_centered(wid_text_input_window, 0.5, 0.5 - 1.0);

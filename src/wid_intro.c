@@ -47,6 +47,7 @@ static void wid_intro_menu_destroy(void);
 
 static int intro_effect_delay = 500;
 static int intro_effect_delay_zoom = 1000;
+static int wid_intro_ready;
 
 static int saved_focus = 0;
 
@@ -362,8 +363,20 @@ static uint8_t wid_menu_level_editor_selected (widp w,
                                                int32_t x, int32_t y,
                                                uint32_t button)
 {
+    if (!wid_intro_ready) {
+        return (true);
+    }
+
+    if (wid_change_level_timer) {
+        action_timer_destroy(&wid_timers, wid_change_level_timer);
+        wid_change_level_timer = 0;
+    }
+
+    SDL_ShowCursor(0);
     wid_intro_hide();
-    wid_map("Choose epic level", 0, 0);
+    wid_game_map_fini();
+
+    wid_map("Choose epic level to edit", 0, 0);
 
     return (true);
 }
@@ -461,6 +474,8 @@ static void wid_intro_create (void)
 
 static void wid_version_make_visible (void *context)
 {
+    wid_intro_ready = true;
+
     widp w = wid_popup(
                   "%%fg=green$Adventurine -- " VERSION,
                   "",               /* title */
