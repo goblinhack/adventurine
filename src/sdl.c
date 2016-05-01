@@ -1454,13 +1454,11 @@ void sdl_loop (void)
              * SDL doesn't seem to like an immediate center. beachball hang if 
              * we do this.
              */
-            static int first = 1;
+            static int first = 0;
             if (first) {
                 first = 0;
                 sdl_mouse_center();
-#if 0
                 SDL_ShowCursor(0);
-#endif
                 wid_mouse_motion(mouse_x, mouse_y, 0, 0, 0, 0);
             }
 
