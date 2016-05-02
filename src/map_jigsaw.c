@@ -3613,7 +3613,7 @@ static tpp map_char_to_tp (char c,
 
     case MAP_SPIKES_RANDOM: 
 
-        if ((myrand() % 100) < 75) {
+        if ((myrand() % 100) < 25) {
             if (map_jigsaw_buffer_getchar(x, y+1) == MAP_FLOOR) {
                 map_jigsaw_buffer_goto(x, y+1);
                 map_jigsaw_buffer_putchar(MAP_WALL);
@@ -3773,18 +3773,12 @@ static tpp map_char_to_tp (char c,
 
         if (shop_floor) {
             tp = random_treasure(shop_floor);
-        } else {
-            if (r < 10) {
-                tp = tp_find("torch");
-            } else {
-                tp = random_treasure(shop_floor);
-            }
+        } else if (r < 25) {
+            tp = random_treasure(shop_floor);
 
-            if ((myrand() % 100) < 25) {
-                if (map_jigsaw_buffer_getchar(x, y+1) == MAP_FLOOR) {
-                    map_jigsaw_buffer_goto(x, y+1);
-                    map_jigsaw_buffer_putchar(MAP_WALL);
-                }
+            if (map_jigsaw_buffer_getchar(x, y+1) == MAP_FLOOR) {
+                map_jigsaw_buffer_goto(x, y+1);
+                map_jigsaw_buffer_putchar(MAP_WALL);
             }
         }
         break;

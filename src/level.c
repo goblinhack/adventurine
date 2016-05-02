@@ -560,6 +560,7 @@ void level_reset_player (levelp level)
             tpp weapon = thing_weapon(t);
             if (weapon) {
                 THING_LOG(t, "Rewield weapon at start of level");
+
                 thing_wield(level, t, weapon);
             }
 

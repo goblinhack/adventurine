@@ -165,8 +165,8 @@
  * But for fluid we want it to be as few tiles as we can as we have to do a
  * lot of water rendering.
  */
-#define TILES_SCREEN_FLUID_WIDTH_PAD      0
-#define TILES_SCREEN_FLUID_HEIGHT_PAD     0
+#define TILES_SCREEN_FLUID_WIDTH_PAD      2
+#define TILES_SCREEN_FLUID_HEIGHT_PAD     2
 
 /*
  * Floor tiles occupy more space.
