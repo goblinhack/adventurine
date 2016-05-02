@@ -726,10 +726,45 @@ static int get_map_tl_br (widp w, double *tl_x, double *tl_y, double *br_x, doub
 
 void fluid_render (widp w, int minx, int miny, int maxx, int maxy)
 {
+    if (player) {
+        const uint32_t visible_width = 
+                TILES_SCREEN_WIDTH / 2 + TILES_SCREEN_FLUID_WIDTH_PAD;
+        const uint32_t visible_height = 
+                TILES_SCREEN_HEIGHT / 2 + TILES_SCREEN_FLUID_HEIGHT_PAD;
+
+        maxx = player->x + visible_width;
+        minx = player->x - visible_width;
+        maxy = player->y + visible_height;
+        miny = player->y - visible_height;
+
+        while (maxx > MAP_WIDTH) {
+            maxx--;
+            minx--;
+        }
+        while (maxy > MAP_HEIGHT) {
+            maxy--;
+            miny--;
+        }
+        while (minx < 0) {
+            maxx++;
+            minx++;
+        }
+        while (miny < 0) {
+            maxy++;
+            miny++;
+        }
+    } else {
+        minx = 0;
+        maxx = MAP_WIDTH;
+        miny = 0;
+        maxy = MAP_HEIGHT;
+    }
+
     double tl_x;
     double tl_y;
     double br_x;
     double br_y;
+
     levelp level = w->level;
 
     if (!level) {

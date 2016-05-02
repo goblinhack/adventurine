@@ -7644,10 +7644,14 @@ static void wid_light_add (widp w, fpoint at, double strength, color c)
     levelp level = wid_get_level(w);
 
     /*
+     * Looks better and brighter without this.
+     */
+
+#if 0
+    /*
      * Do a quick dmap check so that lights that are enclosed in a room do not 
      * shine
      */
-#if 1
     if (player && 
                !thing_is_player_or_owned_by_player(level, t)) {
         double sx, sy;
@@ -9201,9 +9205,9 @@ static void wid_display (widp w,
 
         if (player) {
             const uint32_t visible_width = 
-                    TILES_SCREEN_WIDTH / 2 + TILES_SCREEN_WIDTH_PAD;
+                    TILES_SCREEN_WIDTH / 2 + TILES_SCREEN_LIGHT_WIDTH_PAD;
             const uint32_t visible_height = 
-                    TILES_SCREEN_HEIGHT / 2 + TILES_SCREEN_HEIGHT_PAD;
+                    TILES_SCREEN_HEIGHT / 2 + TILES_SCREEN_LIGHT_HEIGHT_PAD;
 
             maxx = player->x + visible_width;
             minx = player->x - visible_width;
@@ -9420,12 +9424,10 @@ static void wid_display (widp w,
                                             double sx, sy;
                                             thing_real_to_map(t, &sx, &sy);
 
-#if 0
                                             int distance = dmap_distance_to_player(sx, sy);
                                             if (distance != -1) {
                                                 lit = 1;
                                             }
-#endif
                                         }
                                     } else if ((t->lit == 0) && 
                                         (t->torch_light_radius == 0) &&

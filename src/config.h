@@ -158,9 +158,20 @@
  * Padding for tiles on the edge of the smooth scroll. Has to be quite wide so 
  * that we can see the light from other player when off screen.
  */
-#define TILES_SCREEN_WIDTH_PAD      2
-#define TILES_SCREEN_HEIGHT_PAD     2
-#define TILE_FLOOR_SCALE            2
+#define TILES_SCREEN_LIGHT_WIDTH_PAD      8
+#define TILES_SCREEN_LIGHT_HEIGHT_PAD     8
+
+/*
+ * But for fluid we want it to be as few tiles as we can as we have to do a
+ * lot of water rendering.
+ */
+#define TILES_SCREEN_FLUID_WIDTH_PAD      0
+#define TILES_SCREEN_FLUID_HEIGHT_PAD     0
+
+/*
+ * Floor tiles occupy more space.
+ */
+#define TILE_FLOOR_SCALE                  2
 
 /*
  * Console
