@@ -48,6 +48,7 @@ thingp thing_place_torch (levelp level,
     if (!owner->torches) {
         return (0);
     }
+
     owner->torches--;
 
     player_wid_update(level);

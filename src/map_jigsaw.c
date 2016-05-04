@@ -97,9 +97,6 @@ char map_jigsaw_buffer[MAP_WIDTH][MAP_HEIGHT];
 static char map_jigsaw_buffer_old[MAP_WIDTH][MAP_HEIGHT];
 static uint8_t map_jigsaw_buffer_fg[MAP_WIDTH][MAP_HEIGHT];
 static uint8_t map_jigsaw_buffer_bg[MAP_WIDTH][MAP_HEIGHT];
-static int map_jigsaw_buffer_water_depth[MAP_WIDTH][MAP_HEIGHT];
-static int map_jigsaw_buffer_lava_depth[MAP_WIDTH][MAP_HEIGHT];
-static int map_jigsaw_buffer_acid_depth[MAP_WIDTH][MAP_HEIGHT];
 static uint8_t map_jigsaw_buffer_action1[MAP_WIDTH][MAP_HEIGHT];
 static uint8_t map_jigsaw_buffer_action2[MAP_WIDTH][MAP_HEIGHT];
 static uint8_t map_jigsaw_buffer_action3[MAP_WIDTH][MAP_HEIGHT];
@@ -2618,47 +2615,6 @@ static void maze_debug (dungeon_t *dg, frag_t *fragmap)
 }
 #endif
 
-static void maze_add_random_junk (void)
-{
-    int x, y;
-
-    /*
-     * Add random junk outside the level
-     */
-    for (x = 0; x <= MAP_WIDTH - 1; x++) {
-        for (y = 0; y <= MAP_HEIGHT - 1; y++) {
-
-            if (map_jigsaw_buffer_getchar(x, y) != MAP_EMPTY) {
-                continue;
-            }
-
-            map_jigsaw_buffer_goto(x, y);
-
-            int r = myrand() % 1000;
-            if (r < 450) {
-                map_jigsaw_buffer_putchar(MAP_ROCK);
-            } else if (r < 252) {
-                map_jigsaw_buffer_putchar(MAP_GENERATOR);
-            } else if (r < 255) {
-                map_jigsaw_buffer_putchar(MAP_LAVA);
-            } else if (r < 257) {
-                map_jigsaw_buffer_putchar(MAP_TRAP);
-            } else if (r < 258) {
-                map_jigsaw_buffer_putchar(MAP_TREASURE);
-            } else {
-                /*
-                 * space
-                 */
-            }
-        }
-    }
-
-#ifdef MAZE_DEBUG
-    LOG("Maze: Added random junk in outside of level");
-    map_jigsaw_buffer_print_file(MY_STDOUT, 0 /* final */);
-#endif
-}
-
 /*
  * maze_convert_to_map
  */
@@ -3521,9 +3477,6 @@ static void init (void)
     memset(map_jigsaw_buffer_old, 0, sizeof(map_jigsaw_buffer_old));
     memset(map_jigsaw_buffer_fg, 0, sizeof(map_jigsaw_buffer_fg));
     memset(map_jigsaw_buffer_bg, 0, sizeof(map_jigsaw_buffer_bg));
-    memset(map_jigsaw_buffer_water_depth, 0, sizeof(map_jigsaw_buffer_water_depth));
-    memset(map_jigsaw_buffer_lava_depth, 0, sizeof(map_jigsaw_buffer_lava_depth));
-    memset(map_jigsaw_buffer_acid_depth, 0, sizeof(map_jigsaw_buffer_acid_depth));
     memset(map_jigsaw_buffer_action1, 0, sizeof(map_jigsaw_buffer_action1));
     memset(map_jigsaw_buffer_action2, 0, sizeof(map_jigsaw_buffer_action2));
     memset(map_jigsaw_buffer_action3, 0, sizeof(map_jigsaw_buffer_action3));
@@ -3683,6 +3636,10 @@ static tpp map_char_to_tp (char c,
         tp = random_lava();
         break;
 
+    case MAP_WATER:
+        tp = tp_find("water1");
+        break;
+
     case MAP_TELEPORT:
         tp = tp_find("teleport1");
         break;
@@ -3823,189 +3780,6 @@ static tpp map_char_to_tp (char c,
     return (tp);
 }
 
-static void dmap_set_walls (dmap *d)
-{
-    int x, y;
-
-    for (x = 0; x < MAP_WIDTH; x++) {
-        for (y = 0; y < MAP_HEIGHT; y++) {
-
-            if (!jigpiece_char_is_occupiable(
-                map_jigsaw_buffer_getchar(x, y))) {
-
-                d->val[x][y] = DMAP_IS_WALL;
-            } else {
-                d->val[x][y] = DMAP_IS_WALL - 1;
-            }
-        }
-    }
-}
-
-static void dmap_create_water (dungeon_t *dg)
-{
-    int x, y;
-
-    if ((myrand() % 100) < 10) {
-        for (x = 0; x < MAP_WIDTH; x++) {
-            for (y = 0; y < MAP_HEIGHT; y++) {
-                map_jigsaw_buffer_water_depth[x][y] = -1;
-            }
-        }
-        return;
-    }
-
-    dmap d;
-
-    memset(&d, 0, sizeof(d));
-
-    dmap_set_walls(&d);
-
-    int amount = myrand() % 5;
-
-    while (amount--) {
-        int x = myrand() % MAP_WIDTH;
-        int y = myrand() % MAP_HEIGHT;
-
-        int cluster = 30;
-        int cluster_size = 20;
-        while (cluster--) {
-            int dx = (myrand() % cluster_size) - (cluster_size / 2);
-            int dy = (myrand() % cluster_size) - (cluster_size / 2);
-
-            int wx = x + dx;
-            int wy = y + dy;
-
-            if (jigpiece_char_is_occupiable(
-                map_jigsaw_buffer_getchar(wx, wy))) {
-
-                d.val[wx][wy] = 0;
-            }
-        }
-    }
-
-    dmap_process(&d);
-
-    for (x = 0; x < MAP_WIDTH; x++) {
-        for (y = 0; y < MAP_HEIGHT; y++) {
-            if (d.val[x][y] < 10) {
-                map_jigsaw_buffer_water_depth[x][y] = 10 - d.val[x][y];
-            } else {
-                map_jigsaw_buffer_water_depth[x][y] = -1;
-            }
-        }
-    }
-}
-
-static void dmap_create_lava (dungeon_t *dg)
-{
-    int x, y;
-
-    if ((myrand() % 100) < 80) {
-        for (x = 0; x < MAP_WIDTH; x++) {
-            for (y = 0; y < MAP_HEIGHT; y++) {
-                map_jigsaw_buffer_lava_depth[x][y] = -1;
-            }
-        }
-        return;
-    }
-
-    dmap d;
-
-    memset(&d, 0, sizeof(d));
-
-    dmap_set_walls(&d);
-
-    int amount = myrand() % 3;
-
-    while (amount--) {
-        int x = myrand() % MAP_WIDTH;
-        int y = myrand() % MAP_HEIGHT;
-
-        int cluster = 30;
-        int cluster_size = 20;
-        while (cluster--) {
-            int dx = (myrand() % cluster_size) - (cluster_size / 2);
-            int dy = (myrand() % cluster_size) - (cluster_size / 2);
-
-            int wx = x + dx;
-            int wy = y + dy;
-
-            if (jigpiece_char_is_occupiable(
-                map_jigsaw_buffer_getchar(wx, wy))) {
-
-                d.val[wx][wy] = 0;
-            }
-        }
-    }
-
-    dmap_process(&d);
-
-    for (x = 0; x < MAP_WIDTH; x++) {
-        for (y = 0; y < MAP_HEIGHT; y++) {
-            if (d.val[x][y] < 10) {
-                map_jigsaw_buffer_lava_depth[x][y] = 10 - d.val[x][y];
-            } else {
-                map_jigsaw_buffer_lava_depth[x][y] = -1;
-            }
-        }
-    }
-}
-
-static void dmap_create_acid (dungeon_t *dg)
-{
-    int x, y;
-
-    if ((myrand() % 100) < 90) {
-        for (x = 0; x < MAP_WIDTH; x++) {
-            for (y = 0; y < MAP_HEIGHT; y++) {
-                map_jigsaw_buffer_acid_depth[x][y] = -1;
-            }
-        }
-        return;
-    }
-
-    dmap d;
-
-    memset(&d, 0, sizeof(d));
-
-    dmap_set_walls(&d);
-
-    int amount = myrand() % 3;
-
-    while (amount--) {
-        int x = myrand() % MAP_WIDTH;
-        int y = myrand() % MAP_HEIGHT;
-
-        int cluster = 30;
-        int cluster_size = 20;
-        while (cluster--) {
-            int dx = (myrand() % cluster_size) - (cluster_size / 2);
-            int dy = (myrand() % cluster_size) - (cluster_size / 2);
-
-            int wx = x + dx;
-            int wy = y + dy;
-
-            if (jigpiece_char_is_occupiable(
-                map_jigsaw_buffer_getchar(wx, wy))) {
-
-                d.val[wx][wy] = 0;
-            }
-        }
-    }
-
-    dmap_process(&d);
-
-    for (x = 0; x < MAP_WIDTH; x++) {
-        for (y = 0; y < MAP_HEIGHT; y++) {
-            if (d.val[x][y] < 10) {
-                map_jigsaw_buffer_acid_depth[x][y] = 10 - d.val[x][y];
-            } else {
-                map_jigsaw_buffer_acid_depth[x][y] = -1;
-            }
-        }
-    }
-}
-
 /*
  * map_jigsaw_generate
  */
@@ -4144,13 +3918,6 @@ void map_jigsaw_generate (levelp level,
         }
 
         maze_add_final_borders();
-
-        if (0) {
-            maze_add_random_junk();
-            dmap_create_water(dg);
-            dmap_create_lava(dg);
-            dmap_create_acid(dg);
-        }
 
         if (!finalize_level(dg)) {
             maze_seed += myrand();

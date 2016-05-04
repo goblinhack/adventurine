@@ -65,7 +65,6 @@ enum {
 enum {
     WID_TILE_MODE_NONE,
     WID_TILE_MODE_WALLS,
-    WID_TILE_MODE_DOORS,
     WID_TILE_MODE_FLOORS,
     WID_TILE_MODE_MOB_SPAWNERS,
     WID_TILE_MODE_MONST,
@@ -86,7 +85,7 @@ enum {
      * Add to here, update WID_TILE_POOL_MAX
      */
 };
-#define WID_TILE_POOL_MAX 15
+#define WID_TILE_POOL_MAX 14
 
 typedef struct wid_editor_tile_ {
     int x;

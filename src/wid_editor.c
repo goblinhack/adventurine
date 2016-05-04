@@ -867,9 +867,6 @@ static void wid_editor_update_tile_mode_buttons (void)
         case WID_TILE_MODE_FLOORS:
             wid_set_text(b, "Floor");
             break;
-        case WID_TILE_MODE_DOORS:
-            wid_set_text(b, "Doors");
-            break;
         case WID_TILE_MODE_MONST:
             wid_set_text(b, "Monst");
             break;
@@ -898,7 +895,7 @@ static void wid_editor_update_tile_mode_buttons (void)
             wid_set_text(b, "Traps");
             break;
         case WID_TILE_MODE_ITEMS:
-            wid_set_text(b, "Items");
+            wid_set_text(b, "Other");
             break;
         case WID_TILE_MODE_PLAYER:
             wid_set_text(b, "Heroes");
@@ -3220,10 +3217,9 @@ static uint8_t wid_editor_load_tile (const tree_node *node, void *arg)
 
     if (tp_is_wall(tp) ||
         tp_is_rock(tp) ||
+        tp_is_door(tp) ||
         tp_is_obstacle(tp)) {
         tile_pool = WID_TILE_MODE_WALLS;
-    } else if (tp_is_door(tp)) {
-        tile_pool = WID_TILE_MODE_DOORS;
     } else if (tp_is_dungeon_floor(tp) || 
                tp_is_ladder(tp) || 
                tp_is_rope(tp) || 

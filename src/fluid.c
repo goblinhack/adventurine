@@ -22,16 +22,73 @@
 #include "fluid.h"
 #include "math_util.h"
 
+static void fluid_place_water (levelp level, int x, int y)
+{
+    uint16_t fx;
+    uint16_t fy;
+
+    for (fx = x * FLUID_RESOLUTION; 
+            fx < (x * FLUID_RESOLUTION) + FLUID_RESOLUTION; 
+            fx++) {
+        for (fy = y * FLUID_RESOLUTION; 
+                fy < (y * FLUID_RESOLUTION) + FLUID_RESOLUTION; 
+                fy++) {
+
+            level->fluid[fx][fy].mass = FLUID_MAX_MASS;
+            level->fluid[fx][fy].type = FLUID_IS_WATER;
+        }
+    }
+}
+
 void fluid_init (levelp level)
 {
-    uint16_t x, y;
+    int no_random_water = false;
+    uint16_t x, y, z;
+
+    widp grid_wid;
+
+    grid_wid = level_get_map(level);
+    if (!grid_wid) {
+        DIE("no grid wid");
+    }
 
     memset(level->fluid, 0, sizeof(level->fluid));
+
+    z = MAP_DEPTH_FLOOR2;
+    {
+        for (y = 0; y < MAP_HEIGHT; y++) {
+            for (x = 0; x < MAP_WIDTH; x++) {
+
+                /*
+                 * Look for a floor tile where we can place stuff.
+                 */
+                widp w = wid_grid_find_first(grid_wid, x, y, z);
+                while (w) {
+                    thingp thing_it = wid_get_thing(w);
+
+                    if (!thing_it) {
+                        w = wid_grid_find_next(grid_wid, w, x, y, z);
+                        continue;
+                    }
+
+                    if (thing_is_water(thing_it)) {
+                        thing_dead(level, thing_it, 0, "place water");
+                        fluid_place_water(level, x, y);
+
+                        no_random_water = true;
+                    }
+
+                    w = wid_grid_find_next(grid_wid, w, x, y, z);
+                }
+            }
+        }
+    }
 
     for (x = 0; x < MAP_WIDTH; x++) {
         for (y = 0; y < MAP_HEIGHT; y++) {
 
             if (map_find_wall_at(level, x, y, 0)) {
+                fluid_place_water(level, x, y);
                 uint16_t fx;
                 uint16_t fy;
 
@@ -47,6 +104,11 @@ void fluid_init (levelp level)
                     }
                 }
             } else {
+
+                if (no_random_water) {
+                    continue;
+                }
+
                 uint16_t r;
                 for (r = 0; r < 20; r++) {
                     uint16_t fx;
