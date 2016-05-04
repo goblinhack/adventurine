@@ -66,5 +66,5 @@ void thing_collect_rope (levelp level,
 
     player_wid_update(level);
 
-    thing_dead(level, it, owner, "collected");
+    thing_dead(level, it, owner, "collected rope");
 }

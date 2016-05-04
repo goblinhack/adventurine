@@ -3287,6 +3287,8 @@ static void wid_editor_load_map (uint32_t level_no)
     verify(ctx);
     verify(ctx->w);
 
+    LOG("Editor loading level %d", level_no);
+
     levelp l = level_load(level_no, 
                           true, /* is_editor */
                           false /* is_map_editor */);

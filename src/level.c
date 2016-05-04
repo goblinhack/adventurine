@@ -272,6 +272,8 @@ levelp level_load_new (int level_no)
     }
 
     if (fixed) {
+        LOG("Level %s exists, create fixed level", tmp);
+
         level = level_load(game.level_no,
                            false /* is_editor */,
                            false /* is_map_editor */);
@@ -284,6 +286,8 @@ levelp level_load_new (int level_no)
     }
 
     myfree(tmp);
+
+    LOG("New level, %d done loading", level_no);
 
     if (!level) {
         ERR("failed to load level %d", game.level_no);
@@ -334,13 +338,17 @@ levelp level_load (uint32_t level_no,
         dir_and_file = dynprintf("adventurine-data/levels/%d", level_no);
     }
 
-    LEVEL_LOG(level, "Level %s: loading", dir_and_file);
-
     int pass;
     int max_pass;
 
-    if (level_is_map_editor(level) || level_is_editor(level)) {
+    if (level_is_map_editor(level) || 
+        level_is_editor(level)) {
+
         max_pass = 1;
+
+        LEVEL_LOG(level, "Level %s: loading editor, max passes %d", 
+                  dir_and_file, max_pass);
+
     } else {
         /*
          * Need 2 passes for levels being read into the game. First pass is 
@@ -350,9 +358,14 @@ levelp level_load (uint32_t level_no,
          * Second pass creates the things.
          */
         max_pass = 2;
+
+        LEVEL_LOG(level, "Level %s: loading, max passes %d", dir_and_file,
+                  max_pass);
     }
 
     for (pass = 0; pass < max_pass; pass++) {
+        LEVEL_LOG(level, "Level %s: loading pass %d", dir_and_file, pass);
+
         demarshal_p in;
 
         game.level_is_being_loaded = pass + 1;

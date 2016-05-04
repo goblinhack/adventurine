@@ -27,8 +27,6 @@
 #include "thing_shop.h"
 #include "player.h"
 
-int level_is_being_loaded;
-
 double last_playery;
 double last_playerx;
 
@@ -39,7 +37,6 @@ uint32_t player_action_bar_changed_at;
 
 uint32_t tile_width;
 uint32_t tile_height;
-int level_is_being_loaded;
 
 static void wid_game_map_wid_destroy(int keep_player);
 
@@ -406,7 +403,7 @@ wid_game_map_replace_tile (levelp level,
      * Does not handle rotation of triggers correctly, so commented out for 
      * now
      */
-    if (level_is_being_loaded) {
+    if (game.level_is_being_loaded) {
         if (level != last_level) {
             last_level = level;
 
@@ -460,7 +457,7 @@ wid_game_map_replace_tile (levelp level,
     int iy = y;
     int depth = level->level_no;
 
-    if (level_is_being_loaded == 1) {
+    if (game.level_is_being_loaded == 1) {
         /*
          * Map random things to real things.
          */
@@ -516,7 +513,7 @@ wid_game_map_replace_tile (levelp level,
     /*
      * First pass? Only interested in location of triggers.
      */
-    if (level_is_being_loaded == 1) {
+    if (game.level_is_being_loaded == 1) {
         /*
          * Record what triggers exist on the level.
          */
@@ -538,7 +535,7 @@ wid_game_map_replace_tile (levelp level,
      * Second pass, do not create things that are to only be created on 
      * triggers.
      */
-    if (level_is_being_loaded == 2) {
+    if (game.level_is_being_loaded == 2) {
         /*
          * If there is a trigger here 
          */
@@ -732,7 +729,7 @@ wid_game_map_replace_tile (levelp level,
     /*
      * Avoid doing the map fixup all the time as it is expensive.
      */
-    if (level_is_being_loaded) {
+    if (game.level_is_being_loaded) {
         return (child);
     }
 

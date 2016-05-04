@@ -49,5 +49,5 @@ void thing_collect_bomb (levelp level,
 
     player_wid_update(level);
 
-    thing_dead(level, it, owner, "collected");
+    thing_dead(level, it, owner, "collected bomb");
 }

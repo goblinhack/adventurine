@@ -665,6 +665,8 @@ CON("  overlap %s vs %s",thing_logname(me), thing_logname(it));
                  * Don't collect ticking bombs.
                  */
             } else {
+                thing_set_is_collected(it, true);
+
                 if (thing_is_bomb(it)) {
                     thing_collect_bomb(level, me, it);
                     return (true);
