@@ -112,6 +112,13 @@ typedef struct level_t_ {
      */
     int32_t tick_started;
 
+    uint32_t last_moved;
+    uint32_t last_hit_obstacle;
+    uint32_t last_jumped;
+    uint32_t last_bomb;
+    uint32_t last_rope;
+    uint32_t last_torch;
+
 #define MAX_TRIGGERS 256
     level_trigger trigger[MAX_TRIGGERS];
 

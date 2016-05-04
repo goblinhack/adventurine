@@ -67,11 +67,6 @@ static widp thing_place__ (levelp level,
     /*
      * Try to place in front of the player.
      */
-    widp grid = game.wid_grid;
-    if (!grid) {
-        ERR("cannot place thing, no grid map");
-    }
-
     if (!(*fn)(level, t, x, y)) {
         widp w = wid_game_map_replace_tile(level, x, y,
                                            0, /* thing */
@@ -116,6 +111,24 @@ static widp thing_place__ (levelp level,
         return (w);
     }
 
+    dx = 0.0;
+
+    thing_real_to_fmap(t, &x, &y);
+
+    x += dx;
+    y += dy;
+
+    /*
+     * Try to place in front of the player.
+     */
+    if (!(*fn)(level, t, x, y)) {
+        widp w = wid_game_map_replace_tile(level, x, y,
+                                           0, /* thing */
+                                           tp,
+                                           0 /* tpp_data */);
+        return (w);
+    }
+
     if (!behind) {
         return (0);
     }
@@ -123,7 +136,7 @@ static widp thing_place__ (levelp level,
     /*
      * Just place anywhere free.
      */
-    for (dx = -1.0; dx <= 1.0; dx += 1.0) {
+    for (dx = -1.0; dx <= 1.0; dx += 0.5) {
         dy = 0; {
             if ((dx == 0.0) && (dy == 0.0)) {
                 continue;
@@ -180,6 +193,8 @@ static widp thing_place_ (levelp level,
     thing_hit_obstacle_fn fn;
 
     if (tp_is_bomb(tp)) {
+        fn = thing_hit_solid_obstacle;
+    } else if (tp_is_torch(tp)) {
         fn = thing_hit_solid_obstacle;
     } else if (tp_is_rope(tp)) {
         fn = thing_hit_fall_obstacle;

@@ -77,6 +77,13 @@ levelp level_reinit (uint32_t level_no,
 
     level->is_valid = true;
 
+    level->last_moved = 
+    level->last_hit_obstacle =
+    level->last_jumped =
+    level->last_bomb =
+    level->last_rope =
+    level->last_torch = time_get_time_ms();
+
     if (!is_editor && !is_map_editor) {
         wid_game_map_grid_create(level);
     }

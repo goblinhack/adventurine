@@ -227,14 +227,7 @@ uint8_t player_move (levelp level)
         }
     }
 
-    static uint32_t last_moved = 0;
-    static uint32_t last_hit_obstacle = 0;
-    static uint32_t last_jumped = 0;
-    static uint32_t last_bomb = 0;
-    static uint32_t last_rope = 0;
-    static uint32_t last_torch = 0;
-
-    if (!time_have_x_hundredths_passed_since(2, last_moved)) {
+    if (!time_have_x_hundredths_passed_since(2, level->last_moved)) {
         double x = player->x;
         double y = player->y;
 
@@ -242,7 +235,7 @@ uint8_t player_move (levelp level)
         return (false);
     }
 
-    last_moved = time_get_time_ms();
+    level->last_moved = time_get_time_ms();
 
     double x = player->x;
     double y = player->y;
@@ -282,14 +275,14 @@ uint8_t player_move (levelp level)
      * Don't allow too frequent jumps
      */
     if (jump) {
-        if (!time_have_x_hundredths_passed_since(15, last_jumped)) {
+        if (!time_have_x_hundredths_passed_since(15, level->last_jumped)) {
             jump = 0;
         }
     }
 
     if (jump) {
-        if (last_hit_obstacle &&
-            !time_have_x_hundredths_passed_since(15, last_hit_obstacle)) {
+        if (level->last_hit_obstacle &&
+            !time_have_x_hundredths_passed_since(15, level->last_hit_obstacle)) {
 
             /*
              * Allow the player to cling onto and jump when they hit a ledge 
@@ -298,7 +291,7 @@ uint8_t player_move (levelp level)
             if (player->fall_speed < 0.50) {
                 if (!player->jump_speed) {
                     player->jump_speed = jump_speed;
-                    last_jumped = time_get_time_ms();
+                    level->last_jumped = time_get_time_ms();
                 }
             }
         }
@@ -309,42 +302,42 @@ uint8_t player_move (levelp level)
         if (!player->fall_speed) {
             if (!player->jump_speed) {
                 player->jump_speed = jump_speed;
-                last_jumped = time_get_time_ms();
+                level->last_jumped = time_get_time_ms();
             }
         }
     }
 
     if (bomb) {
-        if (!time_have_x_hundredths_passed_since(15, last_bomb)) {
+        if (!time_have_x_hundredths_passed_since(15, level->last_bomb)) {
             bomb = 0;
         }
 
         if (bomb) {
-            last_bomb = time_get_time_ms();
+            level->last_bomb = time_get_time_ms();
 
             thing_place_bomb(level, player, player->x, player->y);
         }
     }
 
     if (rope) {
-        if (!time_have_x_hundredths_passed_since(15, last_rope)) {
+        if (!time_have_x_hundredths_passed_since(15, level->last_rope)) {
             rope = 0;
         }
 
         if (rope) {
-            last_rope = time_get_time_ms();
+            level->last_rope = time_get_time_ms();
 
             thing_place_ropetop(level, player, player->x, player->y);
         }
     }
 
     if (torch) {
-        if (!time_have_x_hundredths_passed_since(15, last_torch)) {
+        if (!time_have_x_hundredths_passed_since(15, level->last_torch)) {
             torch = 0;
         }
 
         if (torch) {
-            last_torch = time_get_time_ms();
+            level->last_torch = time_get_time_ms();
 
             thing_place_torch(level, player, player->x, player->y);
         }
@@ -354,7 +347,7 @@ uint8_t player_move (levelp level)
      * If we hit a side wall when falling, slow the fall.
      */
     if (thing_hit_solid_obstacle(level, player, x + player->momentum, y)) {
-        last_hit_obstacle = time_get_time_ms();
+        level->last_hit_obstacle = time_get_time_ms();
 
         if (player->fall_speed) {
             player->fall_speed *= wall_friction;
