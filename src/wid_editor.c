@@ -46,6 +46,7 @@ static void wid_editor_button_animate(widp b, tpp tp);
 static void wid_editor_tile_fill(int x, int y);
 static void map_editor_fixup(void);
 static void wid_editor_outline(void);
+static void wid_editor_outline_(void);
 
 static widp wid_editor_save_popup; // edit wid_editor_tick if you add more
 static widp wid_editor_map_dialog;
@@ -86,9 +87,6 @@ static int layer_to_depth (int layer)
 
     case WID_EDITOR_MODE2_FILTER_WALL:
         return (MAP_DEPTH_WALL);
-
-    case WID_EDITOR_MODE2_FILTER_FLOOR:
-        return (MAP_DEPTH_FLOOR);
 
     case WID_EDITOR_MODE2_FILTER_ACTIONS:
         return (MAP_DEPTH_ACTIONS);
@@ -1187,6 +1185,11 @@ static void wid_editor_button_display (widp w, fpoint tl, fpoint br)
 
         thing_template_data *data = &ctx->map.tile[x][y][z].data;
         color c = data->col;
+
+        if (!c.r && !c.g && !c.b) {
+            c = WHITE;
+        }
+
         c.a = 255;
         glcolor(c);
 
@@ -1940,6 +1943,8 @@ static void wid_editor_draw_highlight_line (int x0, int y0, int x1, int y1)
 
 static void wid_editor_undo_save (void)
 {
+    wid_editor_outline_();
+
     wid_editor_ctx *ctx = wid_editor_window_ctx;
 
     /*
@@ -2022,7 +2027,7 @@ static void wid_editor_nuke (void)
 
     memset(&ctx->map, 0, sizeof(ctx->map));
 
-    map_editor_fixup();
+    wid_editor_outline();
 }
 
 static void wid_editor_test (void)
@@ -2055,7 +2060,7 @@ static void wid_editor_test (void)
     level->is_test_level = true;
 }
 
-static void wid_editor_outline (void)
+static void wid_editor_outline_ (void)
 {
     tpp floor;
     tpp wall;
@@ -2118,9 +2123,10 @@ static void wid_editor_outline (void)
     }
 
     map_editor_fixup();
+}
 
-    wid_editor_ctx *ctx = wid_editor_window_ctx;
-    wid_editor_chosen_tile[ctx->tile_pool] = wall;
+static void wid_editor_outline (void)
+{
     wid_editor_undo_save();
 }
 
@@ -2211,7 +2217,9 @@ static void wid_editor_random (void)
 
     int depth = ctx->level_no;
 
-    map_jigsaw_generate(0, depth, wid_editor_replace_template);
+    map_jigsaw_generate(ctx->level, depth, wid_editor_replace_template);
+
+    level_update_slow(ctx->level);
 
     map_editor_fixup();
 
@@ -2612,7 +2620,6 @@ static void wid_editor_tile_left_button_pressed (int x, int y)
             break;
         case WID_EDITOR_MODE2_UNUSED_8:
             break;
-        case WID_EDITOR_MODE2_FILTER_FLOOR:
         case WID_EDITOR_MODE2_FILTER_OBJ:
         case WID_EDITOR_MODE2_FILTER_WALL:
         case WID_EDITOR_MODE2_FILTER_ACTIONS:
@@ -2659,7 +2666,9 @@ static void wid_editor_tile_left_button_pressed (int x, int y)
 
             case WID_EDITOR_MODE_STYLE:
                 wid_editor_tile_mode_set(false);
+                if (0) {
                 wid_editor_style();
+                }
                 break;
 
             case WID_EDITOR_MODE_RANDOM:
@@ -3814,12 +3823,6 @@ void wid_editor (uint32_t level_no)
                                         vsmall_font);
                     }
                     break;
-                case WID_EDITOR_MODE2_FILTER_FLOOR:
-                    wid_set_text(b, "Floor");
-                    if (!sdl_joy_axes) {
-                        wid_set_tooltip(b, "Floor layer", vsmall_font);
-                    }
-                    break;
                 case WID_EDITOR_MODE2_FILTER_OBJ:
                     wid_set_text(b, "Obj");
                     if (!sdl_joy_axes) {
@@ -3863,7 +3866,7 @@ void wid_editor (uint32_t level_no)
                     }
                     break;
                 case WID_EDITOR_MODE_PAINT:
-                    wid_set_text(b, "Paint");
+                    wid_set_text(b, "SetCol");
                     if (!sdl_joy_axes) {
                         wid_set_tooltip(b, "P - recolor tiles", vsmall_font);
                     }
@@ -3875,7 +3878,7 @@ void wid_editor (uint32_t level_no)
                     }
                     break;
                 case WID_EDITOR_MODE_FILL:
-                    wid_set_text(b, "Fill");
+                    wid_set_text(b, "Flood");
                     if (!sdl_joy_axes) {
                         wid_set_tooltip(b, "f - flood fill", vsmall_font);
                     }
@@ -3985,11 +3988,13 @@ void wid_editor (uint32_t level_no)
                     }
                     break;
                 case WID_EDITOR_MODE_STYLE:
+#if 0
                     wid_set_text(b, "Style");
                     if (!sdl_joy_axes) {
                         wid_set_tooltip(b, "Retheme walls and floors randomly",
                                         vsmall_font);
                     }
+#endif
                     break;
                 case WID_EDITOR_MODE_VFLIP:
                     wid_set_text(b, "Vflip");
