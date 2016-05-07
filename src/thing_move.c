@@ -167,6 +167,10 @@ int thing_fall (levelp level, thingp t)
         t->fall_speed = 1;
     }
 
+    if (thing_is_submerged(level, t)) {
+        t->fall_speed /= 4.0;
+    }
+
     y = t->y + t->fall_speed;
     it = thing_hit_fall_obstacle(level, t, x, y);
     if (it) {
@@ -442,14 +446,14 @@ void thing_wid_move (levelp level,
     if (thing_is_player(t) || 
         thing_is_monst(t)) {
 
-        if ( thing_is_submerged(level, t)) {
+        if (thing_is_submerged(level, t)) {
             if (thing_is_dir_left(t)) {
-                wid_rotate_to_pct_in(w, 65, 70, ONESEC/2, 999);
+                wid_rotate_to_pct_in(w, 65, 70, ONESEC, 999);
             } else {
-                wid_rotate_to_pct_in(w, -65, -70, ONESEC/2, 999);
+                wid_rotate_to_pct_in(w, -65, -70, ONESEC, 999);
             }
         } else {
-                wid_rotate_to_pct_in(w, 0, 0, 0, 999);
+            wid_rotate_to_pct_in(w, 0, 0, ONESEC, 999);
             wid_effect_sways(t->wid);
         }
 

@@ -209,21 +209,27 @@ uint8_t player_move (levelp level)
         }
     }
 
+    double submerged = thing_is_submerged(level, player);
+
     if (up) {
-        if (!thing_overlaps(level, player, player->x, player->y -0.5, 
-                            thing_is_climbable) &&
-            !thing_overlaps(level, player, player->x, player->y,      
-                            thing_is_climbable)) {
-            up = 0;
+        if (!submerged) {
+            if (!thing_overlaps(level, player, player->x, player->y -0.5, 
+                                thing_is_climbable) &&
+                !thing_overlaps(level, player, player->x, player->y,      
+                                thing_is_climbable)) {
+                up = 0;
+            }
         }
     }
 
     if (down) {
-        player->momentum = 0;
+        if (!submerged) {
+            player->momentum = 0;
 
-        if (!thing_overlaps(level, player, player->x, player->y + 0.5, 
-                            thing_is_climbable)) {
-            up = 0;
+            if (!thing_overlaps(level, player, player->x, player->y + 0.5, 
+                                thing_is_climbable)) {
+                down = 0;
+            }
         }
     }
 
