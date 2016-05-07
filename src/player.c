@@ -368,7 +368,7 @@ uint8_t player_move (levelp level)
     /*
      * If no key then we allow the console.
      */
-    return (up || down || left || right || fire);
+    return (up || down || left || right || fire || jump || torch || bomb || rope);
 }
 
 uint8_t player_key (widp w, const SDL_KEYSYM *key)

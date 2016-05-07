@@ -7935,11 +7935,11 @@ static void wid_display_fast (widp w,
      * Allow slime molds to look either way without bothering to create the 
      * animation for it! Lazy...
      */
-    if (unlikely(w->flip_vert)) {
+    if (unlikely(w->flip_horiz)) {
         swap(tl.x, br.x);
     }
 
-    if (unlikely(w->flip_horiz)) {
+    if (unlikely(w->flip_vert)) {
         swap(tl.y, br.y);
     }
 
@@ -8708,7 +8708,8 @@ static void wid_lighting_debug (widp w,
  */
 static void wid_display (widp w,
                          uint8_t disable_scissor,
-                         uint8_t *updated_scissors)
+                         uint8_t *updated_scissors,
+                         int clip)
 {
     uint8_t did_push_matrix;
     int32_t clip_height;
@@ -8742,14 +8743,16 @@ static void wid_display (widp w,
      * If we're clipped out of existence! then nothing to draw. This can
      * be outside the bounds of a widget or if at the top level, off screeen.
      */
-    clip_width = brx - tlx;
-    if (clip_width < 0) {
-        return;
-    }
+    if (clip) {
+        clip_width = brx - tlx;
+        if (clip_width < 0) {
+            return;
+        }
 
-    clip_height = bry - tly;
-    if (clip_height < 0) {
-        return;
+        clip_height = bry - tly;
+        if (clip_height < 0) {
+            return;
+        }
     }
 
     fading = wid_is_fading(w);
@@ -8868,40 +8871,6 @@ static void wid_display (widp w,
 
     did_push_matrix = false;
 
-    /*
-     * Do rotation and flipping.
-     */
-    if (w->rotating || w->rotated || w->bouncing || 
-        w->flip_vert || w->flip_horiz) {
-
-        did_push_matrix = true;
-
-        glPushMatrix();
-        glTranslatef(((tlx + brx)/2), ((tly + bry)/2), 0);
-
-        if (w->bouncing) {
-            glTranslatef(0, - wid_get_bounce(w), 0);
-        }
-
-        /*
-         * If rotating the widget, turn off the scissors.
-         */
-        if (w->rotating || w->rotated) {
-            disable_scissor = true;
-
-            glRotatef(wid_get_rotate(w), 0, 0, 1);
-        }
-
-        if (w->flip_horiz) {
-            glScalef(-1, 1, 1);
-        }
-
-        if (w->flip_vert) {
-            glScalef(1, -1, 1);
-        }
-
-        glTranslatef(-((tlx + brx)/2), -((tly + bry)/2), 0);
-    }
 
     /*
      * If inputting text, show a cursor.
@@ -8978,6 +8947,41 @@ static void wid_display (widp w,
     tl.y = otly;
     br.x = otlx + wid_get_width(w);
     br.y = otly + wid_get_height(w);
+
+    /*
+     * Do rotation and flipping.
+     */
+    if (w->rotating || w->rotated || w->bouncing || 
+        w->flip_vert || w->flip_horiz) {
+
+        did_push_matrix = true;
+
+        glPushMatrix();
+        glTranslatef(((tl.x + br.x)/2), ((tl.y + br.y)/2), 0);
+
+        if (w->bouncing) {
+            glTranslatef(0, - wid_get_bounce(w), 0);
+        }
+
+        /*
+         * If rotating the widget, turn off the scissors.
+         */
+        if (w->rotating || w->rotated) {
+            disable_scissor = true;
+
+            glRotatef(-wid_get_rotate(w), 0, 0, 1);
+        }
+
+        if (w->flip_horiz) {
+            glScalef(-1, 1, 1);
+        }
+
+        if (w->flip_vert) {
+            glScalef(1, -1, 1);
+        }
+
+        glTranslatef(-((tl.x + br.x)/2), -((tl.y + br.y)/2), 0);
+    }
 
     if (w->on_display) {
         (w->on_display)(w, tl, br);
@@ -9056,7 +9060,11 @@ static void wid_display (widp w,
             br = new_br;
         }
 
+        blit_flush();
+        blit_init();
         tile_blit_fat2(wid_get_thing_template(w), tile, 0, tl, br);
+        blit_flush();
+        blit_init();
 
         glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -9275,15 +9283,23 @@ static void wid_display (widp w,
                         widp w = node->wid;
  
                         if (unlikely(wid_this_is_hidden(w))) {
-                        } else if (w->text[0]) {
+                            /*
+                             * Skip
+                             */
+                        } else if (unlikely(w->text[0])) {
                             /*
                              * Do later post light source.
                              */
+                        } else if (unlikely(w->rotating || w->rotated)) {
+                            uint8_t child_updated_scissors = false;
+                            blit_flush();
+                            wid_display(w, true, &child_updated_scissors, false);
+                            blit_init();
                         } else {
                             wid_display_fast(w,
-                                             shake_x,
-                                             shake_y,
-                                             0, black_and_white);
+                                            shake_x,
+                                            shake_y,
+                                            0, black_and_white);
                         }
                     }
                 }
@@ -9438,10 +9454,16 @@ static void wid_display (widp w,
 
                                 if (lit || w->text[0]) {
                                     if (unlikely(wid_this_is_hidden(node->wid))) {
-                                    } else if (w->text[0]) {
+                                    } else if (unlikely(w->text[0])) {
                                         uint8_t child_updated_scissors = false;
             
+                                        wid_display(w, true, 
+                                                    &child_updated_scissors);
+                                    } else if (unlikely(w->rotating || w->rotated)) {
+                                        uint8_t child_updated_scissors = false;
+                                        blit_flush();
                                         wid_display(w, true, &child_updated_scissors);
+                                        blit_init();
                                     } else {
                                         /*
                                          * Doesn't look that great as a torch 
@@ -9498,7 +9520,7 @@ static void wid_display (widp w,
                                         tree_prev_tree_wid_compare_func) {
             uint8_t child_updated_scissors = false;
 
-            wid_display(child, disable_scissor, &child_updated_scissors);
+            wid_display(child, disable_scissor, &child_updated_scissors, clip);
 
             /*
              * Need to re-enforce the parent's scissors if the child did
@@ -9731,7 +9753,8 @@ void wid_display_all (void)
 
         wid_display(w,
                     false /* disable_scissors */,
-                    0 /* updated_scissors */);
+                    0 /* updated_scissors */,
+                    true);
 
         if (w->on_display_top_level) {
             (w->on_display_top_level)(w);
@@ -10675,28 +10698,28 @@ void wid_flip_vert (widp w, uint8_t val)
 {
     fast_verify(w);
 
-    w->flip_horiz = val;
+    w->flip_vert = val;
 }
 
 void wid_flip_horiz (widp w, uint8_t val)
 {
     fast_verify(w);
 
-    w->flip_vert = val;
+    w->flip_horiz = val;
 }
 
 uint8_t wid_get_flip_vert (widp w)
 {
     fast_verify(w);
 
-    return (w->flip_horiz);
+    return (w->flip_vert);
 }
 
 uint8_t wid_get_flip_horiz (widp w)
 {
     fast_verify(w);
 
-    return (w->flip_vert);
+    return (w->flip_horiz);
 }
 
 void wid_effect_sways (widp w)

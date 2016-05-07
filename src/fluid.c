@@ -1013,3 +1013,28 @@ void fluid_render (widp w, int minx, int miny, int maxx, int maxy)
         }
     }
 }
+
+int thing_is_submerged (levelp level, thingp t)
+{
+    int dx, dy;
+    int x = t->x * FLUID_RESOLUTION;
+    int y = t->y * FLUID_RESOLUTION;
+    int water = 0;
+
+CON("at %f %f",t->x,t->y);
+    for (dy = 0; dy < FLUID_RESOLUTION; dy++) {
+        for (dx = 0; dx < FLUID_RESOLUTION; dx++) {
+            if (level->fluid[x + dx][y + dy].mass > 0) {
+                water++;
+            }
+        }
+    }
+
+    if (water > FLUID_RESOLUTION * FLUID_RESOLUTION / 2) {
+CON("  %d UNDERWATER",water);
+        return (true);
+    }
+CON("  %d not submerged",water);
+
+    return (false);
+}

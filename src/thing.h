@@ -1968,3 +1968,4 @@ static inline uint32_t thing_id (thingp t)
     return (t->thing_id);
 }
 
+int thing_is_submerged(levelp, thingp t);

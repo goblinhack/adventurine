@@ -441,6 +441,17 @@ void thing_wid_move (levelp level,
 
     if (thing_is_player(t) || 
         thing_is_monst(t)) {
+//CON("%d", thing_is_submerged(level, t));
+
+wid_effect_sways(t->wid);
+wid_set_animate(t->wid, false);
+        color c;
+        c = COLOR_NONE;
+        wid_set_mode(t->wid, WID_MODE_NORMAL);
+        wid_set_color(t->wid, WID_COLOR_TL, c);
+        wid_set_color(t->wid, WID_COLOR_BR, c);
+        wid_set_color(t->wid, WID_COLOR_BG, c);
+        wid_set_color(t->wid, WID_COLOR_BLIT, WHITE);
 
         if (!t->fall_speed && !t->jump_speed) {
             if (!w->bouncing) {
