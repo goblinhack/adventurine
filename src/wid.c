@@ -124,6 +124,10 @@ static void wid_tree4_wids_being_destroyed_insert(widp w);
 static void wid_tree5_ticking_wids_remove(widp w);
 static void wid_tree5_ticking_wids_insert(widp w);
 static void wid_move_dequeue(widp w);
+static void wid_display(widp w,
+                        uint8_t disable_scissor,
+                        uint8_t *updated_scissors,
+                        int clip);
 
 /*
  * Child sort priority
@@ -7962,6 +7966,14 @@ static void wid_display_fast (widp w,
         return;
     }
 
+    if (w->rotating || w->rotated) {
+        uint8_t child_updated_scissors = false;
+        blit_flush();
+        wid_display(w, true, &child_updated_scissors, false);
+        blit_init();
+        return;
+    }
+
 #ifdef ENABLE_BLACK_AND_WHITE
     if (unlikely(black_and_white)) {
         tile_blit_fat_black_and_white(tp, tile, 0, tl, br);
@@ -9290,11 +9302,6 @@ static void wid_display (widp w,
                             /*
                              * Do later post light source.
                              */
-                        } else if (unlikely(w->rotating || w->rotated)) {
-                            uint8_t child_updated_scissors = false;
-                            blit_flush();
-                            wid_display(w, true, &child_updated_scissors, false);
-                            blit_init();
                         } else {
                             wid_display_fast(w,
                                             shake_x,
@@ -10730,7 +10737,7 @@ void wid_effect_sways (widp w)
         return;
     }
 
-    wid_rotate_to_pct_in(w, -5, 5, ONESEC, 5);
+    wid_rotate_to_pct_in(w, -4, 4, ONESEC/2, 999);
 }
 
 double wid_get_rotate (widp w)

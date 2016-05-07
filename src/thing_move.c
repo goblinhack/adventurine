@@ -441,17 +441,20 @@ void thing_wid_move (levelp level,
 
     if (thing_is_player(t) || 
         thing_is_monst(t)) {
-//CON("%d", thing_is_submerged(level, t));
 
-wid_effect_sways(t->wid);
-wid_set_animate(t->wid, false);
-        color c;
-        c = COLOR_NONE;
-        wid_set_mode(t->wid, WID_MODE_NORMAL);
-        wid_set_color(t->wid, WID_COLOR_TL, c);
-        wid_set_color(t->wid, WID_COLOR_BR, c);
-        wid_set_color(t->wid, WID_COLOR_BG, c);
-        wid_set_color(t->wid, WID_COLOR_BLIT, WHITE);
+        if ( thing_is_submerged(level, t)) {
+            if (thing_is_dir_left(t)) {
+                wid_rotate_to_pct_in(w, 65, 70, ONESEC/2, 999);
+            } else {
+                wid_rotate_to_pct_in(w, -65, -70, ONESEC/2, 999);
+            }
+        } else {
+                wid_rotate_to_pct_in(w, 0, 0, 0, 999);
+            wid_effect_sways(t->wid);
+        }
+
+        wid_set_animate(t->wid, false);
+        wid_set_no_shape(t->wid);
 
         if (!t->fall_speed && !t->jump_speed) {
             if (!w->bouncing) {
