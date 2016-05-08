@@ -2,8 +2,7 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
-- float in water
-- float graphics
+- breath in water
 - light in water should fizzle out?
 - rocks fall on head
 - hp per level
@@ -55,6 +54,9 @@ sep
 
 may
 ---
+- float graphics
+- explosion and water droplets
+- float in water
 - random editor levels
 - should not delete floor in level ed
 - water tiles

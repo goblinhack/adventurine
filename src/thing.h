@@ -596,6 +596,12 @@ typedef struct thing_ {
     uint32_t tick_health;
 
     /*
+     * Hit a limit and you drown.
+     */
+    uint32_t breath;
+    uint32_t timestamp_last_breath;
+
+    /*
      * Debugging this thing?
      */
     uint32_t debug:1;
@@ -1072,11 +1078,11 @@ static inline uint8_t thing_is_rrr28 (thingp t)
     return (tp_is_rrr28(thing_tp(t)));
 }
 
-static inline uint8_t thing_is_rrr29 (thingp t)
+static inline uint8_t thing_can_drown (thingp t)
 {
     verify(t);
 
-    return (tp_is_rrr29(thing_tp(t)));
+    return (tp_can_drown(thing_tp(t)));
 }
 
 static inline uint8_t thing_is_ropepile (thingp t)
@@ -1673,6 +1679,7 @@ static inline tpp thing_weapon (const thingp t)
  * thing_move.c
  */
 int thing_fall(levelp, thingp);
+int thing_drown(levelp, thingp);
 int thing_slide(levelp, thingp);
 int thing_jump(levelp, thingp);
 thingp things_throw(levelp level, thingp t);

@@ -76,10 +76,10 @@ void level_place_explosion_at (levelp level,
                                   jitter,
                                   is_epicenter);
 
-int i;
-for (i = 0; i < 100; i++) {
-    fluid_add_droplets(level);
-}
+    int i;
+    for (i = 0; i < 100; i++) {
+        fluid_add_droplets(level);
+    }
 }
 
 static double this_explosion[MAP_WIDTH][MAP_HEIGHT];

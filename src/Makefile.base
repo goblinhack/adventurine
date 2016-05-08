@@ -60,6 +60,9 @@ GAME_OBJECTS=				\
     $(OBJDIR)/thing_key.o 		\
     $(OBJDIR)/thing_collect.o 		\
     $(OBJDIR)/thing_move.o 		\
+    $(OBJDIR)/thing_fall.o 		\
+    $(OBJDIR)/thing_drown.o 		\
+    $(OBJDIR)/thing_jump.o 		\
     $(OBJDIR)/thing_collision.o 	\
     $(OBJDIR)/thing_damage.o 		\
     $(OBJDIR)/thing_shop.o 		\

@@ -5622,7 +5622,7 @@ static uint8_t resource_init_last (void *context)
         "icon-keys",
         "icon-bombs",
         "icon-skull",
-        0,
+        "icon-drown",
         // --------------------------------------------------------------------
         "player1-1",
         "player1-lr-1",

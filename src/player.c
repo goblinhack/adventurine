@@ -564,7 +564,9 @@ void player_wid_update (levelp level)
                 game.wid_hp_icon = wid_new_window("icon-hp");
                 wid_set_tl_br_pct(game.wid_hp_icon, tl, br);
 
-                if (player->hp > 0) {
+                if (thing_is_dead(player)) {
+                    wid_set_tilename(game.wid_hp_icon, "icon-skull");
+                } else if (player->hp > 0) {
                     wid_set_tilename(game.wid_hp_icon, "icon-hp");
                 } else {
                     wid_set_tilename(game.wid_hp_icon, "icon-skull");
@@ -705,6 +707,46 @@ void player_wid_update (levelp level)
             }
         }
     }
+    
+    /*
+     * Drowning and torches and ropes
+     */
+    if (player->breath) {
+        double y1 = 0.15;
+        fpoint tl = { 0.0, 0.0 };
+        fpoint br = { 0.03, 0.05 };
+
+        double x1 = 0.05;
+
+        {
+            int i;
+
+            int max = ARRAY_SIZE(game.wid_drown_icon);
+            int n = max - player->breath;
+            if (n > max) {
+                n = max;
+            }
+
+            for (i = 0; i < n; i++) {
+
+                widp w = game.wid_drown_icon[i] = wid_new_window("icon-drown");
+                wid_set_tl_br_pct(w, tl, br);
+
+                wid_set_tilename(w, "icon-drown");
+
+                wid_set_no_shape(w);
+                wid_set_do_not_lower(w, true);
+                wid_move_to_pct_centered(w, x1, y1);
+
+                wid_effect_pulses(w);
+                wid_bounce_to_pct_in(w, ((double) max - n) * 0.01, 0.8, 500, 999);
+
+                x1 += 0.03;
+            }
+
+            wid_effect_pulses(player->wid);
+        }
+    }
 }
 
 void player_wid_destroy (levelp level)
@@ -772,5 +814,17 @@ void player_wid_destroy (levelp level)
     if (game.wid_ropes_text) {
         wid_destroy_nodelay(&game.wid_ropes_text);
         game.wid_ropes_text = 0;
+    }
+
+    {
+        int max = ARRAY_SIZE(game.wid_drown_icon);
+
+        int i;
+        for (i = 0; i < max; i++) {
+            if (game.wid_drown_icon[i]) {
+                wid_destroy_nodelay(&game.wid_drown_icon[i]);
+                game.wid_drown_icon[i] = 0;
+            }
+        }
     }
 }

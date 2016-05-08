@@ -74,6 +74,12 @@ static int thing_tick_all_things (levelp level)
             thing_fall(level, t);
         }
 
+        if (tp_can_drown(tp)) {
+            if (!thing_drown(level, t)) {
+                continue;
+            }
+        }
+
         someone_is_inside_a_shop = false;
 
         if (thing_is_player(t)) {
