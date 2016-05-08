@@ -8,6 +8,203 @@
 #include "thing.h"
 #include "math_util.h"
 
+void thing_set_dir_none (levelp level, thingp t)
+{
+    verify(t);
+
+    if (thing_is_animated_no_dir(t)) {
+        return;
+    }
+
+    if (t->dir != THING_DIR_NONE) {
+        t->dir = THING_DIR_NONE;
+        thing_set_weapon_placement(level, t);
+    }
+}
+
+uint8_t thing_is_dir_none (thingp t)
+{
+    verify(t);
+
+    return (t->dir == THING_DIR_NONE);
+}
+
+void thing_set_dir_down (levelp level, thingp t)
+{
+    verify(t);
+
+    if (thing_is_submerged(level, t)) {
+        return;
+    }
+
+    if (thing_is_animated_no_dir(t)) {
+        return;
+    }
+
+    if (t->dir != THING_DIR_DOWN) {
+        t->dir = THING_DIR_DOWN;
+        thing_set_weapon_placement(level, t);
+    }
+}
+
+uint8_t thing_is_dir_down (thingp t)
+{
+    verify(t);
+
+    return (t->dir == THING_DIR_DOWN);
+}
+
+void thing_set_dir_up (levelp level, thingp t)
+{
+    verify(t);
+
+    if (thing_is_submerged(level, t)) {
+        return;
+    }
+
+    if (thing_is_animated_no_dir(t)) {
+        return;
+    }
+
+    if (t->dir != THING_DIR_UP) {
+        t->dir = THING_DIR_UP;
+        thing_set_weapon_placement(level, t);
+    }
+}
+
+uint8_t thing_is_dir_up (thingp t)
+{
+    verify(t);
+
+    return (t->dir == THING_DIR_UP);
+}
+
+void thing_set_dir_left (levelp level, thingp t)
+{
+    verify(t);
+
+    if (thing_is_animated_no_dir(t)) {
+        return;
+    }
+
+    if (t->dir != THING_DIR_LEFT) {
+        t->dir = THING_DIR_LEFT;
+        thing_set_weapon_placement(level, t);
+    }
+}
+
+uint8_t thing_is_dir_left (thingp t)
+{
+    verify(t);
+
+    return (t->dir == THING_DIR_LEFT);
+}
+
+void thing_set_dir_right (levelp level, thingp t)
+{
+    verify(t);
+
+    if (thing_is_animated_no_dir(t)) {
+        return;
+    }
+
+    if (t->dir != THING_DIR_RIGHT) {
+        t->dir = THING_DIR_RIGHT;
+        thing_set_weapon_placement(level, t);
+    }
+}
+
+uint8_t thing_is_dir_right (thingp t)
+{
+    verify(t);
+
+    return (t->dir == THING_DIR_RIGHT);
+}
+
+void thing_set_dir_tl (levelp level, thingp t)
+{
+    verify(t);
+
+    if (thing_is_animated_no_dir(t)) {
+        return;
+    }
+
+    if (t->dir != THING_DIR_TL) {
+        t->dir = THING_DIR_TL;
+        thing_set_weapon_placement(level, t);
+    }
+}
+
+uint8_t thing_is_dir_tl (thingp t)
+{
+    verify(t);
+
+    return (t->dir == THING_DIR_TL);
+}
+
+void thing_set_dir_bl (levelp level, thingp t)
+{
+    verify(t);
+
+    if (thing_is_animated_no_dir(t)) {
+        return;
+    }
+
+    if (t->dir != THING_DIR_BL) {
+        t->dir = THING_DIR_BL;
+        thing_set_weapon_placement(level, t);
+    }
+}
+
+uint8_t thing_is_dir_bl (thingp t)
+{
+    verify(t);
+
+    return (t->dir == THING_DIR_BL);
+}
+
+void thing_set_dir_tr (levelp level, thingp t)
+{
+    verify(t);
+
+    if (thing_is_animated_no_dir(t)) {
+        return;
+    }
+
+    if (t->dir != THING_DIR_TR) {
+        t->dir = THING_DIR_TR;
+        thing_set_weapon_placement(level, t);
+    }
+}
+
+uint8_t thing_is_dir_tr (thingp t)
+{
+    verify(t);
+
+    return (t->dir == THING_DIR_TR);
+}
+
+void thing_set_dir_br (levelp level, thingp t)
+{
+    verify(t);
+
+    if (thing_is_animated_no_dir(t)) {
+        return;
+    }
+
+    if (t->dir != THING_DIR_BR) {
+        t->dir = THING_DIR_BR;
+        thing_set_weapon_placement(level, t);
+    }
+}
+
+uint8_t thing_is_dir_br (thingp t)
+{
+    verify(t);
+
+    return (t->dir == THING_DIR_BR);
+}
+
 void thing_dir (thingp t, double *dx, double *dy)
 {
     *dx = 0;

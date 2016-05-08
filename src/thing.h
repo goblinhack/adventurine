@@ -500,6 +500,11 @@ typedef struct thing_ {
     float scale;
 
     /*
+     * Last time we were underwater.
+     */
+    uint32_t timestamp_last_submerged;
+
+    /*
      * Last time we were teleported.
      */
     uint32_t timestamp_last_teleport;
@@ -596,6 +601,8 @@ typedef struct thing_ {
     uint32_t debug:1;
 
     uint32_t is_sleeping:1;
+    uint32_t is_submerged:1;
+    uint32_t is_partially_submerged:1;
     uint32_t is_collected:1;
     uint32_t is_open:1;
     uint32_t is_dead:1;
@@ -1969,3 +1976,4 @@ static inline uint32_t thing_id (thingp t)
 }
 
 int thing_is_submerged(levelp, thingp t);
+int thing_is_partially_or_fully_submerged(levelp, thingp t);

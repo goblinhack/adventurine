@@ -8,6 +8,7 @@
 #include "math_util.h"
 #include "wid_game_map.h"
 #include "thing.h"
+#include "fluid.h"
 
 int level_explosion_flash_effect;
 
@@ -74,6 +75,11 @@ void level_place_explosion_at (levelp level,
                                   destroy_in,
                                   jitter,
                                   is_epicenter);
+
+int i;
+for (i = 0; i < 100; i++) {
+    fluid_add_droplets(level);
+}
 }
 
 static double this_explosion[MAP_WIDTH][MAP_HEIGHT];
@@ -201,7 +207,7 @@ static void level_place_explosion_ (levelp level,
                                     uint32_t nargs, ...)
 {
     va_list args;
-
+ 
     /*
      * However, as the player can move close to walls, the current tile might 
      * end up being a wall. If this is the case, look around for a closer tile 

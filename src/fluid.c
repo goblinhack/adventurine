@@ -559,7 +559,7 @@ static void fluid_set_depth (levelp level)
     }
 }
 
-static void fluid_add_droplets (levelp level)
+void fluid_add_droplets (levelp level)
 {
     uint16_t x = (myrand() % (MAP_WIDTH - 4)) + 1;
     uint16_t y = (myrand() % (MAP_HEIGHT - 4)) + 1;
@@ -1021,7 +1021,6 @@ int thing_is_submerged (levelp level, thingp t)
     int y = t->y * FLUID_RESOLUTION;
     int water = 0;
 
-CON("at %f %f",t->x,t->y);
     for (dy = 0; dy < FLUID_RESOLUTION; dy++) {
         for (dx = 0; dx < FLUID_RESOLUTION; dx++) {
             if (level->fluid[x + dx][y + dy].mass > 0) {
@@ -1030,11 +1029,33 @@ CON("at %f %f",t->x,t->y);
         }
     }
 
-    if (water > FLUID_RESOLUTION * FLUID_RESOLUTION / 2) {
-CON("  %d UNDERWATER",water);
+    if (water >= FLUID_RESOLUTION * FLUID_RESOLUTION) {
         return (true);
     }
-CON("  %d not submerged",water);
+
+
+    return (false);
+}
+
+int thing_is_partially_or_fully_submerged (levelp level, thingp t)
+{
+    int dx, dy;
+    int x = t->x * FLUID_RESOLUTION;
+    int y = t->y * FLUID_RESOLUTION;
+    int water = 0;
+
+    for (dy = 0; dy < FLUID_RESOLUTION; dy++) {
+        for (dx = 0; dx < FLUID_RESOLUTION; dx++) {
+            if (level->fluid[x + dx][y + dy].mass > 0) {
+                water++;
+            }
+        }
+    }
+
+    if (water >= (FLUID_RESOLUTION * FLUID_RESOLUTION) / 2) {
+        return (true);
+    }
+
 
     return (false);
 }

@@ -209,7 +209,7 @@ uint8_t player_move (levelp level)
         }
     }
 
-    double submerged = thing_is_submerged(level, player);
+    double submerged = thing_is_partially_or_fully_submerged(level, player);
 
     if (up) {
         if (!submerged) {
@@ -224,8 +224,6 @@ uint8_t player_move (levelp level)
 
     if (down) {
         if (!submerged) {
-            player->momentum = 0;
-
             if (!thing_overlaps(level, player, player->x, player->y + 0.5, 
                                 thing_is_climbable)) {
                 down = 0;

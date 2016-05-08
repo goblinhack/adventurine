@@ -10,6 +10,7 @@
 #include "wid_game_map.h"
 #include "tile.h"
 #include "math_util.h"
+#include "time_util.h"
 
 /*
  * This is movement on the client of the player initiated by the player.
@@ -140,6 +141,38 @@ int thing_fall (levelp level, thingp t)
         return (false);
     }
 
+    if (thing_is_player(t) || 
+        thing_is_monst(t)) {
+
+        if (thing_is_submerged(level, t)) {
+            t->is_submerged = true;
+            t->is_partially_submerged = true;
+
+        } else if (thing_is_partially_or_fully_submerged(level, t)) {
+            t->is_partially_submerged = true;
+
+        } else {
+            if (t->is_submerged) {
+                t->jump_speed = 0.1;
+
+            } else if (t->is_partially_submerged) {
+                t->jump_speed = 0.05;
+            }
+
+            t->is_submerged = false;
+            t->is_partially_submerged = false;
+        }
+
+        if (t->is_submerged) {
+            t->fall_speed /= 4.0;
+            t->jump_speed /= 4.0;
+
+        } else if (t->is_partially_submerged) {
+            t->fall_speed /= 2.0;
+            t->jump_speed /= 2.0;
+        }
+    }
+
     if (thing_is_monst(t)  ||
         thing_is_player(t)) {
 
@@ -165,10 +198,6 @@ int thing_fall (levelp level, thingp t)
 
     if (t->fall_speed > 1) {
         t->fall_speed = 1;
-    }
-
-    if (thing_is_submerged(level, t)) {
-        t->fall_speed /= 4.0;
     }
 
     y = t->y + t->fall_speed;
@@ -286,6 +315,10 @@ int thing_slide (levelp level, thingp t)
     }
 
     t->momentum *= 0.90;
+
+    if (t->is_submerged || t->is_partially_submerged) {
+        t->momentum /= 2.00;
+    }
 
     thing_wid_update(level, t, x, y, true, false /* is new */);
 
@@ -446,19 +479,26 @@ void thing_wid_move (levelp level,
     if (thing_is_player(t) || 
         thing_is_monst(t)) {
 
-        if (thing_is_submerged(level, t)) {
-            if (thing_is_dir_left(t)) {
-                wid_rotate_to_pct_in(w, 65, 70, ONESEC, 999);
-            } else {
-                wid_rotate_to_pct_in(w, -65, -70, ONESEC, 999);
-            }
-        } else {
-            wid_rotate_to_pct_in(w, 0, 0, ONESEC, 999);
-            wid_effect_sways(t->wid);
-        }
+            if (t->is_submerged) {
+                if (thing_is_dir_left(t) ||
+                    thing_is_dir_tl(t) ||
+                    thing_is_dir_bl(t)) {
 
-        wid_set_animate(t->wid, false);
-        wid_set_no_shape(t->wid);
+                    wid_rotate_to_pct_in(w, 65, 70, ONESEC, 999);
+                } else {
+                    wid_rotate_to_pct_in(w, -65, -70, ONESEC, 999);
+                }
+            } else {
+                if (time_have_x_tenths_passed_since(5, t->timestamp_last_submerged)) {
+                    wid_rotate_to_pct_in(w, 0, 0, ONESEC, 999);
+
+                    t->timestamp_last_submerged = time_get_time_ms();
+                }
+            }
+
+            wid_effect_sways(t->wid);
+            wid_set_animate(t->wid, false);
+            wid_set_no_shape(t->wid);
 
         if (!t->fall_speed && !t->jump_speed) {
             if (!w->bouncing) {
