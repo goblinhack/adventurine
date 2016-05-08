@@ -55,6 +55,7 @@ GAME_OBJECTS=				\
     $(OBJDIR)/thing_ai.o 		\
     $(OBJDIR)/thing_anim.o 		\
     $(OBJDIR)/thing_blood.o 		\
+    $(OBJDIR)/thing_bubbles.o 		\
     $(OBJDIR)/thing_bomb.o 		\
     $(OBJDIR)/thing_rope.o 		\
     $(OBJDIR)/thing_key.o 		\

@@ -1070,11 +1070,11 @@ static inline uint8_t thing_is_rrr27 (thingp t)
     return (tp_is_rrr27(thing_tp(t)));
 }
 
-static inline uint8_t thing_is_rrr28 (thingp t)
+static inline uint8_t thing_is_bubbles (thingp t)
 {
     verify(t);
 
-    return (tp_is_rrr28(thing_tp(t)));
+    return (tp_is_bubbles(thing_tp(t)));
 }
 
 static inline uint8_t thing_can_drown (thingp t)
@@ -1818,12 +1818,18 @@ void level_place_blood(levelp level,
 void level_place_flames(levelp level, 
                        thingp owner,
                        double x, double y);
-void level_place_bubbles(levelp level, 
-                       thingp owner,
-                       double x, double y);
 void level_place_blood_crit(levelp level, 
                             thingp owner,
                             double x, double y);
+
+/*
+ * thing_bubbles.c
+ */
+void level_place_bubbles(levelp level,
+                         thingp owner,
+                         double x, double y);
+void thing_bubbles_placed(levelp level, thingp t);
+
 /*
  * thing_bomb.c
  */
@@ -1981,5 +1987,6 @@ static inline uint32_t thing_id (thingp t)
     return (t->thing_id);
 }
 
+int thing_submerged_depth(levelp level, thingp t);
 int thing_is_submerged(levelp, thingp t);
 int thing_is_partially_or_fully_submerged(levelp, thingp t);

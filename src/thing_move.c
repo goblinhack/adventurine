@@ -134,7 +134,7 @@ int thing_slide (levelp level, thingp t)
     t->momentum *= 0.90;
 
     if (t->is_submerged || t->is_partially_submerged) {
-        t->momentum /= 2.00;
+        t->momentum *= 0.75;
     }
 
     thing_wid_update(level, t, x, y, true, false /* is new */);

@@ -311,6 +311,11 @@ uint8_t player_move (levelp level)
         }
     }
 
+    if (submerged && jump) {
+        jump = 0;
+        up = 1;
+    }
+
     if (bomb) {
         if (!time_have_x_hundredths_passed_since(15, level->last_bomb)) {
             bomb = 0;

@@ -519,13 +519,11 @@ static void level_place_small_rocks (levelp level,
 
 void thing_explosion_placed (levelp level, thingp t)
 {
-    if (thing_is_explosion(t)) {
-        level_place_small_rocks(level, t,
-                                t->x, t->y,
-                                2.05, // radius
-                                5 // amount
-                            );
+    level_place_small_rocks(level, t,
+                            t->x, t->y,
+                            2.05, // radius
+                            5 // amount
+                        );
 
-        things_throw(level, t);
-    }
+    things_throw(level, t);
 }

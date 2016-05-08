@@ -63,7 +63,13 @@ static void thing_timer_place_and_destroy_callback (levelp level,
             sound_play_at(sound, t->x, t->y);
         }
 
-        thing_explosion_placed(level, t);
+        if (thing_is_explosion(t)) {
+            thing_explosion_placed(level, t);
+        }
+
+        if (thing_is_bubbles(t)) {
+            thing_bubbles_placed(level, t);
+        }
     }
 
     place->thing_id = t->thing_id;

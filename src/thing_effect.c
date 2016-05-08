@@ -97,28 +97,6 @@ void thing_effect_flames (levelp level, thingp t)
     }
 }
 
-void thing_effect_bubbles (levelp level, thingp t)
-{
-    verify(t);
-
-    widp w = t->wid;
-    if (w) {
-        wid_set_mode(w, WID_MODE_ACTIVE);
-        wid_set_color(w, WID_COLOR_BLIT, GREEN);
-
-        /*
-         * Shake the screen.
-         */
-        if (thing_is_player(t)) {
-            sdl_joy_rumble(1.0, 2000);
-        }
-
-        level_place_bubbles(level,
-                          0, // owner
-                          t->x, t->y);
-    }
-}
-
 void thing_effect_hit_crit (levelp level, thingp t)
 {
     verify(t);

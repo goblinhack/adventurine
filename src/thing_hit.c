@@ -84,16 +84,6 @@ CON("%s hit success on %s hitter %s",
 
     thing_effect_hit_success(level, t);
 
-    if (hitter) {
-        if (thing_is_lava(hitter)) {
-            thing_effect_flames(level, t);
-        }
-
-        if (thing_is_acid(hitter)) {
-            thing_effect_bubbles(level, t);
-        }
-    }
-
     if (damage > t->hp / 10) {
         thing_effect_hit_crit(level, t);
     }

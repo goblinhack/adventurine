@@ -25,16 +25,28 @@ int thing_drown (levelp level, thingp t)
         }
 
         if (t->timestamp_last_breath) {
-            if (time_have_x_tenths_passed_since(30, t->timestamp_last_breath)) {
+            if (time_have_x_tenths_passed_since(10, t->timestamp_last_breath)) {
 
-                if (t->breath > 7) {
+                if ((myrand() % 100) < 10) {
+                    if (thing_submerged_depth(level, t) > 10) {
+                        level_place_bubbles(level, t, t->x, t->y - 0.5);
+                    }
+                }
+            }
+
+            if (time_have_x_tenths_passed_since(50, t->timestamp_last_breath)) {
+
+                if (t->breath > 8) {
+                    level_place_blood_crit(level, t, t->x, t->y);
+                } if (t->breath > 7) {
                     level_place_blood_crit(level, t, t->x, t->y);
                 } else {
-                    level_place_blood(level, t, t->x, t->y);
+                    if (thing_submerged_depth(level, t) > 10) {
+                        level_place_bubbles(level, t, t->x, t->y - 0.5);
+                    }
                 }
 
                 t->timestamp_last_breath = time_get_time_ms();
-
 
                 t->breath++;
                 if (player == t) {

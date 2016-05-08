@@ -1014,6 +1014,25 @@ void fluid_render (widp w, int minx, int miny, int maxx, int maxy)
     }
 }
 
+int thing_submerged_depth (levelp level, thingp t)
+{
+    int x = t->x * FLUID_RESOLUTION;
+    int y = t->y * FLUID_RESOLUTION;
+    int dx = FLUID_RESOLUTION / 2;
+    int dy = FLUID_RESOLUTION / 2;
+    int water = 0;
+
+    while (y > 0) {
+        if (level->fluid[x + dx][y + dy].mass > 0) {
+            water++;
+        }
+
+        y--;
+    }
+
+    return (water);
+}
+
 int thing_is_submerged (levelp level, thingp t)
 {
     int dx, dy;

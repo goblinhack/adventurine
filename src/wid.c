@@ -8661,9 +8661,7 @@ static void wid_lighting_debug (widp w,
         return;
     }
 
-    levelp level = wid_get_level(w);
-
-    if (thing_is_player_or_owned_by_player(level, t)) {
+    if (!thing_is_player(t)) {
         return;
     }
 
@@ -9496,7 +9494,7 @@ static void wid_display (widp w,
             }
 #endif
 
-            if (debug) {
+            if (1) {
                 for (i = 0; i < wid_light_count; i++) {
                     /*
                      * Calculate ray lengths for all passes.
