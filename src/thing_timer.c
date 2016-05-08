@@ -59,8 +59,9 @@ static void thing_timer_place_and_destroy_callback (levelp level,
         t->is_epicenter = 1;
 
         const char *sound = tp_sound_on_creation(place->tp);
-
-        sound_play_at(sound, t->x, t->y);
+        if (sound) {
+            sound_play_at(sound, t->x, t->y);
+        }
 
         thing_explosion_placed(level, t);
     }

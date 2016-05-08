@@ -58,63 +58,6 @@ int thing_fall (levelp level, thingp t)
         return (false);
     }
 
-    if (thing_is_player(t) || 
-        thing_is_monst(t)) {
-
-        if (thing_is_submerged(level, t)) {
-
-            if (!t->timestamp_last_breath) {
-                t->timestamp_last_breath = time_get_time_ms();
-            }
-
-            if (t->timestamp_last_breath) {
-                if (time_have_x_tenths_passed_since(10, t->timestamp_last_breath)) {
-                    t->timestamp_last_breath = time_get_time_ms();
-
-                    t->breath++;
-                    if (player == t) {
-                        player_wid_update(level);
-                    }
-                }
-
-                if (t->breath >= 10) {
-                    thing_dead(level, t, 0, "drowned");
-                }
-            }
-
-            t->is_submerged = true;
-            t->is_partially_submerged = true;
-
-        } else if (thing_is_partially_or_fully_submerged(level, t)) {
-            t->is_partially_submerged = true;
-            t->timestamp_last_breath = 0;
-            t->breath = 0;
-
-        } else {
-            t->timestamp_last_breath = 0;
-            t->breath = 0;
-
-            if (t->is_submerged) {
-                t->jump_speed = 0.1;
-
-            } else if (t->is_partially_submerged) {
-                t->jump_speed = 0.05;
-            }
-
-            t->is_submerged = false;
-            t->is_partially_submerged = false;
-        }
-
-        if (t->is_submerged) {
-            t->fall_speed /= 4.0;
-            t->jump_speed /= 4.0;
-
-        } else if (t->is_partially_submerged) {
-            t->fall_speed /= 2.0;
-            t->jump_speed /= 2.0;
-        }
-    }
-
     if (thing_is_monst(t)  ||
         thing_is_player(t)) {
 

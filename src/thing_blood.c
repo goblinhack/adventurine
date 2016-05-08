@@ -16,8 +16,6 @@ static void level_place_spatter (levelp level,
                                  int amount,
                                  uint32_t nargs, ...)
 {
-CON("todo spatter");
-return;
     va_list args;
 
     while (amount--) {
@@ -112,7 +110,7 @@ void level_place_blood_crit (levelp level,
                         owner,
                         x, y,
                         0.1, // radius
-                        5, // amount
+                        10, // amount
                         1, // nargs
-                        "blood2");
+                        "blood1");
 }

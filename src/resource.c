@@ -6552,7 +6552,6 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_HIT_SUCCESS, "hit_success");
     tp_load(THING_HIT_MISS, "hit_miss");
     tp_load(THING_BLOOD1, "blood1");
-    tp_load(THING_BLOOD2, "blood2");
     tp_load(THING_FLAMES1, "flames1");
     tp_load(THING_BUBBLES1, "bubbles1");
 

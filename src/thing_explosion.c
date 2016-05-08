@@ -76,9 +76,11 @@ void level_place_explosion_at (levelp level,
                                   jitter,
                                   is_epicenter);
 
-    int i;
-    for (i = 0; i < 100; i++) {
-        fluid_add_droplets(level);
+    if (tp_is_explosion(tp)) {
+        int i;
+        for (i = 0; i < 100; i++) {
+            fluid_add_droplets(level);
+        }
     }
 }
 
@@ -517,6 +519,7 @@ static void level_place_small_rocks (levelp level,
 
 void thing_explosion_placed (levelp level, thingp t)
 {
+    if (thing_is_explosion(t)) {
         level_place_small_rocks(level, t,
                                 t->x, t->y,
                                 2.05, // radius
@@ -524,4 +527,5 @@ void thing_explosion_placed (levelp level, thingp t)
                             );
 
         things_throw(level, t);
+    }
 }
