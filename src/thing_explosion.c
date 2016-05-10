@@ -76,10 +76,12 @@ void level_place_explosion_at (levelp level,
                                   jitter,
                                   is_epicenter);
 
-    if (tp_is_explosion(tp)) {
-        int i;
-        for (i = 0; i < 100; i++) {
-            fluid_add_droplets(level);
+    if (is_epicenter) {
+        if (tp_is_explosion(tp)) {
+            int i;
+            for (i = 0; i < 100; i++) {
+                fluid_add_droplets(level);
+            }
         }
     }
 }
