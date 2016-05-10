@@ -2,16 +2,18 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
-- breath in water
-- light in water should fizzle out?
+- rocks need random offsets
 - rocks fall on head
+- push small rocks
+- flying bounders
+- rocks moving too fast on explosion
+- light in water should fizzle out?
+- have boulder roll 
 - hp per level
 - sparks effect
 - miss effects
 - ladders should fall when damaged
 - sparks on hitting
-- flying bounders
-- have boulder roll 
 - side piston push blocks - that can be stacked
 - monster patrol left/right
 - wham / kpow
@@ -54,6 +56,8 @@ sep
 
 may
 ---
+- rocks pile up
+- breath in water
 - float graphics
 - explosion and water droplets
 - float in water
