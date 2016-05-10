@@ -1135,8 +1135,10 @@ thingp thing_hit_solid_obstacle (levelp level,
             /*
              * Allowed to pass through small rocks.
              */
-            if (thing_is_smallrock(it)) {
-                continue;
+            if (!thing_is_smallrock(me)) {
+                if (thing_is_smallrock(it)) {
+                    continue;
+                }
             }
 
             if (thing_is_spikes(it)) {
@@ -1425,6 +1427,13 @@ thingp thing_hit_fall_obstacle (levelp level,
                     !thing_is_ladder(it) && 
                     !thing_is_cobweb(it) && 
                     !thing_is_spikes(it) && 
+                    !thing_is_door(it)) {
+                    continue;
+                }
+            } else if (thing_is_smallrock(me)) {
+                if (!thing_is_wall(it) && 
+                    !thing_is_rock(it) && 
+                    !thing_is_smallrock(it) && 
                     !thing_is_door(it)) {
                     continue;
                 }

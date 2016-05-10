@@ -20,7 +20,13 @@ static void thing_hit_ground (levelp level, thingp t, thingp it)
 {
     if (t->falling_too_fast) {
         t->falling_too_fast = 0;
-        (void) thing_hit(level, t, it, 1);
+
+        if (thing_is_player(t) ||
+            thing_is_monst(t) ||
+            thing_is_bomb(t)) {
+CON("too fast %f", t->fall_speed);
+            (void) thing_hit(level, t, it, 1);
+        }
     }
 
     t->fall_speed = 0;
@@ -55,6 +61,7 @@ int thing_fall (levelp level, thingp t)
 
     if (t->jump_speed) {
         t->fall_speed = 0;
+        t->falling_too_fast = false;
         return (false);
     }
 
