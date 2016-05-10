@@ -8273,7 +8273,7 @@ static void wid_light_calculate_for_single_obstacle (widp w,
          * How many radians does this obstacle block?
          */
         double tot_rad = p1_rad - p2_rad;
-        int tot_deg = p1_deg - p2_deg;
+        double tot_deg = p1_deg - p2_deg;
         if (tot_deg < 0) {
             tot_deg += max_light_rays;
             tot_rad += RAD_360;
@@ -8290,6 +8290,10 @@ static void wid_light_calculate_for_single_obstacle (widp w,
          *
          * In essence, this is a depth buffer.
          */
+        if (tot_deg < 1) {
+            continue;
+        }
+
         while (tot_deg-- >= 0) {
 
             fpoint light_end;
@@ -8301,19 +8305,13 @@ static void wid_light_calculate_for_single_obstacle (widp w,
              * so we can work out distance.
              */
             fpoint intersect;
-            if (get_line_known_intersection(P[k], P[l], 
-                                            light_pos, light_end,
-                                            &intersect)) {
 
-                map_light_add_ray_depth(P[0], light, light_pos, intersect, 
-                                        rad, deg, soft_shadow);
-            }
+            getIntersection(P[k], P[l], 
+                            light_pos, light_end,
+                            &intersect);
 
-            map_light_add_ray_depth(P[0], light, light_pos, P[k], 
-                                    p1_rad, p1_deg, soft_shadow);
-
-            map_light_add_ray_depth(P[0], light, light_pos, P[l], 
-                                    p2_rad, p2_deg, soft_shadow);
+            map_light_add_ray_depth(P[0], light, light_pos, intersect,
+                                    rad, deg, soft_shadow);
 
             rad += dr;
             if (rad >= RAD_360) {
@@ -9494,7 +9492,7 @@ static void wid_display (widp w,
             }
 #endif
 
-            if (1) {
+            if (0) {
                 for (i = 0; i < wid_light_count; i++) {
                     /*
                      * Calculate ray lengths for all passes.

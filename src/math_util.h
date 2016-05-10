@@ -312,3 +312,137 @@ double gauss(const double m, const double s);
 double fpoint_project_onto_line(fpoint P0, fpoint L0, fpoint L1);
 
 double gaussrand(double mean, double stddev);
+
+/** You know that lines a and b have an intersection and now you
+    want to get it!
+*/
+static inline void getIntersection (fpoint a0,
+                                    fpoint a1,
+                                    fpoint b0,
+                                    fpoint b1,
+                                    fpoint *i)
+{
+    /* the intersection [(x1,y1), (x2, y2)]
+       it might be a line or a single point. If it is a line,
+       then x1 = x2 and y1 = y2.  */
+    double x1, y1, x2, y2;
+
+    if (a0.x == a1.x) {
+        // Case (A)
+        // As a is a perfect vertical line, it cannot be represented
+        // nicely in a mathematical way. But we directly know that
+        //
+        x1 = a0.x;
+        x2 = x1;
+        if (b0.x == b1.x) {
+            // Case (AA): all x are the same!
+            // Normalize
+            if (a0.y > a1.y) {
+                swap(a0, a1);
+            }
+            if (b0.y > b1.y) {
+                swap(b0, b1);
+            }
+            if (a0.y > b0.y) {
+                swap(a0, b0);
+                swap(a1, b1);
+            }
+
+            // Now we know that the y-value of a["first"] is the 
+            // lowest of all 4 y values
+            // this means, we are either in case (AAA):
+            //   a: x--------------x
+            //   b:    x---------------x
+            // or in case (AAB)
+            //   a: x--------------x
+            //   b:    x-------x
+            // in both cases:
+            // get the relavant y intervall
+            y1 = b0.y;
+            y2 = min(a1.y, b1.y);
+        } else {
+            // Case (AB)
+            // we can mathematically represent line b as
+            //     y = m*x + t <=> t = y - m*x
+            // m = (y1-y2)/(x1-x2)
+            double m, t;
+            m = (b0.y - b1.y)/
+                (b0.x - b1.x);
+            t = b0.y - m*b0.x;
+            y1 = m*x1 + t;
+            y2 = y1;
+        }
+    } else if (b0.x == b1.x) {
+        // Case (B)
+        // essentially the same as Case (AB), but with
+        // a and b switched
+        x1 = b0.x;
+        x2 = x1;
+
+        swap(a0, b0);
+        swap(a1, b1);
+
+        double m, t;
+        m = (b0.y - b1.y)/
+            (b0.x - b1.x);
+        t = b0.y - m*b0.x;
+        y1 = m*x1 + t;
+        y2 = y1;
+    } else {
+        // Case (C)
+        // Both lines can be represented mathematically
+        double ma, mb, ta, tb;
+        ma = (a0.y - a1.y)/
+             (a0.x - a1.x);
+        mb = (b0.y - b1.y)/
+             (b0.x - b1.x);
+        ta = a0.y - ma*a0.x;
+        tb = b0.y - mb*b0.x;
+        if (ma == mb) {
+            // Case (CA)
+            // both lines are in parallel. As we know that they 
+            // intersect, the intersection could be a line
+            // when we rotated this, it would be the same situation 
+            // as in case (AA)
+
+            // Normalize
+            if (a0.x > a1.x) {
+                swap(a0, a1);
+            }
+            if (b0.x > b1.x) {
+                swap(b0, b1);
+            }
+            if (a0.x > b0.x) {
+                swap(a0, b0);
+                swap(a1, b1);
+            }
+
+            // get the relavant x intervall
+            x1 = b0.x;
+            x2 = min(a1.x, b1.x);
+            y1 = ma*x1+ta;
+            y2 = ma*x2+ta;
+        } else {
+            // Case (CB): only a point as intersection:
+            // y = ma*x+ta
+            // y = mb*x+tb
+            // ma*x + ta = mb*x + tb
+            // (ma-mb)*x = tb - ta
+            // x = (tb - ta)/(ma-mb)
+            x1 = (tb-ta)/(ma-mb);
+            y1 = ma*x1+ta;
+            x2 = x1;
+            y2 = y1;
+        }
+    }
+
+    i->x = x1;
+    i->y = y1;
+
+    /*
+     * If a line
+     *
+    i->x = x2;
+    i->y = y2;
+     */
+}

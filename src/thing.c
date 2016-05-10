@@ -345,7 +345,7 @@ void thing_map_add (levelp level, thingp t, int32_t x, int32_t y)
         /*
          * We're hosed.
          */
-        DIE("Out of map slots trying to add %s", thing_logname(t));
+        ERR("Out of map slots trying to add %s", thing_logname(t));
 
         for (i = 0; i < cell->count; i++) {
             uint32_t m = cell->id[i];

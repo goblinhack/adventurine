@@ -249,3 +249,52 @@ double fpoint_angle_clockwise (const fpoint A, const fpoint B)
 {
     return (atan2(A.x*B.y - A.y*B.x, A.x*B.x+A.y*B.y));
 }
+
+#if 0
+static double EPSILON = 0.000001;
+
+static double crossProduct (fpoint a, fpoint b) {
+    return (a.x * b.y - b.x * a.y);
+}
+
+static boolean isPointOnLine (fpoint p0, fpoint p1, fpoint b) 
+{
+    p1.x -= p0.x;
+    p1.y -= p0.y;
+    p0.x = 0;
+    p0.y = 0;
+
+    fpoint bt;
+
+    bt.x = b.x - p0.x;
+    bt.y = b.y - p0.y;
+
+    double r = crossProduct(p1, bt);
+
+    return (fabs(r) < EPSILON);
+}
+
+static boolean isPointRightOfLine (fpoint p0, fpoint p1, fpoint b) 
+{
+    p1.x -= p0.x;
+    p1.y -= p0.y;
+    p0.x = 0;
+    p0.y = 0;
+
+    fpoint bt;
+
+    bt.x = b.x - p0.x;
+    bt.y = b.y - p0.y;
+
+    return (crossProduct(p1, bt) < 0);
+}
+
+static boolean lineSegmentTouchesOrCrossesLine (
+                fpoint p0, fpoint p1,
+                fpoint p2, fpoint p3)
+{
+    return (isPointOnLine(p0, p1, p2)
+                || isPointOnLine(p0, p1, p3)
+                || (isPointRightOfLine(p0, p1, p2) ^ isPointRightOfLine(p0, p1, p3));
+}
+#endif
