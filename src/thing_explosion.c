@@ -492,29 +492,13 @@ static void level_place_small_rocks (levelp level,
                                      double radius,
                                      int amount)
 {
-    const char *what[] = {
-        "smallrock1",
-        "smallrock2",
-        "smallrock3",
-        "smallrock4",
-        "smallrock5",
-        "smallrock6"
-    };
-        
     while (amount--) {
         double px = gauss(x, radius);
         double py = y - gauss(1, radius);
 
-        const char *name = what[myrand() % ARRAY_SIZE(what)];
-        tpp tp = tp_find(name);
-        if (!tp) {
-            ERR("no explosion for name %s", name);
-            return;
-        }
-
         wid_game_map_replace_tile(level, px, py,
                                   0, /* thing */
-                                  tp,
+                                  tp_find("smallrock1"),
                                   0 /* tpp_data */);
     }
 }

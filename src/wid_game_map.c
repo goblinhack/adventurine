@@ -564,6 +564,14 @@ wid_game_map_replace_tile (levelp level,
         return (0);
     }
 
+    double dx = 0;
+    double dy = 0;
+
+    if (tp_is_smallrock(tp)) {
+        dx = gaussrand(0.0, 0.5);
+        tp = random_smallrock();
+    }
+
     /*
      * If we find a player, it is really a placeholder of where to put a 
      * future player who joins.
@@ -676,9 +684,6 @@ wid_game_map_replace_tile (levelp level,
     if (scale != 1.0) {
         wid_scaling_blit_to_pct_in(child, scale, scale, 500, 9999999);
     }
-
-    double dx = 0;
-    double dy = 0;
 
     thing_wid_update(level,
                      t, 

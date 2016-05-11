@@ -1223,6 +1223,7 @@ tpp random_food(void);
 tpp random_treasure(int shop_floor);
 tpp random_weapon(int shop_floor);
 tpp random_rock(void);
+tpp random_smallrock(void);
 tpp random_lava(void);
 tpp random_monst(int depth);
 tpp random_trap(int depth);

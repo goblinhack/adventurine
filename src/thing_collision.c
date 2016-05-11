@@ -767,6 +767,29 @@ LOG("add poss me %s hitter %s",thing_logname(me), thing_logname(it));
         }
     }
 
+    if (thing_is_smallrock(me) && 
+        ((me->momentum > 0.1) || (me->fall_speed > 0.1))) {
+
+        /*
+         * Rock bumped into something.
+         */
+        if (thing_is_player(it)                ||
+            thing_is_cloud_effect(it)) {
+            /*
+             * I'm hit!
+             */
+#if 0
+if (debug) {
+LOG("add poss me %s hitter %s",thing_logname(me), thing_logname(it));
+}
+#endif
+//CON("%d %s %s",__LINE__,thing_logname(me), thing_logname(it));
+//CON("  %d",__LINE__);
+            thing_possible_hit_add(it, "rock hit thing");
+            return (true);
+        }
+    }
+
     /*
      * If spinning blades or moving wall hit something?
      */
@@ -1398,6 +1421,10 @@ thingp thing_hit_fall_obstacle (levelp level,
                 continue;
             }
 
+            if (thing_is_dungeon_floor(it)) {
+                continue;
+            }
+
             if (thing_is_player(me)) {
                 /*
                  * Allow players to land on small rocks and monsters.
@@ -1431,6 +1458,17 @@ thingp thing_hit_fall_obstacle (levelp level,
                     continue;
                 }
             } else if (thing_is_smallrock(me)) {
+                if (thing_is_smallrock(it)) {
+                    if (me->y > it->y) {
+                        continue;
+                    }
+                    if (me->y == it->y) {
+                        if ((int)(uintptr_t) me < (int)(uintptr_t) it) {
+                            continue;
+                        }
+                    }
+                }
+
                 if (!thing_is_wall(it) && 
                     !thing_is_rock(it) && 
                     !thing_is_smallrock(it) && 

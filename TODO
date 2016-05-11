@@ -2,13 +2,13 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
-- rocks need random offsets
-- rocks fall on head
-- push small rocks
+- have boulder roll 
 - flying bounders
+- exit can fall through bottom of level
+- random gap in tall ropes
+- ropes get toooo tall
 - rocks moving too fast on explosion
 - light in water should fizzle out?
-- have boulder roll 
 - hp per level
 - sparks effect
 - miss effects
@@ -56,6 +56,9 @@ sep
 
 may
 ---
+- rocks fall on head
+- rocks need random offsets
+- rockes get stuck on falling
 - rocks pile up
 - breath in water
 - float graphics
