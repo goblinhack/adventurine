@@ -33,17 +33,31 @@ static void thing_hit_ground (levelp level,
     }
 
     if (thing_can_roll(t)) {
-        if (t->fall_speed) {
-            things_handle_impact(t, 
+//        if (t->fall_speed) {
+CON(" ");
+CON("fell and mom was %f fall %f", t->momentum, t->fall_speed);
+            if (things_handle_impact(t, 
                                  t->x,
                                  t->y + t->fall_speed,
-                                 it);
-            if (!t->momentum) {
-                t->momentum = gauss(0.0, 0.2);
+                                 it)) {
             }
+
+
+if (0) {
+            if (!t->momentum) {
+CON(" fell and now mom was %f fall %f jump %f", t->momentum, t->fall_speed, t->jump_speed);
+                if (t->jump_speed) {
+CON("  fell and came to stop");
+//                    t->momentum = 0.05;
+//                t->momentum = gauss(0.0, 0.1);
+                }
+            }
+                
+//        }
         }
     }
 
+if (0)
     t->fall_speed = 0;
 }
 
@@ -97,6 +111,7 @@ int thing_fall (levelp level, thingp t)
         return (false);
     }
 
+if (0)
     t->fall_speed += 0.010;
 
     if (t->fall_speed > 0.4) {
