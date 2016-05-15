@@ -729,7 +729,7 @@ if (thing_can_roll(t)) {
 t->fall_speed = gauss(0, 0.1);
 t->momentum = gauss(0, 0.1);
 t->momentum = 
--0.010363;
+-0.050363;
 t->fall_speed = 
 0.036830 ;
 }

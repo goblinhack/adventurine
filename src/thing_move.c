@@ -107,6 +107,7 @@ int thing_slide (levelp level, thingp t)
 
     t->rot += t->momentum;
 
+if (0)
     if (fabs(t->momentum) < 0.001) {
         t->momentum = 0;
         return (false);
@@ -114,14 +115,17 @@ int thing_slide (levelp level, thingp t)
 
     x = t->x + t->momentum;
     if (thing_hit_solid_obstacle(level, t, x, y)) {
+if (0)
         t->momentum /= 2;
 
         x = t->x + t->momentum;
         if (thing_hit_solid_obstacle(level, t, x, y)) {
+if (0)
             t->momentum /= 2;
 
             x = t->x + t->momentum;
             if (thing_hit_solid_obstacle(level, t, x, y)) {
+if (0)
                 t->momentum /= 2;
 
                 x = t->x + t->momentum;
@@ -132,10 +136,12 @@ int thing_slide (levelp level, thingp t)
                                                   t->x + t->momentum,
                                                   t->y,
                                                   it)) {
+if (0)
                             t->momentum = 0;
                         }
 
                     } else {
+if (0)
                         t->momentum = 0;
                     }
 
