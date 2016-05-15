@@ -16,7 +16,11 @@
 /*
  * Hit the ground hard?
  */
-static void thing_hit_ground (levelp level, thingp t, thingp it)
+static void thing_hit_ground (levelp level, 
+                              thingp t, 
+                              double nx,
+                              double ny,
+                              thingp it)
 {
     if (t->falling_too_fast) {
         t->falling_too_fast = 0;
@@ -25,6 +29,14 @@ static void thing_hit_ground (levelp level, thingp t, thingp it)
             thing_is_monst(t) ||
             thing_is_bomb(t)) {
             (void) thing_hit(level, t, it, 1);
+        }
+    }
+
+    if (thing_can_roll(t)) {
+        if (t->fall_speed) {
+            if (!t->momentum) {
+                t->momentum = gauss(0.0, 0.2);
+            }
         }
     }
 
@@ -53,7 +65,7 @@ int thing_fall (levelp level, thingp t)
 
         it = thing_overlaps(level, t, t->x, t->y, thing_is_ladder);
         if (it) {
-            thing_hit_ground(level, t, it);
+            thing_hit_ground(level, t, t->x, t->y, it);
             return (false);
         }
     }
@@ -77,7 +89,7 @@ int thing_fall (levelp level, thingp t)
 
     it = thing_hit_fall_obstacle(level, t, x, y);
     if (it) {
-        thing_hit_ground(level, t, it);
+        thing_hit_ground(level, t, t->x, t->y, it);
         return (false);
     }
 
@@ -109,7 +121,10 @@ int thing_fall (levelp level, thingp t)
                 y = t->y + t->fall_speed;
                 it = thing_hit_fall_obstacle(level, t, x, y);
                 if (it) {
-                    thing_hit_ground(level, t, it);
+                    thing_hit_ground(level, t, 
+                                     t->x, 
+                                     t->y + t->fall_speed,
+                                     it);
                     return (false);
                 }
             }

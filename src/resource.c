@@ -6497,6 +6497,7 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_SMALLROCK5, "smallrock5");
     tp_load(THING_SMALLROCK6, "smallrock6");
     tp_load(THING_BOULDER1, "boulder1");
+    tp_load(THING_BOULDER2, "boulder2");
     tp_load(THING_CHOCOLATEFROG, "chocolatefrog");
     tp_load(THING_GOLD1, "gold1");
     tp_load(THING_GOLD2, "gold2");

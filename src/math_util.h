@@ -294,6 +294,13 @@ fpoint_dist_line(fpoint P0, fpoint L0, fpoint L1, double *dist,
                  fpoint *intersect);
 
 /*
+ * true if perpendicular line from point is in line segment.
+ */
+int 
+fpoint_dist_line2(fpoint P0, fpoint L0, fpoint L1, double *dist,
+                 fpoint *intersect);
+
+/*
  * true if lines intersect
  */
 uint8_t get_line_intersection(fpoint p0,

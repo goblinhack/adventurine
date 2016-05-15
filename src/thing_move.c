@@ -105,6 +105,8 @@ int thing_slide (levelp level, thingp t)
     double x;
     double y = t->y;
 
+    t->rot += t->momentum;
+
     if (fabs(t->momentum) < 0.008) {
         t->momentum = 0;
         return (false);
@@ -123,15 +125,27 @@ int thing_slide (levelp level, thingp t)
                 t->momentum /= 2;
 
                 x = t->x + t->momentum;
-                if (thing_hit_solid_obstacle(level, t, x, y)) {
-                    t->momentum = 0;
+                thingp it = thing_hit_solid_obstacle(level, t, x, y);
+                if (it) {
+                    if (thing_can_roll(t)) {
+                        if (!things_handle_impact(t, 
+                                                  t->x + t->momentum,
+                                                  t->y,
+                                                  it)) {
+                            t->momentum = 0;
+                        }
+
+                    } else {
+                        t->momentum = 0;
+                    }
+
                     return (false);
                 }
             }
         }
     }
 
-    t->momentum *= 0.90;
+    t->momentum *= 0.9;
 
     if (t->is_submerged || t->is_partially_submerged) {
         t->momentum *= 0.75;
@@ -444,4 +458,120 @@ thingp things_throw (levelp level, thingp t)
     }
 
     return (0);
+}
+
+int things_handle_impact (const thingp A, 
+                           double nx,
+                           double ny,
+                           const thingp B)
+{
+    int check_only = false;
+    int collided = false;
+    fpoint intersect = {0,0};
+    fpoint normal_A = {0,0};
+    fpoint normal_B = {0,0};
+
+    if (thing_can_roll(A) && !thing_can_roll(B)) {
+        if (circle_box_collision(A, /* circle */
+                                 B, /* box */
+                                 nx,
+                                 ny,
+                                 &normal_A,
+                                 &intersect,
+                                 check_only)) {
+            normal_B = normal_A;
+            collided = true;
+        }
+    } else{
+        return (false);
+    }
+
+    if (!collided) {
+        return (false);
+    }
+
+    /*
+     * Normal vector is a line between the two center of masses.
+     * Tangent vector is at 90 degrees to this.
+     */
+    fpoint normal_A_unit = funit(normal_A);
+    fpoint tangent_A_unit = { -normal_A_unit.y, normal_A_unit.x };
+
+    fpoint normal_B_unit = funit(normal_B);
+    fpoint tangent_B_unit = { -normal_B_unit.y, normal_B_unit.x };
+
+    double mA = 1;
+    double mB = 1;
+
+    fpoint vA = thing_velocity(A);
+    fpoint vB = thing_velocity(B);
+
+    if (thing_is_stationary(B)) {
+        mB = mA;
+        vB = fmul(-1, vA);
+    }
+
+    /*
+     * Project the velocity onto the normal vectors.
+     */
+    double normal_A_len = fdot(normal_A_unit, vA);
+    double normal_B_len = fdot(normal_B_unit, vB);
+
+    double tangent_A_len = fdot(tangent_A_unit, vA);
+    double tangent_B_len = fdot(tangent_B_unit, vB);
+    
+    /*
+     * Tangent velocity doesn't change.after collision.
+     */
+    double tangent_A_velocity = tangent_A_len;
+    double tangent_B_velocity = tangent_B_len;
+    
+    /*
+     * Do one dimensional elastic collision.
+     */
+    double normal_A_velocity =
+        (normal_A_len*(mA - mB) + 2.0 * mB*normal_B_len) / (mA + mB);
+
+    double normal_B_velocity =
+        (normal_B_len*(mB - mA) + 2.0 * mA*normal_B_len) / (mA + mB);
+
+    fpoint normal_velocity_A  = fmul(normal_A_velocity, normal_A_unit);
+    fpoint tangent_velocity_A = fmul(tangent_A_velocity, tangent_A_unit);
+
+    fpoint normal_velocity_B  = fmul(normal_B_velocity, normal_B_unit);
+    fpoint tangent_velocity_B = fmul(tangent_B_velocity, tangent_B_unit);
+
+#if 0
+glcolor(ORANGE);
+Begin(GL_LINES);
+Vertex2f(A->x, A->y);
+Vertex2f(A->x + normal_velocity_A.x*OBJ_MAX_RADIUS, A->y + normal_velocity_A.y*OBJ_MAX_RADIUS);
+End();
+glcolor(CYAN);
+Begin(GL_LINES);
+Vertex2f(A->x, A->y);
+Vertex2f(A->x + tangent_velocity_A.x*OBJ_MAX_RADIUS, A->y + tangent_velocity_A.y*OBJ_MAX_RADIUS);
+End();
+glcolor(WHITE);
+Begin(GL_LINES);
+Vertex2f(A->x, A->y);
+Vertex2f(A->x + A->velocity.x*OBJ_MAX_RADIUS, A->y + A->velocity.y*OBJ_MAX_RADIUS);
+End();
+#endif
+    static double COLLISION_ELASTICITY      = 1.0;
+    static double TANGENT_ELASTICITY        = 1.0;
+
+    normal_velocity_A = fmul(COLLISION_ELASTICITY, normal_velocity_A);
+    normal_velocity_B = fmul(COLLISION_ELASTICITY, normal_velocity_B);
+    tangent_velocity_A = fmul(TANGENT_ELASTICITY, tangent_velocity_A);
+    tangent_velocity_B = fmul(TANGENT_ELASTICITY, tangent_velocity_B);
+
+    thing_set_velocity(A,
+        normal_velocity_A.x + tangent_velocity_A.x,
+        normal_velocity_A.y + tangent_velocity_A.y);
+    thing_set_velocity(B,
+        normal_velocity_B.x + tangent_velocity_B.x,
+        normal_velocity_B.y + tangent_velocity_B.y);
+
+    return (true);
 }

@@ -88,7 +88,7 @@ void tile_blit_fat (tpp tp, tile *tile, char *name, fpoint tl, fpoint br)
  * Blits a whole tile. Y co-ords are inverted. Does not expand tl, br.
  */
 static inline
-void tile_blit_fat2 (tpp tp, tile *tile, char *name, const fpoint tl, const fpoint br)
+void tile_blit_fat2 (tpp tp, tile *tile, char *name, fpoint tl, fpoint br)
 {
 #if 0
     if (!tile) {
@@ -117,6 +117,13 @@ void tile_blit_fat2 (tpp tp, tile *tile, char *name, const fpoint tl, const fpoi
 
         double pct_w     = tile->pct_width;
         double pct_h     = tile->pct_height;
+        double pix_w     = br.x - tl.x;
+        double pix_h     = br.y - tl.y;
+
+        tl.x -= left_off  * pix_w;
+        br.x += right_off * pix_w;
+        tl.y -= top_off   * pix_h;
+        br.y += bot_off   * pix_h;
 
         x1 -= left_off  * pct_w;
         x2 += right_off * pct_w;

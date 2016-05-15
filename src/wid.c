@@ -25,6 +25,7 @@
 #include "map.h"
 #include "level.h"
 #include "fluid.h"
+#include "thing.h"
 
 #ifdef ENABLE_WID_PTRCHECK
 #undef fast_verify
@@ -7966,7 +7967,7 @@ static void wid_display_fast (widp w,
         return;
     }
 
-    if (w->rotating || w->rotated) {
+    if ((t && thing_can_roll(t)) || w->rotating || w->rotated) {
         uint8_t child_updated_scissors = false;
         blit_flush();
         wid_display(w, true, &child_updated_scissors, false);
@@ -7981,6 +7982,25 @@ static void wid_display_fast (widp w,
 #endif
     {
         tile_blit_fat(tp, tile, 0, tl, br);
+    }
+
+    if (0 && t) {
+//        && (thing_can_roll(t) || thing_is_rock(t))) {
+        fpoint P0, P1, P2, P3;
+        thing_to_coords(t, &P0, &P1, &P2, &P3);
+
+        glcolor(GREEN);
+        gl_blitline(P0.x, P0.y, P1.x, P1.y);
+        gl_blitline(P1.x, P1.y, P2.x, P2.y);
+        gl_blitline(P2.x, P2.y, P3.x, P3.y);
+        gl_blitline(P3.x, P3.y, P0.x, P0.y);
+
+        fpoint v = thing_velocity(t);
+        double vx = v.x * 100;
+        double vy = v.y * 100;
+
+        glcolor(WHITE);
+        gl_blitline(P2.x, P2.y, P2.x + vx, P2.y + vy);
     }
 
     if (unlikely(debug && t)) {
@@ -8719,6 +8739,7 @@ static void wid_display (widp w,
                          uint8_t *updated_scissors,
                          int clip)
 {
+    thingp t = wid_get_thing(w);
     uint8_t did_push_matrix;
     int32_t clip_height;
     int32_t clip_width;
@@ -8959,7 +8980,8 @@ static void wid_display (widp w,
     /*
      * Do rotation and flipping.
      */
-    if (w->rotating || w->rotated || w->bouncing || 
+    if ((t && thing_can_roll(t)) ||
+        w->rotating || w->rotated || w->bouncing || 
         w->flip_vert || w->flip_horiz) {
 
         did_push_matrix = true;
@@ -8978,6 +9000,12 @@ static void wid_display (widp w,
             disable_scissor = true;
 
             glRotatef(-wid_get_rotate(w), 0, 0, 1);
+        }
+
+        if ((t && thing_can_roll(t))) {
+            disable_scissor = true;
+
+            glRotatef(t->rot * 30, 0, 0, 1);
         }
 
         if (w->flip_horiz) {
@@ -9070,7 +9098,11 @@ static void wid_display (widp w,
 
         blit_flush();
         blit_init();
-        tile_blit_fat2(wid_get_thing_template(w), tile, 0, tl, br);
+        if (t) {
+            tile_blit_fat2(thing_tp(t), tile, 0, tl, br);
+        } else {
+            tile_blit_fat2(0, tile, 0, tl, br);
+        }
         blit_flush();
         blit_init();
 
@@ -9467,6 +9499,7 @@ static void wid_display (widp w,
                                         blit_flush();
                                         wid_display(w, true, &child_updated_scissors);
                                         blit_init();
+
                                     } else {
                                         /*
                                          * Doesn't look that great as a torch 

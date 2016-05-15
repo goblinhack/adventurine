@@ -624,7 +624,7 @@ void demarshal_thing_template (demarshal_p ctx, tpp t)
         GET_OPT_NAMED_BITFIELD(ctx, "is_rrr24", t->is_rrr24);
         GET_OPT_NAMED_BITFIELD(ctx, "is_rrr25", t->is_rrr25);
         GET_OPT_NAMED_BITFIELD(ctx, "is_rrr26", t->is_rrr26);
-        GET_OPT_NAMED_BITFIELD(ctx, "is_rrr27", t->is_rrr27);
+        GET_OPT_NAMED_BITFIELD(ctx, "can_roll", t->can_roll);
         GET_OPT_NAMED_BITFIELD(ctx, "is_bubbles", t->is_bubbles);
         GET_OPT_NAMED_BITFIELD(ctx, "can_drown", t->can_drown);
         GET_OPT_NAMED_BITFIELD(ctx, "is_ropepile", t->is_ropepile);
@@ -852,7 +852,7 @@ void marshal_thing_template (marshal_p ctx, tpp t)
     PUT_NAMED_BITFIELD(ctx, "is_rrr24", t->is_rrr24);
     PUT_NAMED_BITFIELD(ctx, "is_rrr25", t->is_rrr25);
     PUT_NAMED_BITFIELD(ctx, "is_rrr26", t->is_rrr26);
-    PUT_NAMED_BITFIELD(ctx, "is_rrr27", t->is_rrr27);
+    PUT_NAMED_BITFIELD(ctx, "can_roll", t->can_roll);
     PUT_NAMED_BITFIELD(ctx, "is_bubbles", t->is_bubbles);
     PUT_NAMED_BITFIELD(ctx, "can_drown", t->can_drown);
     PUT_NAMED_BITFIELD(ctx, "is_ropepile", t->is_ropepile);

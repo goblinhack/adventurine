@@ -206,6 +206,48 @@ fpoint_dist_line (fpoint P0, fpoint L0, fpoint L1, double *dist,
     return (1);
 }
 
+int 
+fpoint_dist_line2 (fpoint P0, fpoint L0, fpoint L1, double *dist,
+                  fpoint *intersect_out)
+{
+    fpoint intersect;
+    float mag;
+    float U;
+ 
+    /*
+     * Can get the squared distance to avoid this.
+     */
+    mag = fdist(L1, L0);
+ 
+    /*
+     * Project point P onto the line and then calc the dot product.
+     */
+    U = (((P0.x - L0.x) * (L1.x - L0.x)) +
+         ((P0.y - L0.y) * (L1.y - L0.y))) /
+         (mag * mag);
+ 
+    if (U < 0.0f) {
+        intersect = L0;
+    } else if (U > 1.0f) {
+        intersect = L1;
+    } else {
+        intersect.x = L0.x + U * (L1.x - L0.x);
+        intersect.y = L0.y + U * (L1.y - L0.y);
+    }
+ 
+    *dist = fdist(P0, intersect);
+
+    if (intersect_out) {
+        *intersect_out = intersect;
+    }
+ 
+    if ((U < 0.0f) || (U > 1.0f)) {
+        return (0);   // closest P0 does not fall within the line segment
+    }
+ 
+    return (1);
+}
+
 double 
 fpoint_project_onto_line (fpoint P0, fpoint L0, fpoint L1)
 {

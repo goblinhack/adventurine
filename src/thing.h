@@ -226,6 +226,7 @@ enum {
     THING_SMALLROCK5,
     THING_SMALLROCK6,
     THING_BOULDER1,
+    THING_BOULDER2,
     THING_CHOCOLATEFROG,
     THING_GOLD1,
     THING_GOLD2,
@@ -462,6 +463,7 @@ typedef struct thing_ {
     float fall_speed;
     float jump_speed;
     float momentum;
+    float rot;
 
     /*
      * How close for collision detection.
@@ -1062,11 +1064,11 @@ static inline uint8_t thing_is_rrr26 (thingp t)
     return (tp_is_rrr26(thing_tp(t)));
 }
 
-static inline uint8_t thing_is_rrr27 (thingp t)
+static inline uint8_t thing_can_roll (thingp t)
 {
     verify(t);
 
-    return (tp_is_rrr27(thing_tp(t)));
+    return (tp_can_roll(thing_tp(t)));
 }
 
 static inline uint8_t thing_is_bubbles (thingp t)
@@ -1689,6 +1691,10 @@ void thing_move_set_dir(levelp,
                         uint8_t down,
                         uint8_t left,
                         uint8_t right);
+int things_handle_impact(const thingp A, 
+                         double nx,
+                         double ny,
+                         const thingp B);
 
 /*
  * thing.c
@@ -1741,6 +1747,12 @@ void thing_wield_next_weapon(levelp, thingp t);
  */
 void 
 thingp_get_interpolated_position(const thingp t, double *x, double *y);
+int circle_box_collision(thingp C, thingp B,
+                         double nx,
+                         double ny,
+                         fpoint *normal,
+                         fpoint *intersect,
+                         int check_only);
 
 /*
  * thing_place.c
@@ -1882,6 +1894,7 @@ void thing_collect(levelp level,
  * thing_collision.c
  */
 int thing_handle_collisions(levelp, thingp t);
+void thing_to_coords(thingp t, fpoint *P0, fpoint *P1, fpoint *P2, fpoint *P3);
 
 /*
  * thing_fire.c
@@ -1989,3 +2002,39 @@ static inline uint32_t thing_id (thingp t)
 int thing_submerged_depth(levelp level, thingp t);
 int thing_is_submerged(levelp, thingp t);
 int thing_is_partially_or_fully_submerged(levelp, thingp t);
+
+static inline int thing_is_stationary (thingp t)
+{
+    return (!thing_can_roll(t));
+}
+
+static inline fpoint thing_velocity (thingp t)
+{
+    fpoint v;
+
+    v.x = t->momentum;                    
+    if (t->jump_speed) {
+        v.y = -t->jump_speed;
+    } else {
+        v.y = t->fall_speed;
+    }
+
+    return (v);
+}
+
+static void inline thing_set_velocity (thingp t, double x, double y)
+{
+    if (thing_is_stationary(t)) {
+        return;
+    }
+
+    t->momentum = x;
+
+    if (y > 0) {
+        t->fall_speed = y;
+        t->jump_speed = 0;
+    } else {
+        t->jump_speed = -y;
+        t->fall_speed = 0;
+    }
+}

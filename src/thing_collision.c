@@ -177,6 +177,169 @@ thingp_get_interpolated_position (const thingp t, double *x, double *y)
     *y = t->last_y + (dy * wdy);
 }
 
+void
+thing_to_coords (thingp t, fpoint *P0, fpoint *P1, fpoint *P2, fpoint *P3)
+{
+    widp w = t->wid;
+
+    double tl_x;
+    double tl_y;
+    double br_x;
+    double br_y;
+
+    wid_get_tl_x_tl_y_br_x_br_y(t->wid, &tl_x, &tl_y, &br_x, &br_y);
+
+    tpp tp = thing_tp(t);
+
+    double left_off  = (double)tp_get_blit_left_off(tp);
+    double right_off = (double)tp_get_blit_right_off(tp);
+    double top_off   = (double)tp_get_blit_top_off(tp);
+    double bot_off   = (double)tp_get_blit_bot_off(tp);
+
+    double pix_w     = br_x - tl_x;
+    double pix_h     = br_y - tl_y;
+
+    tl_x -= left_off  * pix_w;
+    br_x += right_off * pix_w;
+    tl_y -= top_off   * pix_h;
+    br_y += bot_off   * pix_h;
+
+    if (0) {
+    widp p = w->parent;
+    tl_x += p->offset.x;
+    tl_y += p->offset.y;
+    br_x += p->offset.x;
+    br_y += p->offset.y;
+    }
+
+    P0->x = tl_x;
+    P0->y = tl_y;
+    P1->x = br_x;
+    P1->y = tl_y;
+    P2->x = br_x;
+    P2->y = br_y;
+    P3->x = tl_x;
+    P3->y = br_y;
+}
+
+int circle_box_collision (thingp C, thingp B,
+                          double nx,
+                          double ny,
+                          fpoint *normal,
+                          fpoint *intersect,
+                          int check_only)
+{
+    widp Cw = C->wid;
+    double Cx = wid_get_cx(Cw);
+    double Cy = wid_get_cy(Cw);
+    double Cwid = wid_get_width(Cw);
+    double Cheight = wid_get_height(Cw);
+    Cx += (nx - C->x) * Cwid;
+    Cy += (ny - C->y) * Cheight;
+
+    widp Bw = B->wid;
+    double Bx = wid_get_cx(Bw);
+    double By = wid_get_cy(Bw);
+
+    fpoint P0, P1, P2, P3;
+    fpoint C0, C1, C2, C3;
+    double dist;
+    fpoint B_at = { Bx, By };
+
+    thing_to_coords(C, &C0, &C1, &C2, &C3);
+    thing_to_coords(B, &P0, &P1, &P2, &P3);
+    double radius = (C1.x - C0.x) / 2.0;
+
+    fpoint C_at = { Cx, Cy };
+
+    if (fdist(C_at, P0) < radius) {
+        goto collided;
+    }
+
+    if (fdist(C_at, P1) < radius) {
+        goto collided;
+    }
+
+    if (fdist(C_at, P2) < radius) {
+        goto collided;
+    }
+
+    if (fdist(C_at, P3) < radius) {
+        goto collided;
+    }
+
+    if (fpoint_dist_line2(C_at, P0, P1, &dist, 0)) {
+        if (dist < radius) {
+            goto collided;
+        }
+    }
+
+    if (fpoint_dist_line2(C_at, P1, P2, &dist, 0)) {
+        if (dist < radius) {
+            goto collided;
+        }
+    }
+
+    if (fpoint_dist_line2(C_at, P2, P3, &dist, 0)) {
+        if (dist < radius) {
+            goto collided;
+        }
+    }
+
+    if (fpoint_dist_line2(C_at, P3, P0, &dist, 0)) {
+        if (dist < radius) {
+            goto collided;
+        }
+    }
+
+    return (false);
+
+collided:
+
+    if (check_only) {
+        return (true);
+    }
+
+    fpoint delta;
+
+    if (get_line_intersection(C_at, B_at, P0, P1, intersect)) {
+        delta.x = P0.x - P1.x;
+        delta.y = P0.y - P1.y;
+        normal->x = -delta.y;
+        normal->y = delta.x;
+        return (true);
+    }
+
+    if (get_line_intersection(C_at, B_at, P1, P2, intersect)) {
+        delta.x = P1.x - P2.x;
+        delta.y = P1.y - P2.y;
+        normal->x = -delta.y;
+        normal->y = delta.x;
+        return (true);
+    }
+
+    if (get_line_intersection(C_at, B_at, P2, P3, intersect)) {
+        delta.x = P2.x - P3.x;
+        delta.y = P2.y - P3.y;
+        normal->x = -delta.y;
+        normal->y = delta.x;
+        return (true);
+    }
+
+    if (get_line_intersection(C_at, B_at, P3, P0, intersect)) {
+        delta.x = P3.x - P0.x;
+        delta.y = P3.y - P0.y;
+        normal->x = -delta.y;
+        normal->y = delta.x;
+        return (true);
+    }
+
+    /*
+     * Sphere may be inside box.
+     */
+    return (false);
+}
+
 static uint8_t things_overlap (const thingp A, 
                                double nx,
                                double ny,
@@ -423,6 +586,27 @@ static uint8_t things_overlap (const thingp A,
         Bpx2 = collision_map_large_x2;
         Bpy1 = collision_map_large_y1;
         Bpy2 = collision_map_large_y2;
+    }
+
+    int check_only = true;
+    int collided = false;
+    fpoint intersect = {0,0};
+    fpoint normal_A = {0,0};
+    fpoint normal_B = {0,0};
+
+    if (thing_can_roll(A) && !thing_can_roll(B)) {
+        if (circle_box_collision(A, /* circle */
+                                 B, /* box */
+                                 nx,
+                                 ny,
+                                 &normal_A,
+                                 &intersect,
+                                 check_only)) {
+            normal_B = normal_A;
+            collided = true;
+            return (true);
+        }
+        return (false);
     }
 
     /*
