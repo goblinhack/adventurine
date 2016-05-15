@@ -34,6 +34,10 @@ static void thing_hit_ground (levelp level,
 
     if (thing_can_roll(t)) {
         if (t->fall_speed) {
+            things_handle_impact(t, 
+                                 t->x,
+                                 t->y + t->fall_speed,
+                                 it);
             if (!t->momentum) {
                 t->momentum = gauss(0.0, 0.2);
             }
