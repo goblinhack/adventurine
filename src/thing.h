@@ -1691,7 +1691,8 @@ void thing_move_set_dir(levelp,
                         uint8_t down,
                         uint8_t left,
                         uint8_t right);
-int things_handle_impact(const thingp A, 
+int things_handle_impact(levelp,
+                         const thingp A, 
                          double nx,
                          double ny,
                          const thingp B);

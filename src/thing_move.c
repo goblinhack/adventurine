@@ -132,7 +132,7 @@ if (0)
                 thingp it = thing_hit_solid_obstacle(level, t, x, y);
                 if (it) {
                     if (thing_can_roll(t)) {
-                        if (!things_handle_impact(t, 
+                        if (!things_handle_impact(level, t, 
                                                   t->x + t->momentum,
                                                   t->y,
                                                   it)) {
@@ -467,7 +467,8 @@ thingp things_throw (levelp level, thingp t)
     return (0);
 }
 
-int things_handle_impact (const thingp A, 
+int things_handle_impact (levelp level, 
+                          const thingp A, 
                           double nx,
                           double ny,
                           const thingp B)
@@ -477,6 +478,8 @@ int things_handle_impact (const thingp A,
     fpoint intersect = {0,0};
     fpoint normal_A = {0,0};
     fpoint normal_B = {0,0};
+    fpoint A_at = { A->x, A->y };
+    fpoint B_at = { B->x, B->y };
 
     if (thing_can_roll(A) && !thing_can_roll(B)) {
         if (circle_box_collision(A, /* circle */
@@ -495,8 +498,6 @@ int things_handle_impact (const thingp A,
                                     nx,
                                     ny,
                                     &intersect)) {
-            fpoint A_at = { A->x, A->y };
-            fpoint B_at = { B->x, B->y };
             normal_A = fsub(B_at, A_at);
             normal_B = normal_A;
             collided = true;
@@ -568,12 +569,59 @@ int things_handle_impact (const thingp A,
     tangent_velocity_A = fmul(TANGENT_ELASTICITY, tangent_velocity_A);
     tangent_velocity_B = fmul(TANGENT_ELASTICITY, tangent_velocity_B);
 
-    thing_set_velocity(A,
-        normal_velocity_A.x + tangent_velocity_A.x,
-        normal_velocity_A.y + tangent_velocity_A.y);
-    thing_set_velocity(B,
-        normal_velocity_B.x + tangent_velocity_B.x,
-        normal_velocity_B.y + tangent_velocity_B.y);
+    double step = 1.0;
+
+    nx = A_at.x + step * (normal_velocity_A.x + tangent_velocity_A.x);
+    ny = A_at.y + step * (normal_velocity_A.y + tangent_velocity_A.y);
+    if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
+        thing_set_velocity(A,
+            normal_velocity_A.x + tangent_velocity_A.x,
+            normal_velocity_A.y + tangent_velocity_A.y);
+    } else {
+        nx = A_at.x + step * (normal_velocity_A.x);
+        ny = A_at.y + step * (normal_velocity_A.y);
+        if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
+            thing_set_velocity(A,
+                normal_velocity_A.x + tangent_velocity_A.x,
+                normal_velocity_A.y + tangent_velocity_A.y);
+        } else {
+            nx = A_at.x + step * (tangent_velocity_A.x);
+            ny = A_at.y + step * (tangent_velocity_A.y);
+            if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
+                thing_set_velocity(A,
+                    normal_velocity_A.x + tangent_velocity_A.x,
+                    normal_velocity_A.y + tangent_velocity_A.y);
+            } else {
+                thing_set_velocity(A, 0, 0);
+            }
+        }
+    }
+
+    nx = B_at.x + step * (normal_velocity_B.x + tangent_velocity_B.x);
+    ny = B_at.y + step * (normal_velocity_B.y + tangent_velocity_B.y);
+    if (!thing_hit_fall_obstacle(level, B, nx, ny)) {
+        thing_set_velocity(B,
+            normal_velocity_B.x + tangent_velocity_B.x,
+            normal_velocity_B.y + tangent_velocity_B.y);
+    } else {
+        nx = B_at.x + step * (normal_velocity_B.x);
+        ny = B_at.y + step * (normal_velocity_B.y);
+        if (!thing_hit_fall_obstacle(level, B, nx, ny)) {
+            thing_set_velocity(B,
+                normal_velocity_B.x + tangent_velocity_B.x,
+                normal_velocity_B.y + tangent_velocity_B.y);
+        } else {
+            nx = B_at.x + step * (tangent_velocity_B.x);
+            ny = B_at.y + step * (tangent_velocity_B.y);
+            if (!thing_hit_fall_obstacle(level, B, nx, ny)) {
+                thing_set_velocity(B,
+                    normal_velocity_B.x + tangent_velocity_B.x,
+                    normal_velocity_B.y + tangent_velocity_B.y);
+            } else {
+                thing_set_velocity(B, 0, 0);
+            }
+        }
+    }
 
     return (true);
 }

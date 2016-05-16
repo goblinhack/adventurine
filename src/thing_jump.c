@@ -42,10 +42,10 @@ int thing_jump (levelp level, thingp t)
     thingp it;
     it = thing_hit_solid_obstacle(level, t, x, y);
     if (it) {
-        if (things_handle_impact(t, 
-                                t->x,
-                                t->y - t->jump_speed,
-                                it)) {
+        if (things_handle_impact(level, t, 
+                                 t->x,
+                                 t->y - t->jump_speed,
+                                 it)) {
         }
 
 if (0)

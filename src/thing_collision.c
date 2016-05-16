@@ -363,7 +363,6 @@ int circle_circle_collision (thingp A,
     thing_to_coords(A, &A0, &A1, &A2, &A3);
     double A_radius = (A1.x - A0.x) / 2.0;
 
-
     widp Bw = B->wid;
     double Bx = wid_get_cx(Bw);
     double By = wid_get_cy(Bw);
@@ -660,6 +659,7 @@ static uint8_t things_overlap (const thingp A,
         }
         return (false);
     }
+
     if (thing_can_roll(A) && thing_can_roll(B)) {
         if (circle_circle_collision(A, /* circle */
                                     B, /* box */
@@ -1700,6 +1700,24 @@ thingp thing_hit_fall_obstacle (levelp level,
                     !thing_is_ladder(it) && 
                     !thing_is_cobweb(it) && 
                     !thing_is_spikes(it) && 
+                    !thing_is_door(it)) {
+                    continue;
+                }
+            } else if (thing_is_obstacle(me)) {
+                if (thing_is_obstacle(it)) {
+                    if (me->y > it->y) {
+                        continue;
+                    }
+                    if (me->y == it->y) {
+                        if ((int)(uintptr_t) me < (int)(uintptr_t) it) {
+                            continue;
+                        }
+                    }
+                }
+
+                if (!thing_is_wall(it) && 
+                    !thing_is_rock(it) && 
+                    !thing_is_obstacle(it) && 
                     !thing_is_door(it)) {
                     continue;
                 }
