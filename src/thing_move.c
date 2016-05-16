@@ -468,9 +468,9 @@ thingp things_throw (levelp level, thingp t)
 }
 
 int things_handle_impact (const thingp A, 
-                           double nx,
-                           double ny,
-                           const thingp B)
+                          double nx,
+                          double ny,
+                          const thingp B)
 {
     int check_only = false;
     int collided = false;
@@ -479,7 +479,6 @@ int things_handle_impact (const thingp A,
     fpoint normal_B = {0,0};
 
     if (thing_can_roll(A) && !thing_can_roll(B)) {
-CON("C v B");
         if (circle_box_collision(A, /* circle */
                                  B, /* box */
                                  nx,
@@ -490,16 +489,25 @@ CON("C v B");
             normal_B = normal_A;
             collided = true;
         }
+    } else if (thing_can_roll(A) && thing_can_roll(B)) {
+        if (circle_circle_collision(A, /* circle */
+                                    B, /* circle */
+                                    nx,
+                                    ny,
+                                    &intersect)) {
+            fpoint A_at = { A->x, A->y };
+            fpoint B_at = { B->x, B->y };
+            normal_A = fsub(B_at, A_at);
+            normal_B = normal_A;
+            collided = true;
+        }
     } else{
         return (false);
     }
 
     if (!collided) {
-CON("NO COLLISION");
         return (false);
     }
-CON("COLLISION");
-CON("  normal %f %f",normal_A.x,normal_A.y);
 
     /*
      * Normal vector is a line between the two center of masses.
@@ -521,7 +529,6 @@ CON("  normal %f %f",normal_A.x,normal_A.y);
         mB = mA;
         vB = fmul(-1, vA);
     }
-CON("  vA %f %f",vA.x,vA.y);
 
     /*
      * Project the velocity onto the normal vectors.
@@ -556,8 +563,6 @@ CON("  vA %f %f",vA.x,vA.y);
     static double COLLISION_ELASTICITY      = 1.0;
     static double TANGENT_ELASTICITY        = 1.0;
 
-CON("  nA %f %f",normal_velocity_A.x,normal_velocity_A.y);
-CON("  tA %f %f",tangent_velocity_A.x,tangent_velocity_A.y);
     normal_velocity_A = fmul(COLLISION_ELASTICITY, normal_velocity_A);
     normal_velocity_B = fmul(COLLISION_ELASTICITY, normal_velocity_B);
     tangent_velocity_A = fmul(TANGENT_ELASTICITY, tangent_velocity_A);

@@ -1747,12 +1747,19 @@ void thing_wield_next_weapon(levelp, thingp t);
  */
 void 
 thingp_get_interpolated_position(const thingp t, double *x, double *y);
+
 int circle_box_collision(thingp C, thingp B,
                          double nx,
                          double ny,
                          fpoint *normal,
                          fpoint *intersect,
                          int check_only);
+
+int circle_circle_collision(thingp A, 
+                            thingp B,
+                            double nx,
+                            double ny,
+                            fpoint *intersect);
 
 /*
  * thing_place.c
@@ -2037,5 +2044,4 @@ static void inline thing_set_velocity (thingp t, double x, double y)
         t->jump_speed = -y;
         t->fall_speed = 0;
     }
-CON("set %f fall %f jump %f",t->momentum, t->fall_speed, t->jump_speed);
 }

@@ -237,20 +237,20 @@ int circle_box_collision (thingp C, thingp B,
     Cx += (nx - C->x) * Cwid;
     Cy += (ny - C->y) * Cheight;
 
+    fpoint C_at = { Cx, Cy };
+    fpoint C0, C1, C2, C3;
+    thing_to_coords(C, &C0, &C1, &C2, &C3);
+
+    double radius = (C1.x - C0.x) / 2.0;
+
     widp Bw = B->wid;
     double Bx = wid_get_cx(Bw);
     double By = wid_get_cy(Bw);
 
     fpoint P0, P1, P2, P3;
-    fpoint C0, C1, C2, C3;
-    double dist;
     fpoint B_at = { Bx, By };
 
-    thing_to_coords(C, &C0, &C1, &C2, &C3);
     thing_to_coords(B, &P0, &P1, &P2, &P3);
-    double radius = (C1.x - C0.x) / 2.0;
-
-    fpoint C_at = { Cx, Cy };
 
     if (fdist(C_at, P0) < radius) {
         goto collided;
@@ -268,6 +268,7 @@ int circle_box_collision (thingp C, thingp B,
         goto collided;
     }
 
+    double dist;
     if (fpoint_dist_line2(C_at, P0, P1, &dist, 0)) {
         if (dist < radius) {
             goto collided;
@@ -338,6 +339,61 @@ collided:
      * Sphere may be inside box.
      */
     return (false);
+}
+/*
+ * If two circles collide, the resultant direction is along the normal between
+ * the two center of masses of the circles.
+ */
+int circle_circle_collision (thingp A, 
+                             thingp B,
+                             double nx,
+                             double ny,
+                             fpoint *intersect)
+{
+    widp Aw = A->wid;
+    double Ax = wid_get_cx(Aw);
+    double Ay = wid_get_cy(Aw);
+    double Awid = wid_get_width(Aw);
+    double Aheight = wid_get_height(Aw);
+    Ax += (nx - A->x) * Awid;
+    Ay += (ny - A->y) * Aheight;
+
+    fpoint A_at = { Ax, Ay };
+    fpoint A0, A1, A2, A3;
+    thing_to_coords(A, &A0, &A1, &A2, &A3);
+    double A_radius = (A1.x - A0.x) / 2.0;
+
+
+    widp Bw = B->wid;
+    double Bx = wid_get_cx(Bw);
+    double By = wid_get_cy(Bw);
+
+    fpoint B_at = { Bx, By };
+    fpoint B0, B1, B2, B3;
+    thing_to_coords(B, &B0, &B1, &B2, &B3);
+    double B_radius = (B1.x - B0.x) / 2.0;
+
+    fpoint n = fsub(B_at, A_at);
+    double touching_dist = A_radius + B_radius;
+    double dist_squared = n.x*n.x + n.y*n.y;
+
+    double diff = dist_squared - touching_dist * touching_dist;
+    if (diff >= 0.0) {
+        /*
+         * Circles are not touching
+         */
+        return (false);
+    }
+
+    diff = sqrt(fabs(diff));
+    diff /= 2.0;
+
+    n = funit(n);
+    n = fmul(A_radius - diff, n);
+    n = fadd(A_at, n);
+    *intersect = n;
+
+    return (true);
 }
 
 static uint8_t things_overlap (const thingp A, 
@@ -589,10 +645,8 @@ static uint8_t things_overlap (const thingp A,
     }
 
     int check_only = true;
-    int collided = false;
     fpoint intersect = {0,0};
     fpoint normal_A = {0,0};
-    fpoint normal_B = {0,0};
 
     if (thing_can_roll(A) && !thing_can_roll(B)) {
         if (circle_box_collision(A, /* circle */
@@ -602,8 +656,16 @@ static uint8_t things_overlap (const thingp A,
                                  &normal_A,
                                  &intersect,
                                  check_only)) {
-            normal_B = normal_A;
-            collided = true;
+            return (true);
+        }
+        return (false);
+    }
+    if (thing_can_roll(A) && thing_can_roll(B)) {
+        if (circle_circle_collision(A, /* circle */
+                                    B, /* box */
+                                    nx,
+                                    ny,
+                                    &intersect)) {
             return (true);
         }
         return (false);
