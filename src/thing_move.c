@@ -555,6 +555,7 @@ int things_handle_impact (levelp level,
     double normal_B_velocity =
         (normal_B_len*(mB - mA) + 2.0 * mA*normal_A_len) / (mA + mB);
 
+CON("%f %f %f",A->momentum, A->fall_speed, A->jump_speed);
     fpoint normal_velocity_A  = fmul(normal_A_velocity, normal_A_unit);
     fpoint tangent_velocity_A = fmul(tangent_A_velocity, tangent_A_unit);
 
@@ -582,19 +583,23 @@ int things_handle_impact (levelp level,
         ny = A_at.y + step * (normal_velocity_A.y);
         if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
             thing_set_velocity(A,
-                normal_velocity_A.x + tangent_velocity_A.x,
-                normal_velocity_A.y + tangent_velocity_A.y);
+                normal_velocity_A.x,
+                normal_velocity_A.y);
         } else {
             nx = A_at.x + step * (tangent_velocity_A.x);
             ny = A_at.y + step * (tangent_velocity_A.y);
             if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
                 thing_set_velocity(A,
-                    normal_velocity_A.x + tangent_velocity_A.x,
-                    normal_velocity_A.y + tangent_velocity_A.y);
+                    tangent_velocity_A.x,
+                    tangent_velocity_A.y);
             } else {
-                thing_set_velocity(A, 0, 0);
+                thing_set_velocity(A, -vA.x, -vA.y);
             }
         }
+    }
+
+    if (thing_is_stationary(B)) {
+        return (true);
     }
 
     nx = B_at.x + step * (normal_velocity_B.x + tangent_velocity_B.x);
@@ -608,17 +613,18 @@ int things_handle_impact (levelp level,
         ny = B_at.y + step * (normal_velocity_B.y);
         if (!thing_hit_fall_obstacle(level, B, nx, ny)) {
             thing_set_velocity(B,
-                normal_velocity_B.x + tangent_velocity_B.x,
-                normal_velocity_B.y + tangent_velocity_B.y);
+                normal_velocity_B.x,
+                normal_velocity_B.y);
         } else {
             nx = B_at.x + step * (tangent_velocity_B.x);
             ny = B_at.y + step * (tangent_velocity_B.y);
             if (!thing_hit_fall_obstacle(level, B, nx, ny)) {
                 thing_set_velocity(B,
-                    normal_velocity_B.x + tangent_velocity_B.x,
-                    normal_velocity_B.y + tangent_velocity_B.y);
+                    tangent_velocity_B.x,
+                    tangent_velocity_B.y);
             } else {
-                thing_set_velocity(B, 0, 0);
+CON("B stuck");
+                thing_set_velocity(B, -vB.x, -vB.y);
             }
         }
     }

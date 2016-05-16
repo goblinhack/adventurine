@@ -2045,4 +2045,5 @@ static void inline thing_set_velocity (thingp t, double x, double y)
         t->jump_speed = -y;
         t->fall_speed = 0;
     }
+CON(" set to %f %f %f",t->momentum, t->fall_speed, t->jump_speed);
 }

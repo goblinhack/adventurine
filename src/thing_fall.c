@@ -51,10 +51,9 @@ if (0) {
                 
 //        }
         }
+    } else {
+        t->fall_speed = 0;
     }
-
-if (0)
-    t->fall_speed = 0;
 }
 
 /*
@@ -107,7 +106,7 @@ int thing_fall (levelp level, thingp t)
         return (false);
     }
 
-if (0)
+if (0) 
     t->fall_speed += 0.010;
 
     if (t->fall_speed > 0.4) {
@@ -118,6 +117,7 @@ if (0)
         t->fall_speed = 1;
     }
 
+if (!thing_can_roll(t)) {
     y = t->y + t->fall_speed;
     it = thing_hit_fall_obstacle(level, t, x, y);
     if (it) {
@@ -145,6 +145,7 @@ if (0)
             }
         }
     }
+}
 
     thing_wid_update(level, t, x, y, true, false /* is new */);
 

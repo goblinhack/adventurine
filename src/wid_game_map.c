@@ -728,6 +728,7 @@ wid_game_map_replace_tile (levelp level,
 if (thing_can_roll(t)) {
 t->fall_speed = gauss(0, 0.1);
 t->momentum = gauss(0, 0.1);
+t->momentum = 0.01;
 }
     /*
      * This adds it to the grid wid.

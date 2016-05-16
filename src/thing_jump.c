@@ -59,7 +59,7 @@ if (0)
 if (0)
     t->jump_speed *= 0.90;
 
-    if (fabs(t->jump_speed) < 0.001) {
+    if (fabs(t->jump_speed) < 0.0001) {
         t->jump_speed = 0;
         thing_jump_end(level, t);
         return (true);
