@@ -62,6 +62,73 @@ static int thing_tick_all_things (levelp level)
             continue;
         }
 
+        if (thing_can_roll(t)) {
+            int impact = false;
+            double nx;
+            double ny;
+            thingp it;
+
+            nx = t->x + t->momentum / 16.0;
+            ny = t->y + t->fall_speed / 16.0;
+            it = thing_hit_fall_obstacle(level, t, nx, ny);
+            if (it && things_handle_impact(level, t, nx, ny, it)) {
+                impact = true;
+            }
+
+            nx = t->x + t->momentum / 8.0;
+            ny = t->y + t->fall_speed / 8.0;
+            it = thing_hit_fall_obstacle(level, t, nx, ny);
+            if (it && things_handle_impact(level, t, nx, ny, it)) {
+                impact = true;
+            }
+
+            if (!impact) {
+                nx = t->x + t->momentum / 4.0;
+                ny = t->y + t->fall_speed / 4.0;
+                it = thing_hit_fall_obstacle(level, t, nx, ny);
+                if (it && things_handle_impact(level, t, nx, ny, it)) {
+                    impact = true;
+                }
+            }
+
+            if (!impact) {
+                nx = t->x + t->momentum / 2.0;
+                ny = t->y + t->fall_speed / 2.0;
+                it = thing_hit_fall_obstacle(level, t, nx, ny);
+                if (it && things_handle_impact(level, t, nx, ny, it)) {
+                    impact = true;
+                }
+            }
+
+            if (!impact) {
+                nx = t->x + t->momentum;
+                ny = t->y + t->fall_speed;
+                it = thing_hit_fall_obstacle(level, t, nx, ny);
+                if (it && things_handle_impact(level, t, nx, ny, it)) {
+                    impact = true;
+                }
+            }
+
+            nx = t->x + t->momentum;
+            ny = t->y + t->fall_speed;
+
+            if (impact) {
+                thing_wid_update(level, t, nx, ny, true, false /* is new */);
+
+                thing_handle_collisions(level, t);
+            } else {
+                thing_wid_update(level, t, nx, ny, true, false /* is new */);
+
+                t->fall_speed += 0.005;
+            }
+
+            if (t->fall_speed > 0.5) {
+                t->fall_speed = 0;
+            }
+        }
+
+#if 0
+
         if (t->momentum) {
             thing_slide(level, t);
         }
@@ -73,6 +140,7 @@ static int thing_tick_all_things (levelp level)
         if (tp_can_fall(tp)) {
             thing_fall(level, t);
         }
+#endif
 
         if (tp_can_drown(tp)) {
             if (!thing_drown(level, t)) {

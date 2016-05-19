@@ -837,6 +837,9 @@ void thing_leave_level (levelp level, thingp t)
     t->in_shop_owned_by_thing_id = 0;
     t->momentum = 0;
     t->fall_speed = 0;
+if (thing_can_roll(t)) {
+THING_CON(t,"set fall speed %s %d %f",__FUNCTION__, __LINE__,t->fall_speed);
+}
     t->jump_speed = 0;
 
     thing_map_remove(level, t);

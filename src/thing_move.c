@@ -555,15 +555,14 @@ int things_handle_impact (levelp level,
     double normal_B_velocity =
         (normal_B_len*(mB - mA) + 2.0 * mA*normal_A_len) / (mA + mB);
 
-CON("%f %f %f",A->momentum, A->fall_speed, A->jump_speed);
     fpoint normal_velocity_A  = fmul(normal_A_velocity, normal_A_unit);
     fpoint tangent_velocity_A = fmul(tangent_A_velocity, tangent_A_unit);
 
     fpoint normal_velocity_B  = fmul(normal_B_velocity, normal_B_unit);
     fpoint tangent_velocity_B = fmul(tangent_B_velocity, tangent_B_unit);
 
-    static double COLLISION_ELASTICITY      = 1.0;
-    static double TANGENT_ELASTICITY        = 1.0;
+    static double COLLISION_ELASTICITY      = 0.5;
+    static double TANGENT_ELASTICITY        = 0.5;
 
     normal_velocity_A = fmul(COLLISION_ELASTICITY, normal_velocity_A);
     normal_velocity_B = fmul(COLLISION_ELASTICITY, normal_velocity_B);
@@ -578,13 +577,22 @@ CON("%f %f %f",A->momentum, A->fall_speed, A->jump_speed);
         thing_set_velocity(A,
             normal_velocity_A.x + tangent_velocity_A.x,
             normal_velocity_A.y + tangent_velocity_A.y);
-    } else {
+CON("set A");
+    }
+#if 0
+    else {
         nx = A_at.x + step * (normal_velocity_A.x);
         ny = A_at.y + step * (normal_velocity_A.y);
         if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
             thing_set_velocity(A,
                 normal_velocity_A.x,
                 normal_velocity_A.y);
+CON("set B");
+#if 0
+            if (fabs(A->momentum) < 0.01) {
+                A->momentum = gauss(0, 0.1);
+            }
+#endif
         } else {
             nx = A_at.x + step * (tangent_velocity_A.x);
             ny = A_at.y + step * (tangent_velocity_A.y);
@@ -592,11 +600,14 @@ CON("%f %f %f",A->momentum, A->fall_speed, A->jump_speed);
                 thing_set_velocity(A,
                     tangent_velocity_A.x,
                     tangent_velocity_A.y);
+CON("set C");
             } else {
                 thing_set_velocity(A, -vA.x, -vA.y);
+CON("set D");
             }
         }
     }
+#endif
 
     if (thing_is_stationary(B)) {
         return (true);
@@ -623,7 +634,6 @@ CON("%f %f %f",A->momentum, A->fall_speed, A->jump_speed);
                     tangent_velocity_B.x,
                     tangent_velocity_B.y);
             } else {
-CON("B stuck");
                 thing_set_velocity(B, -vB.x, -vB.y);
             }
         }

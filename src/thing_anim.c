@@ -82,7 +82,7 @@ void thing_animate (levelp level, thingp t)
         }
 
         if (thing_is_animated_only_when_moving(t)) {
-            if (t->fall_speed) {
+            if (t->fall_speed > 0) {
                 return;
             }
         }

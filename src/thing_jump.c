@@ -56,8 +56,8 @@ if (0)
 
     thing_wid_update(level, t, x, y, true, false /* is new */);
 
-if (0)
-    t->jump_speed *= 0.90;
+if (1)
+    t->jump_speed *= 0.95;
 
     if (fabs(t->jump_speed) < 0.0001) {
         t->jump_speed = 0;

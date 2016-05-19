@@ -619,7 +619,7 @@ void player_wid_update (levelp level)
                 wid_set_font(game.wid_torches_text, vlarge_font);
                 snprintf(tmp, sizeof(tmp), "x %u", player->torches);
                 wid_set_text(game.wid_torches_text, tmp);
-                wid_set_text_outline(game.wid_hp_text, true);
+                wid_set_text_outline(game.wid_torches_text, true);
             }
         }
 
@@ -644,7 +644,7 @@ void player_wid_update (levelp level)
                 wid_set_font(game.wid_ropes_text, vlarge_font);
                 snprintf(tmp, sizeof(tmp), "x %u", player->ropes);
                 wid_set_text(game.wid_ropes_text, tmp);
-                wid_set_text_outline(game.wid_hp_text, true);
+                wid_set_text_outline(game.wid_ropes_text, true);
             }
         }
     }
@@ -708,7 +708,7 @@ void player_wid_update (levelp level)
                 wid_set_font(game.wid_bombs_text, vlarge_font);
                 snprintf(tmp, sizeof(tmp), "x %u", player->bombs);
                 wid_set_text(game.wid_bombs_text, tmp);
-                wid_set_text_outline(game.wid_hp_text, true);
+                wid_set_text_outline(game.wid_bombs_text, true);
             }
         }
     }

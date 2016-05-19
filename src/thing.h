@@ -2021,11 +2021,7 @@ static inline fpoint thing_velocity (thingp t)
     fpoint v;
 
     v.x = t->momentum;                    
-    if (t->jump_speed) {
-        v.y = -t->jump_speed;
-    } else {
-        v.y = t->fall_speed;
-    }
+    v.y = t->fall_speed;
 
     return (v);
 }
@@ -2035,15 +2031,10 @@ static void inline thing_set_velocity (thingp t, double x, double y)
     if (thing_is_stationary(t)) {
         return;
     }
+if (thing_can_roll(t)) {
+CON("set velocity %f %f",x, y);
+}
 
     t->momentum = x;
-
-    if (y > 0) {
-        t->fall_speed = y;
-        t->jump_speed = 0;
-    } else {
-        t->jump_speed = -y;
-        t->fall_speed = 0;
-    }
-CON(" set to %f %f %f",t->momentum, t->fall_speed, t->jump_speed);
+    t->fall_speed = y;
 }
