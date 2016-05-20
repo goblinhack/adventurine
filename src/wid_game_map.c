@@ -726,13 +726,8 @@ wid_game_map_replace_tile (levelp level,
         wid_flip_horiz(child, flip);
     }
 if (thing_can_roll(t)) {
-t->fall_speed = gauss(0, 0.1);
-t->momentum = gauss(0, 0.1);
-t->momentum = 0.03;
-t->fall_speed = 0.025;
-if (thing_can_roll(t)) {
-THING_CON(t,"set fall speed %s %d %f",__FUNCTION__, __LINE__,t->fall_speed);
-}
+t->fall_speed = gauss(0, 0.0);
+t->momentum = gauss(0, 0.15);
 }
     /*
      * This adds it to the grid wid.

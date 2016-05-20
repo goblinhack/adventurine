@@ -571,73 +571,54 @@ int things_handle_impact (levelp level,
 
     double step = 1.0;
 
-    nx = A_at.x + step * (normal_velocity_A.x + tangent_velocity_A.x);
-    ny = A_at.y + step * (normal_velocity_A.y + tangent_velocity_A.y);
+                    thing_set_velocity(A, 0, 0);
+//for (step = 1.0; step >= 0.10; step /= 2.0) {
+    double dx = step * (normal_velocity_A.x + tangent_velocity_A.x);
+    double dy = step * (normal_velocity_A.y + tangent_velocity_A.y);
+    nx = A_at.x + dx;
+    ny = A_at.y + dy;
     if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
-        thing_set_velocity(A,
-            normal_velocity_A.x + tangent_velocity_A.x,
-            normal_velocity_A.y + tangent_velocity_A.y);
-CON("set A");
-    }
-#if 0
-    else {
-        nx = A_at.x + step * (normal_velocity_A.x);
-        ny = A_at.y + step * (normal_velocity_A.y);
+        thing_set_velocity(A, dx, dy);
+//        break;
+    } else {
+        dx = step * (tangent_velocity_A.x);
+        dy = step * (tangent_velocity_A.y);
+        nx = A_at.x + dx;
+        ny = A_at.y + dy;
         if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
-            thing_set_velocity(A,
-                normal_velocity_A.x,
-                normal_velocity_A.y);
-CON("set B");
-#if 0
-            if (fabs(A->momentum) < 0.01) {
-                A->momentum = gauss(0, 0.1);
-            }
-#endif
+            thing_set_velocity(A, dx, dy);
+//            break;
         } else {
-            nx = A_at.x + step * (tangent_velocity_A.x);
-            ny = A_at.y + step * (tangent_velocity_A.y);
+            dx = step * (normal_velocity_A.x + tangent_velocity_A.x);
+            dy = 0;
+            nx = A_at.x + dx;
+            ny = A_at.y + dy;
             if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
-                thing_set_velocity(A,
-                    tangent_velocity_A.x,
-                    tangent_velocity_A.y);
-CON("set C");
+                thing_set_velocity(A, dx, dy);
+//                break;
             } else {
-                thing_set_velocity(A, -vA.x, -vA.y);
-CON("set D");
+                dx = 0;
+                dy = step * (normal_velocity_A.y + tangent_velocity_A.y);
+                nx = A_at.x + dx;
+                ny = A_at.y + dy;
+                if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
+                    thing_set_velocity(A, dx, dy);
+//                    break;
+                } else {
+                    thing_set_velocity(A, 0, 0);
+                }
             }
         }
     }
-#endif
+//}
 
     if (thing_is_stationary(B)) {
         return (true);
     }
 
-    nx = B_at.x + step * (normal_velocity_B.x + tangent_velocity_B.x);
-    ny = B_at.y + step * (normal_velocity_B.y + tangent_velocity_B.y);
-    if (!thing_hit_fall_obstacle(level, B, nx, ny)) {
-        thing_set_velocity(B,
-            normal_velocity_B.x + tangent_velocity_B.x,
-            normal_velocity_B.y + tangent_velocity_B.y);
-    } else {
-        nx = B_at.x + step * (normal_velocity_B.x);
-        ny = B_at.y + step * (normal_velocity_B.y);
-        if (!thing_hit_fall_obstacle(level, B, nx, ny)) {
-            thing_set_velocity(B,
-                normal_velocity_B.x,
-                normal_velocity_B.y);
-        } else {
-            nx = B_at.x + step * (tangent_velocity_B.x);
-            ny = B_at.y + step * (tangent_velocity_B.y);
-            if (!thing_hit_fall_obstacle(level, B, nx, ny)) {
-                thing_set_velocity(B,
-                    tangent_velocity_B.x,
-                    tangent_velocity_B.y);
-            } else {
-                thing_set_velocity(B, -vB.x, -vB.y);
-            }
-        }
-    }
+    thing_set_velocity(B,
+        normal_velocity_B.x + tangent_velocity_B.x,
+        normal_velocity_B.y + tangent_velocity_B.y);
 
     return (true);
 }

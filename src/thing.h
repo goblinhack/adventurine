@@ -2031,9 +2031,6 @@ static void inline thing_set_velocity (thingp t, double x, double y)
     if (thing_is_stationary(t)) {
         return;
     }
-if (thing_can_roll(t)) {
-CON("set velocity %f %f",x, y);
-}
 
     t->momentum = x;
     t->fall_speed = y;

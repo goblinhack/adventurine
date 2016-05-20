@@ -1704,17 +1704,6 @@ thingp thing_hit_fall_obstacle (levelp level,
                     continue;
                 }
             } else if (thing_is_obstacle(me)) {
-                if (thing_is_obstacle(it)) {
-                    if (me->y > it->y) {
-                        continue;
-                    }
-                    if (me->y == it->y) {
-                        if ((int)(uintptr_t) me < (int)(uintptr_t) it) {
-                            continue;
-                        }
-                    }
-                }
-
                 if (!thing_is_wall(it) && 
                     !thing_is_rock(it) && 
                     !thing_is_obstacle(it) && 
