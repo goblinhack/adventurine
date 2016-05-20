@@ -572,14 +572,14 @@ int things_handle_impact (levelp level,
     double step = 1.0;
 
                     thing_set_velocity(A, 0, 0);
-//for (step = 1.0; step >= 0.10; step /= 2.0) {
+for (step = 1.0; step >= 0.10; step /= 2.0) {
     double dx = step * (normal_velocity_A.x + tangent_velocity_A.x);
     double dy = step * (normal_velocity_A.y + tangent_velocity_A.y);
     nx = A_at.x + dx;
     ny = A_at.y + dy;
     if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
         thing_set_velocity(A, dx, dy);
-//        break;
+        break;
     } else {
         dx = step * (tangent_velocity_A.x);
         dy = step * (tangent_velocity_A.y);
@@ -587,7 +587,7 @@ int things_handle_impact (levelp level,
         ny = A_at.y + dy;
         if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
             thing_set_velocity(A, dx, dy);
-//            break;
+            break;
         } else {
             dx = step * (normal_velocity_A.x + tangent_velocity_A.x);
             dy = 0;
@@ -595,7 +595,7 @@ int things_handle_impact (levelp level,
             ny = A_at.y + dy;
             if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
                 thing_set_velocity(A, dx, dy);
-//                break;
+                break;
             } else {
                 dx = 0;
                 dy = step * (normal_velocity_A.y + tangent_velocity_A.y);
@@ -603,14 +603,14 @@ int things_handle_impact (levelp level,
                 ny = A_at.y + dy;
                 if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
                     thing_set_velocity(A, dx, dy);
-//                    break;
+                    break;
                 } else {
-                    thing_set_velocity(A, 0, 0);
+//                    thing_set_velocity(A, 0, 0);
                 }
             }
         }
     }
-//}
+}
 
     if (thing_is_stationary(B)) {
         return (true);
