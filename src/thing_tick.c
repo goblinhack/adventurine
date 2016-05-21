@@ -72,6 +72,7 @@ static int thing_tick_all_things (levelp level)
 
             double d;
             for (d = 16.0; d >= 1.0; d /= 2.0) {
+                d = 1;
                 nx = t->x + t->momentum / d;
                 ny = t->y + t->fall_speed / d;
                 it = thing_hit_fall_obstacle(level, t, nx, ny);
@@ -81,6 +82,7 @@ static int thing_tick_all_things (levelp level)
                         break;
                     }
                 }
+                break;
             }
 
             nx = t->x + t->momentum;
