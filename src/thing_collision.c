@@ -253,19 +253,27 @@ int circle_box_collision (thingp C, thingp B,
     thing_to_coords(B, &P0, &P1, &P2, &P3);
 
     if (fdist(C_at, P0) < radius) {
-        goto collided;
+        normal->x = C_at.x - P0.x;
+        normal->y = C_at.y - P0.y;
+        return (true);
     }
 
     if (fdist(C_at, P1) < radius) {
-        goto collided;
+        normal->x = C_at.x - P1.x;
+        normal->y = C_at.y - P1.y;
+        return (true);
     }
 
     if (fdist(C_at, P2) < radius) {
-        goto collided;
+        normal->x = C_at.x - P2.x;
+        normal->y = C_at.y - P2.y;
+        return (true);
     }
 
     if (fdist(C_at, P3) < radius) {
-        goto collided;
+        normal->x = C_at.x - P3.x;
+        normal->y = C_at.y - P3.y;
+        return (true);
     }
 
     double dist;
@@ -377,7 +385,7 @@ int circle_circle_collision (thingp A,
     double dist_squared = n.x*n.x + n.y*n.y;
 
     double diff = dist_squared - touching_dist * touching_dist;
-    if (diff >= 0.0) {
+    if (diff > 0.0) {
         /*
          * Circles are not touching
          */

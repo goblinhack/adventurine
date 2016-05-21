@@ -68,6 +68,8 @@ static int thing_tick_all_things (levelp level)
             double ny;
             thingp it;
 
+            t->rot += t->momentum;
+
             double d;
             for (d = 16.0; d >= 1.0; d /= 2.0) {
                 nx = t->x + t->momentum / d;

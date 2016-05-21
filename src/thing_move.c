@@ -480,6 +480,7 @@ int things_handle_impact (levelp level,
     fpoint normal_B = {0,0};
     fpoint A_at = { A->x, A->y };
     fpoint B_at = { B->x, B->y };
+    int circle_circle = false;
 
     if (thing_can_roll(A) && !thing_can_roll(B)) {
         if (circle_box_collision(A, /* circle */
@@ -501,6 +502,7 @@ int things_handle_impact (levelp level,
             normal_A = fsub(B_at, A_at);
             normal_B = normal_A;
             collided = true;
+            circle_circle = true;
         }
     } else{
         return (false);
@@ -561,56 +563,73 @@ int things_handle_impact (levelp level,
     fpoint normal_velocity_B  = fmul(normal_B_velocity, normal_B_unit);
     fpoint tangent_velocity_B = fmul(tangent_B_velocity, tangent_B_unit);
 
-    static double COLLISION_ELASTICITY      = 0.5;
-    static double TANGENT_ELASTICITY        = 0.5;
+    static double COLLISION_ELASTICITY      = 0.6;
+    static double TANGENT_ELASTICITY        = 0.6;
 
     normal_velocity_A = fmul(COLLISION_ELASTICITY, normal_velocity_A);
     normal_velocity_B = fmul(COLLISION_ELASTICITY, normal_velocity_B);
     tangent_velocity_A = fmul(TANGENT_ELASTICITY, tangent_velocity_A);
     tangent_velocity_B = fmul(TANGENT_ELASTICITY, tangent_velocity_B);
 
+    if (circle_circle) {
+        thing_set_velocity(A,
+            normal_velocity_A.x + tangent_velocity_A.x,
+            normal_velocity_A.y + tangent_velocity_A.y);
+        thing_set_velocity(B,
+            normal_velocity_B.x + tangent_velocity_B.x,
+            normal_velocity_B.y + tangent_velocity_B.y);
+        return (true);
+    }
+
     double step = 1.0;
 
-                    thing_set_velocity(A, 0, 0);
-for (step = 1.0; step >= 0.10; step /= 2.0) {
+//for (step = 1.0; step >= 0.10; step /= 2.0) {
     double dx = step * (normal_velocity_A.x + tangent_velocity_A.x);
     double dy = step * (normal_velocity_A.y + tangent_velocity_A.y);
     nx = A_at.x + dx;
     ny = A_at.y + dy;
     if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
         thing_set_velocity(A, dx, dy);
-        break;
+//        break;
     } else {
         dx = step * (tangent_velocity_A.x);
         dy = step * (tangent_velocity_A.y);
         nx = A_at.x + dx;
         ny = A_at.y + dy;
         if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
+CON("B");
             thing_set_velocity(A, dx, dy);
-            break;
+//            break;
         } else {
             dx = step * (normal_velocity_A.x + tangent_velocity_A.x);
             dy = 0;
             nx = A_at.x + dx;
             ny = A_at.y + dy;
             if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
+CON("C");
                 thing_set_velocity(A, dx, dy);
-                break;
+//                break;
             } else {
                 dx = 0;
                 dy = step * (normal_velocity_A.y + tangent_velocity_A.y);
                 nx = A_at.x + dx;
                 ny = A_at.y + dy;
                 if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
+CON("D");
                     thing_set_velocity(A, dx, dy);
-                    break;
+//                    break;
+CON("E");
                 } else {
-//                    thing_set_velocity(A, 0, 0);
+                    dx = -step * (normal_velocity_A.x + tangent_velocity_A.x);
+                    dy = -step * (normal_velocity_A.y + tangent_velocity_A.y);
+                    nx = A_at.x + dx;
+                    ny = A_at.y + dy;
+                    thing_set_velocity(A, dx, dy);
                 }
             }
         }
     }
-}
+//}
 
     if (thing_is_stationary(B)) {
         return (true);

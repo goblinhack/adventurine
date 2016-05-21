@@ -22,9 +22,6 @@ static int thing_hit_ground (levelp level,
                              double ny,
                              thingp it)
 {
-if (thing_can_roll(t)) {
-THING_CON(t,"hit ground %s %d %f",__FUNCTION__, __LINE__,t->fall_speed);
-}
     if (t->falling_too_fast) {
         t->falling_too_fast = 0;
 
@@ -60,9 +57,6 @@ if (0) {
         }
     } else {
         t->fall_speed = 0;
-if (thing_can_roll(t)) {
-THING_CON(t,"set fall speed %s %d %f",__FUNCTION__, __LINE__,t->fall_speed);
-}
         return (true);
     }
 }
@@ -84,9 +78,6 @@ int thing_fall (levelp level, thingp t)
         y = t->y - 0.05;
     }
 
-if (thing_can_roll(t)) {
-THING_CON(t,"fall test %s %d %f",__FUNCTION__, __LINE__,t->fall_speed);
-}
     if (thing_is_rope(t)) {
         if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y + 1.0)) {
             thing_place_rope(level, t, t->x, (int) t->y + 1.0);
@@ -107,9 +98,6 @@ THING_CON(t,"fall test %s %d %f",__FUNCTION__, __LINE__,t->fall_speed);
 
     if (t->jump_speed) {
         t->fall_speed = 0;
-if (thing_can_roll(t)) {
-THING_CON(t,"set fall speed %s %d %f",__FUNCTION__, __LINE__,t->fall_speed);
-}
         t->falling_too_fast = false;
         return (false);
     }
@@ -134,19 +122,12 @@ THING_CON(t,"set fall speed %s %d %f",__FUNCTION__, __LINE__,t->fall_speed);
         t->fall_speed += 0.005;
     }
 
-if (thing_can_roll(t)) {
-THING_CON(t,"set fall speed %s %d %f",__FUNCTION__, __LINE__,t->fall_speed);
-}
-
     if (t->fall_speed > 0.4) {
         t->falling_too_fast = true;
     }
 
     if (t->fall_speed > 1) {
         t->fall_speed = 1;
-if (thing_can_roll(t)) {
-THING_CON(t,"set fall speed %s %d %f",__FUNCTION__, __LINE__,t->fall_speed);
-}
     }
 
     y = t->y + t->fall_speed;

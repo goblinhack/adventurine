@@ -85,16 +85,10 @@ int thing_drown (levelp level, thingp t)
 
     if (t->is_submerged) {
         t->fall_speed /= 4.0;
-if (thing_can_roll(t)) {
-THING_CON(t,"set fall speed %s %d %f",__FUNCTION__, __LINE__,t->fall_speed);
-}
         t->jump_speed /= 4.0;
 
     } else if (t->is_partially_submerged) {
         t->fall_speed /= 2.0;
-if (thing_can_roll(t)){
-THING_CON(t,"set fall speed %s %d %f",__FUNCTION__, __LINE__,t->fall_speed);
-}
         t->jump_speed /= 2.0;
     }
 
