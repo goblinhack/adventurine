@@ -70,20 +70,15 @@ static int thing_tick_all_things (levelp level)
 
             t->rot += t->momentum;
 
-            double d;
-            for (d = 16.0; d >= 1.0; d /= 2.0) {
-                d = 1;
-                nx = t->x + t->momentum / d;
-                ny = t->y + t->fall_speed / d;
+                nx = t->x + t->momentum;
+                ny = t->y + t->fall_speed;
                 it = thing_hit_fall_obstacle(level, t, nx, ny);
                 if (it) {
                     if (things_handle_impact(level, t, nx, ny, it)) {
                         impact = true;
-                        break;
                     }
+                    continue;
                 }
-                break;
-            }
 
             nx = t->x + t->momentum;
             ny = t->y + t->fall_speed;

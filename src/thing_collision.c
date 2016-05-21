@@ -1614,6 +1614,7 @@ thingp thing_hit_solid_obstacle (levelp level,
     return (0);
 }
 
+extern thingp collision_ignore;
 /*
  * Have we hit anything?
  *
@@ -1657,6 +1658,9 @@ thingp thing_hit_fall_obstacle (levelp level,
             
             it = id_to_thing(cell->id[i]);
             if (it == t) {
+                continue;
+            }
+            if (it == collision_ignore) {
                 continue;
             }
 
