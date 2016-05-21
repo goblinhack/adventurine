@@ -84,12 +84,17 @@ static int thing_tick_all_things (levelp level)
             ny = t->y + t->fall_speed;
 
             if (impact) {
-                thing_wid_update(level, t, nx, ny, true, false /* is new */);
+                thing_wid_update(level, t, nx, ny, false, false /* is new */);
 
                 thing_handle_collisions(level, t);
             } else {
-                thing_wid_update(level, t, nx, ny, true, false /* is new */);
+                thing_wid_update(level, t, nx, ny, false, false /* is new */);
             }
+                it = thing_hit_fall_obstacle(level, t, nx, ny);
+                if (it) {
+                        DIE("wtf");
+                        impact = true;
+                    }
 
             t->fall_speed += 0.005;
 

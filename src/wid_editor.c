@@ -105,6 +105,10 @@ static int layer_to_depth (int layer)
 static void wid_editor_overwrite_inactive_layers (void)
 {
     wid_editor_ctx *ctx = wid_editor_window_ctx;
+    if (!ctx) {
+        return;
+    }
+
     verify(ctx);
     verify(ctx->w);
 

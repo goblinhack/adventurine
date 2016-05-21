@@ -534,6 +534,8 @@ int things_handle_impact (levelp level,
         vB = fmul(-1, vA);
     }
 
+    double vel_A_len = flength(vA);
+
     /*
      * Project the velocity onto the normal vectors.
      */
@@ -560,6 +562,8 @@ int things_handle_impact (levelp level,
 
     fpoint normal_velocity_A  = fmul(normal_A_velocity, normal_A_unit);
     fpoint tangent_velocity_A = fmul(tangent_A_velocity, tangent_A_unit);
+A->normal_velocity  = normal_velocity_A;
+A->tangent_velocity = tangent_velocity_A;
 
     fpoint normal_velocity_B  = fmul(normal_B_velocity, normal_B_unit);
     fpoint tangent_velocity_B = fmul(tangent_B_velocity, tangent_B_unit);
@@ -571,10 +575,10 @@ int things_handle_impact (levelp level,
     normal_velocity_B = fmul(COLLISION_ELASTICITY, normal_velocity_B);
     tangent_velocity_A = fmul(TANGENT_ELASTICITY, tangent_velocity_A);
     tangent_velocity_B = fmul(TANGENT_ELASTICITY, tangent_velocity_B);
+collision_ignore = B;
 
     double step = 1.0;
 
-collision_ignore = B;
 //for (step = 1.0; step >= 0.10; step /= 2.0) {
     double dx = step * (normal_velocity_A.x + tangent_velocity_A.x);
     double dy = step * (normal_velocity_A.y + tangent_velocity_A.y);
@@ -584,18 +588,19 @@ collision_ignore = B;
         thing_set_velocity(A, dx, dy);
 //        break;
     } else {
-    double COLLISION_ELASTICITY      = 1.0;
-    double TANGENT_ELASTICITY        = 1.0;
+        double COLLISION_ELASTICITY      = 1.0;
+        double TANGENT_ELASTICITY        = 1.0;
 
-    normal_velocity_A = fmul(COLLISION_ELASTICITY, normal_velocity_A);
-    normal_velocity_B = fmul(COLLISION_ELASTICITY, normal_velocity_B);
-    tangent_velocity_A = fmul(TANGENT_ELASTICITY, tangent_velocity_A);
-    tangent_velocity_B = fmul(TANGENT_ELASTICITY, tangent_velocity_B);
+        normal_velocity_A = fmul(COLLISION_ELASTICITY, normal_velocity_A);
+        normal_velocity_B = fmul(COLLISION_ELASTICITY, normal_velocity_B);
+        tangent_velocity_A = fmul(TANGENT_ELASTICITY, tangent_velocity_A);
+        tangent_velocity_B = fmul(TANGENT_ELASTICITY, tangent_velocity_B);
 
-        dx = step * (tangent_velocity_A.x);
-        dy = step * (tangent_velocity_A.y);
+        dx = step * (tangent_velocity_A.x * vel_A_len);
+        dy = step * (tangent_velocity_A.y * vel_A_len);
         nx = A_at.x + dx;
         ny = A_at.y + dy;
+#if 0
         if (!thing_hit_fall_obstacle(level, A, nx, ny)) {
             thing_set_velocity(A, dx, dy);
 //            break;
@@ -621,10 +626,10 @@ collision_ignore = B;
                     nx = A_at.x + dx;
                     ny = A_at.y + dy;
                     thing_set_velocity(A, dx, dy);
-CON("stuck");
                 }
             }
         }
+#endif
     }
 //}
 

@@ -22,7 +22,8 @@ typedef struct {
 
 static thing_possible_hit thing_possible_hits[MAX_THING_POSSIBLE_HIT];
 static uint32_t thing_possible_hit_size;
-static int collision_radius = 2;
+static const int def_collision_radius = 4;
+static int collision_radius = def_collision_radius;
 
 /*
  * Add a thing to the list of things that could be hit on this attack.
@@ -1295,7 +1296,7 @@ LOG("shield coll");
 
     collision_radius = thing_collision_radius(me);
     if (!collision_radius) {
-        collision_radius = 2;
+        collision_radius = def_collision_radius;
     }
 
     for (dx = -collision_radius; dx <= collision_radius; dx++) 
@@ -1365,7 +1366,7 @@ thingp thing_hit_solid_obstacle (levelp level,
 
     collision_radius = thing_collision_radius(me);
     if (!collision_radius) {
-        collision_radius = 2;
+        collision_radius = def_collision_radius;
     }
 
     for (dx = -collision_radius; dx <= collision_radius; dx++) 
@@ -1638,7 +1639,7 @@ thingp thing_hit_fall_obstacle (levelp level,
 
     collision_radius = thing_collision_radius(me);
     if (!collision_radius) {
-        collision_radius = 2;
+        collision_radius = def_collision_radius;
     }
 
     for (dx = -collision_radius; dx <= collision_radius; dx++) 
@@ -1812,7 +1813,7 @@ thingp thing_hit_any_obstacle (levelp level,
 
     collision_radius = thing_collision_radius(me);
     if (!collision_radius) {
-        collision_radius = 2;
+        collision_radius = def_collision_radius;
     }
 
     for (dx = -collision_radius; dx <= collision_radius; dx++) 
@@ -1903,7 +1904,7 @@ thingp thing_overlaps (levelp level,
 
     collision_radius = thing_collision_radius(me);
     if (!collision_radius) {
-        collision_radius = 2;
+        collision_radius = def_collision_radius;
     }
 
     for (dx = -collision_radius; dx <= collision_radius; dx++) 

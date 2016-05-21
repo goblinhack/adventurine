@@ -450,6 +450,8 @@ typedef struct thing_ {
      */
     float x;
     float y;
+    fpoint normal_velocity;
+    fpoint tangent_velocity;
 
     /*
      * Last anim frame position. To be able to detect moving things.

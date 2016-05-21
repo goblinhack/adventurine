@@ -7972,22 +7972,35 @@ static void wid_display_fast (widp w,
         blit_flush();
         wid_display(w, true, &child_updated_scissors, false);
         blit_init();
-        return;
-    }
-
+    } else {
 #ifdef ENABLE_BLACK_AND_WHITE
-    if (unlikely(black_and_white)) {
-        tile_blit_fat_black_and_white(tp, tile, 0, tl, br);
-    } else 
+        if (unlikely(black_and_white)) {
+            tile_blit_fat_black_and_white(tp, tile, 0, tl, br);
+        } else 
 #endif
-    {
-        tile_blit_fat(tp, tile, 0, tl, br);
+        {
+            tile_blit_fat(tp, tile, 0, tl, br);
+        }
     }
 
-    if (0 && t) {
-//        && (thing_can_roll(t) || thing_is_rock(t))) {
+    if (t && thing_can_roll(t)) {
+        glcolor(YELLOW);
+        char tmp[80];
+        sprintf(tmp, "%.6f,%.6f",t->momentum, t->fall_speed);
+        ttf_puts_no_fmt(vsmall_font, tmp, (otlx + obrx) / 2, (otly + obry) / 2, 1.0, 1.0, true);
+
         fpoint P0, P1, P2, P3;
         thing_to_coords(t, &P0, &P1, &P2, &P3);
+        widp p = w->parent;
+
+        P0.x += p->offset.x;
+        P0.y += p->offset.y;
+        P1.x += p->offset.x;
+        P1.y += p->offset.y;
+        P2.x += p->offset.x;
+        P2.y += p->offset.y;
+        P3.x += p->offset.x;
+        P3.y += p->offset.y;
 
         glcolor(GREEN);
         gl_blitline(P0.x, P0.y, P1.x, P1.y);
@@ -7995,12 +8008,31 @@ static void wid_display_fast (widp w,
         gl_blitline(P2.x, P2.y, P3.x, P3.y);
         gl_blitline(P3.x, P3.y, P0.x, P0.y);
 
-        fpoint v = thing_velocity(t);
-        double vx = v.x * 100;
-        double vy = v.y * 100;
+        double scale = 10000;
 
+        double mx = (P0.x + P2.x) / 2;
+        double my = (P0.y + P2.y) / 2;
+
+        fpoint v = thing_velocity(t);
+        double vx = v.x * scale;
+        double vy = v.y * scale;
         glcolor(WHITE);
-        gl_blitline(P2.x, P2.y, P2.x + vx, P2.y + vy);
+        gl_blitline(mx, my, mx + vx, my + vy);
+
+        if (0) {
+        v = t->normal_velocity;
+        vx = v.x * scale;
+        vy = v.y * scale;
+        glcolor(CYAN);
+        gl_blitline(mx, my, mx + vx, my + vy);
+            }
+
+        v = t->tangent_velocity;
+        vx = v.x * scale;
+        vy = v.y * scale;
+        glcolor(GREEN);
+        gl_blitline(mx, my, mx + vx, my + vy);
+
     }
 
     if (unlikely(debug && t)) {
