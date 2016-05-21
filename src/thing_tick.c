@@ -68,15 +68,47 @@ static int thing_tick_all_things (levelp level)
             double ny;
             thingp it;
 
-            t->rot += t->momentum;
+            t->fall_speed += 0.005;
+
+            if (t->fall_speed > 0.5) {
+                t->fall_speed = 0;
+            }
 
                 nx = t->x + t->momentum;
                 ny = t->y + t->fall_speed;
                 it = thing_hit_fall_obstacle(level, t, nx, ny);
                 if (it) {
+
+                    double theta = 0.5;
+                    {
+                        fpoint p;
+                        p.x = t->momentum;
+                        p.y = t->fall_speed;
+                        p = fpoint_rotate(p, theta);
+
+                        if (!thing_hit_fall_obstacle(level, t, t->x + p.x, t->y + p.y)) {
+                            t->momentum = p.x;
+                            t->fall_speed = p.y;
+                            continue;
+                        }
+                    }
+                    {
+                        fpoint p;
+                        p.x = t->momentum;
+                        p.y = t->fall_speed;
+                        p = fpoint_rotate(p, -theta);
+
+                        if (!thing_hit_fall_obstacle(level, t, t->x + p.x, t->y + p.y)) {
+                            t->momentum = p.x;
+                            t->fall_speed = p.y;
+                            continue;
+                        }
+                    }
+
                     if (things_handle_impact(level, t, nx, ny, it)) {
                         impact = true;
                     }
+
                     continue;
                 }
 
@@ -90,17 +122,8 @@ static int thing_tick_all_things (levelp level)
             } else {
                 thing_wid_update(level, t, nx, ny, false, false /* is new */);
             }
-                it = thing_hit_fall_obstacle(level, t, nx, ny);
-                if (it) {
-                        DIE("wtf");
-                        impact = true;
-                    }
 
-            t->fall_speed += 0.005;
-
-            if (t->fall_speed > 0.5) {
-                t->fall_speed = 0;
-            }
+            t->rot += t->momentum;
         }
 
 #if 0
