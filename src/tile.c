@@ -178,9 +178,9 @@ void tile_load_arr (const char *tex_name,
 	    }
 
             t->px1 = ((double) (MIN.x - AT.x)) / (double) pixel_size.width;
-            t->px2 = ((double) (MAX.x - AT.x)) / (double) pixel_size.width;
+            t->px2 = ((double) (MAX.x - AT.x + 1)) / (double) pixel_size.width;
             t->py1 = ((double) (MIN.y - AT.y)) / (double) pixel_size.height;
-            t->py2 = ((double) (MAX.y - AT.y)) / (double) pixel_size.height;
+            t->py2 = ((double) (MAX.y - AT.y + 1)) / (double) pixel_size.height;
 
 #ifdef DEBUG_TILE
             printf("^^^  %s %f %f %f %f min x %d %d min y %d %d\n",name,t->px1,t->py1,t->px2,t->py2, MIN.x,MAX.x,MIN.y,MAX.y);

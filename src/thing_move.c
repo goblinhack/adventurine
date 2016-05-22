@@ -545,8 +545,8 @@ int things_handle_impact (levelp level,
     fpoint normal_velocity_B  = fmul(normal_B_velocity, normal_B_unit);
     fpoint tangent_velocity_B = fmul(tangent_B_velocity, tangent_B_unit);
 
-    static double COLLISION_ELASTICITY      = 0.5;
-    static double TANGENT_ELASTICITY        = 0.5;
+    static double COLLISION_ELASTICITY      = 0.4;
+    static double TANGENT_ELASTICITY        = 0.4;
 
     normal_velocity_A = fmul(COLLISION_ELASTICITY, normal_velocity_A);
     normal_velocity_B = fmul(COLLISION_ELASTICITY, normal_velocity_B);

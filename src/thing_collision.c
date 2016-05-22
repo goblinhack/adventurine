@@ -213,6 +213,14 @@ thing_to_coords (thingp t, fpoint *P0, fpoint *P1, fpoint *P2, fpoint *P3)
     br_y += p->offset.y;
     }
 
+    double otl_x = tl_x;
+    double otl_y = tl_y;
+    tilep tile = wid_get_tile(w);
+    tl_x = otl_x + tile->px1 * pix_w;
+    br_x = otl_x + tile->px2 * pix_w;
+    tl_y = otl_y + tile->py1 * pix_h;
+    br_y = otl_y + tile->py2 * pix_h;
+
     P0->x = tl_x;
     P0->y = tl_y;
     P1->x = br_x;
