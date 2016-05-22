@@ -1751,7 +1751,8 @@ void thing_wield_next_weapon(levelp, thingp t);
 void 
 thingp_get_interpolated_position(const thingp t, double *x, double *y);
 
-int circle_box_collision(thingp C, thingp B,
+int circle_box_collision(levelp,
+                         thingp C, thingp B,
                          double nx,
                          double ny,
                          fpoint *normal,

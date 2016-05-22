@@ -223,7 +223,8 @@ thing_to_coords (thingp t, fpoint *P0, fpoint *P1, fpoint *P2, fpoint *P3)
     P3->y = br_y;
 }
 
-int circle_box_collision (thingp C, thingp B,
+int circle_box_collision (levelp level,
+                          thingp C, thingp B,
                           double nx,
                           double ny,
                           fpoint *normal,
@@ -253,28 +254,39 @@ int circle_box_collision (thingp C, thingp B,
 
     thing_to_coords(B, &P0, &P1, &P2, &P3);
 
+    /*
+     * Corner collisions, normal is at 45 degrees.
+     */
     if (fdist(C_at, P0) < radius) {
-        normal->x = C_at.x - P0.x;
-        normal->y = C_at.y - P0.y;
-        return (true);
+        if (!map_find_wall_at(level, B->x - 1, B->y, 0)) {
+            normal->x = C_at.x - P0.x;
+            normal->y = C_at.y - P0.y;
+            return (true);
+        }
     }
 
     if (fdist(C_at, P1) < radius) {
-        normal->x = C_at.x - P1.x;
-        normal->y = C_at.y - P1.y;
-        return (true);
+        if (!map_find_wall_at(level, B->x + 1, B->y, 0)) {
+            normal->x = C_at.x - P1.x;
+            normal->y = C_at.y - P1.y;
+            return (true);
+        }
     }
 
     if (fdist(C_at, P2) < radius) {
-        normal->x = C_at.x - P2.x;
-        normal->y = C_at.y - P2.y;
-        return (true);
+        if (!map_find_wall_at(level, B->x + 1, B->y, 0)) {
+            normal->x = C_at.x - P2.x;
+            normal->y = C_at.y - P2.y;
+            return (true);
+        }
     }
 
     if (fdist(C_at, P3) < radius) {
-        normal->x = C_at.x - P3.x;
-        normal->y = C_at.y - P3.y;
-        return (true);
+        if (!map_find_wall_at(level, B->x - 1, B->y, 0)) {
+            normal->x = C_at.x - P3.x;
+            normal->y = C_at.y - P3.y;
+            return (true);
+        }
     }
 
     double dist;
@@ -349,6 +361,7 @@ collided:
      */
     return (false);
 }
+
 /*
  * If two circles collide, the resultant direction is along the normal between
  * the two center of masses of the circles.
@@ -404,7 +417,8 @@ int circle_circle_collision (thingp A,
     return (true);
 }
 
-static uint8_t things_overlap (const thingp A, 
+static uint8_t things_overlap (levelp level,
+                               const thingp A, 
                                double nx,
                                double ny,
                                const thingp B)
@@ -657,7 +671,8 @@ static uint8_t things_overlap (const thingp A,
     fpoint normal_A = {0,0};
 
     if (thing_can_roll(A) && !thing_can_roll(B)) {
-        if (circle_box_collision(A, /* circle */
+        if (circle_box_collision(level,
+                                 A, /* circle */
                                  B, /* box */
                                  nx,
                                  ny,
@@ -837,7 +852,7 @@ LOG("  owner");
     /*
      * Do we overlap with something?
      */
-    if (!things_overlap(me, -1.0, -1.0, it)) {
+    if (!things_overlap(level, me, -1.0, -1.0, it)) {
 #if 0
 CON("  no overlap %s vs %s",thing_logname(me), thing_logname(it));
 #endif
@@ -1572,7 +1587,7 @@ thingp thing_hit_solid_obstacle (levelp level,
                 }
             }
 
-            if (!things_overlap(me, nx, ny, it)) {
+            if (!things_overlap(level, me, nx, ny, it)) {
                 continue;
             }
 
@@ -1752,7 +1767,7 @@ thingp thing_hit_fall_obstacle (levelp level,
                 }
             }
 
-            if (!things_overlap(me, nx, ny, it)) {
+            if (!things_overlap(level, me, nx, ny, it)) {
                 continue;
             }
 
@@ -1860,7 +1875,7 @@ thingp thing_hit_any_obstacle (levelp level,
                 continue;
             }
 
-            if (!things_overlap(me, nx, ny, it)) {
+            if (!things_overlap(level, me, nx, ny, it)) {
                 continue;
             }
 
@@ -1933,7 +1948,7 @@ thingp thing_overlaps (levelp level,
                 continue;
             }
 
-            if (!things_overlap(me, nx, ny, it)) {
+            if (!things_overlap(level, me, nx, ny, it)) {
                 continue;
             }
 

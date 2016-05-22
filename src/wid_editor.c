@@ -1061,6 +1061,10 @@ static void wid_editor_update_buttons (void)
 static void wid_editor_button_display (widp w, fpoint tl, fpoint br)
 {
     wid_editor_ctx *ctx = wid_editor_window_ctx;
+    if (!ctx) {
+        return;
+    }
+
     verify(ctx);
     verify(ctx->w);
 

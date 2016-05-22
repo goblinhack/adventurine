@@ -484,7 +484,8 @@ int things_handle_impact (levelp level,
     int circle_circle = false;
 
     if (thing_can_roll(A) && !thing_can_roll(B)) {
-        if (circle_box_collision(A, /* circle */
+        if (circle_box_collision(level,
+                                 A, /* circle */
                                  B, /* box */
                                  nx,
                                  ny,
@@ -560,8 +561,9 @@ int things_handle_impact (levelp level,
 
     fpoint normal_velocity_A  = fmul(normal_A_velocity, normal_A_unit);
     fpoint tangent_velocity_A = fmul(tangent_A_velocity, tangent_A_unit);
-A->normal_velocity  = normal_velocity_A;
-A->tangent_velocity = tangent_velocity_A;
+
+    A->normal_velocity  = normal_velocity_A;
+    A->tangent_velocity = tangent_velocity_A;
 
     fpoint normal_velocity_B  = fmul(normal_B_velocity, normal_B_unit);
     fpoint tangent_velocity_B = fmul(tangent_B_velocity, tangent_B_unit);

@@ -74,9 +74,22 @@ static int thing_tick_all_things (levelp level)
 
                 if (it) {
 
+                    int dx;
+                    if (t->momentum > 0) {
+                        dx = 1;
+                    } else {
+                        dx = -1;
+                    }
+
                     double theta = 1.0;
                     double friction = 0.8;
 
+                    if ((fabs(t->momentum) < 0.01) &&
+                        (fabs(t->fall_speed) < 0.01) &&
+                        !map_find_wall_at(level, t->x + dx, t->y, 0) &&
+                        map_find_wall_at(level, t->x + dx, t->y + 1, 0) &&
+                        map_find_wall_at(level, t->x, t->y + 1, 0)) {
+                    } else {
                     {
                         fpoint p;
                         p.x = t->momentum * friction;
@@ -101,6 +114,7 @@ static int thing_tick_all_things (levelp level)
                             t->fall_speed = p.y;
                             it = 0;
                         }
+                    }
                     }
 
                     if (it) {
