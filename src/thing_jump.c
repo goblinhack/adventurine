@@ -39,15 +39,7 @@ int thing_jump (levelp level, thingp t)
 
     y = t->y - t->jump_speed;
 
-    thingp it;
-    it = thing_hit_solid_obstacle(level, t, x, y);
-    if (it) {
-        if (things_handle_impact(level, t, 
-                                 t->x,
-                                 t->y - t->jump_speed,
-                                 it)) {
-        }
-
+    if (thing_hit_solid_obstacle(level, t, x, y)) {
         t->jump_speed = 0;
         thing_jump_end(level, t);
         return (true);
@@ -55,9 +47,9 @@ int thing_jump (levelp level, thingp t)
 
     thing_wid_update(level, t, x, y, true, false /* is new */);
 
-    t->jump_speed *= 0.95;
+    t->jump_speed *= 0.90;
 
-    if (fabs(t->jump_speed) < 0.0001) {
+    if (fabs(t->jump_speed) < 0.01) {
         t->jump_speed = 0;
         thing_jump_end(level, t);
         return (true);

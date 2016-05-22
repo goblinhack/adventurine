@@ -125,4 +125,3 @@ int thing_fall (levelp level, thingp t)
 
     return (true);
 }
-

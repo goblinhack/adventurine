@@ -107,7 +107,7 @@ int thing_slide (levelp level, thingp t)
 
     t->rot += t->momentum;
 
-    if (fabs(t->momentum) < 0.001) {
+    if (fabs(t->momentum) < 0.008) {
         t->momentum = 0;
         return (false);
     }
@@ -125,27 +125,15 @@ int thing_slide (levelp level, thingp t)
                 t->momentum /= 2;
 
                 x = t->x + t->momentum;
-                thingp it = thing_hit_solid_obstacle(level, t, x, y);
-                if (it) {
-                    if (thing_can_roll(t)) {
-                        if (!things_handle_impact(level, t, 
-                                                  t->x + t->momentum,
-                                                  t->y,
-                                                  it)) {
-                            t->momentum = 0;
-                        }
-
-                    } else {
-                        t->momentum = 0;
-                    }
-
+                if (thing_hit_solid_obstacle(level, t, x, y)) {
+                    t->momentum = 0;
                     return (false);
                 }
             }
         }
     }
 
-    t->momentum *= 0.9;
+    t->momentum *= 0.90;
 
     thing_wid_update(level, t, x, y, true, false /* is new */);
 

@@ -86,6 +86,8 @@ int thing_drown (levelp level, thingp t)
     }
 
     if (t->is_submerged) {
+        t->momentum *= 0.75;
+
         if (thing_is_player(t)) {
             t->fall_speed /= 4.0;
             t->jump_speed /= 4.0;
@@ -95,6 +97,8 @@ int thing_drown (levelp level, thingp t)
         }
 
     } else if (t->is_partially_submerged) {
+        t->momentum *= 0.75;
+
         if (thing_is_player(t)) {
             t->fall_speed /= 2.0;
             t->jump_speed /= 2.0;
@@ -104,6 +108,7 @@ int thing_drown (levelp level, thingp t)
         }
 
     }
+
 
     return (true);
 }

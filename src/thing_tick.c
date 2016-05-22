@@ -133,7 +133,7 @@ static int thing_tick_all_things (levelp level)
             nx = t->x + t->momentum;
             ny = t->y + t->fall_speed;
 
-            thing_wid_update(level, t, nx, ny, false, false /* is new */);
+            thing_wid_update(level, t, nx, ny, true, false /* is new */);
 
             t->rot += t->momentum;
             t->fall_speed += 0.005;
@@ -153,10 +153,6 @@ static int thing_tick_all_things (levelp level)
             if (tp_can_fall(tp)) {
                 thing_fall(level, t);
             }
-        }
-
-        if (t->is_submerged || t->is_partially_submerged) {
-            t->momentum *= 0.75;
         }
 
         if (!thing_drown(level, t)) {
