@@ -2,9 +2,11 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
-- have boulder roll 
-- flying bounders
+- collision with boulders not accurate for player
+- boulder sound on hit ground
+- boulder impact damage
 - exit can fall through bottom of level
+- side piston push blocks - that can be stacked
 - random gap in tall ropes
 - ropes get toooo tall
 - rocks moving too fast on explosion
@@ -14,7 +16,6 @@ may
 - miss effects
 - ladders should fall when damaged
 - sparks on hitting
-- side piston push blocks - that can be stacked
 - monster patrol left/right
 - wham / kpow
 - chains
@@ -56,6 +57,8 @@ sep
 
 may
 ---
+- have boulder roll 
+- flying bounders
 - rocks fall on head
 - rocks need random offsets
 - rockes get stuck on falling
