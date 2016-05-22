@@ -107,7 +107,6 @@ int thing_slide (levelp level, thingp t)
 
     t->rot += t->momentum;
 
-if (0)
     if (fabs(t->momentum) < 0.001) {
         t->momentum = 0;
         return (false);
@@ -115,17 +114,14 @@ if (0)
 
     x = t->x + t->momentum;
     if (thing_hit_solid_obstacle(level, t, x, y)) {
-if (0)
         t->momentum /= 2;
 
         x = t->x + t->momentum;
         if (thing_hit_solid_obstacle(level, t, x, y)) {
-if (0)
             t->momentum /= 2;
 
             x = t->x + t->momentum;
             if (thing_hit_solid_obstacle(level, t, x, y)) {
-if (0)
                 t->momentum /= 2;
 
                 x = t->x + t->momentum;
@@ -136,12 +132,10 @@ if (0)
                                                   t->x + t->momentum,
                                                   t->y,
                                                   it)) {
-if (0)
                             t->momentum = 0;
                         }
 
                     } else {
-if (0)
                         t->momentum = 0;
                     }
 
@@ -151,12 +145,7 @@ if (0)
         }
     }
 
-if (0)
-    t->momentum *= 0.99;
-
-    if (t->is_submerged || t->is_partially_submerged) {
-        t->momentum *= 0.75;
-    }
+    t->momentum *= 0.9;
 
     thing_wid_update(level, t, x, y, true, false /* is new */);
 

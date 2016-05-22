@@ -1052,7 +1052,6 @@ int thing_is_submerged (levelp level, thingp t)
         return (true);
     }
 
-
     return (false);
 }
 

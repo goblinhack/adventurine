@@ -20,43 +20,45 @@ int thing_drown (levelp level, thingp t)
 {
     if (thing_is_submerged(level, t)) {
 
-        if (!t->timestamp_last_breath) {
-            t->timestamp_last_breath = time_get_time_ms();
-        }
-
-        if (t->timestamp_last_breath) {
-            if (time_have_x_tenths_passed_since(10, t->timestamp_last_breath)) {
-
-                if ((myrand() % 100) < 10) {
-                    if (thing_submerged_depth(level, t) > 10) {
-                        level_place_bubbles(level, t, t->x, t->y - 0.5);
-                    }
-                }
-            }
-
-            if (time_have_x_tenths_passed_since(50, t->timestamp_last_breath)) {
-
-                if (t->breath > 8) {
-                    level_place_blood_crit(level, t, t->x, t->y);
-                } if (t->breath > 7) {
-                    level_place_blood_crit(level, t, t->x, t->y);
-                } else {
-                    if (thing_submerged_depth(level, t) > 10) {
-                        level_place_bubbles(level, t, t->x, t->y - 0.5);
-                    }
-                }
-
+        if (tp_can_drown(thing_tp(t))) {
+            if (!t->timestamp_last_breath) {
                 t->timestamp_last_breath = time_get_time_ms();
-
-                t->breath++;
-                if (player == t) {
-                    player_wid_update(level);
-                }
             }
 
-            if (t->breath >= ARRAY_SIZE(game.wid_drown_icon)) {
-                thing_dead(level, t, 0, "drowned");
-                return (false);
+            if (t->timestamp_last_breath) {
+                if (time_have_x_tenths_passed_since(10, t->timestamp_last_breath)) {
+
+                    if ((myrand() % 100) < 10) {
+                        if (thing_submerged_depth(level, t) > 10) {
+                            level_place_bubbles(level, t, t->x, t->y - 0.5);
+                        }
+                    }
+                }
+
+                if (time_have_x_tenths_passed_since(50, t->timestamp_last_breath)) {
+
+                    if (t->breath > 8) {
+                        level_place_blood_crit(level, t, t->x, t->y);
+                    } if (t->breath > 7) {
+                        level_place_blood_crit(level, t, t->x, t->y);
+                    } else {
+                        if (thing_submerged_depth(level, t) > 10) {
+                            level_place_bubbles(level, t, t->x, t->y - 0.5);
+                        }
+                    }
+
+                    t->timestamp_last_breath = time_get_time_ms();
+
+                    t->breath++;
+                    if (player == t) {
+                        player_wid_update(level);
+                    }
+                }
+
+                if (t->breath >= ARRAY_SIZE(game.wid_drown_icon)) {
+                    thing_dead(level, t, 0, "drowned");
+                    return (false);
+                }
             }
         }
 
@@ -84,12 +86,23 @@ int thing_drown (levelp level, thingp t)
     }
 
     if (t->is_submerged) {
-        t->fall_speed /= 4.0;
-        t->jump_speed /= 4.0;
+        if (thing_is_player(t)) {
+            t->fall_speed /= 4.0;
+            t->jump_speed /= 4.0;
+        } else {
+            t->fall_speed *= 0.75;
+            t->jump_speed *= 0.75;
+        }
 
     } else if (t->is_partially_submerged) {
-        t->fall_speed /= 2.0;
-        t->jump_speed /= 2.0;
+        if (thing_is_player(t)) {
+            t->fall_speed /= 2.0;
+            t->jump_speed /= 2.0;
+        } else {
+            t->fall_speed *= 0.95;
+            t->jump_speed *= 0.95;
+        }
+
     }
 
     return (true);

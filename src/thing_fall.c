@@ -32,33 +32,8 @@ static int thing_hit_ground (levelp level,
         }
     }
 
-    if (thing_can_roll(t)) {
-//        if (t->fall_speed) {
-            if (things_handle_impact(level, t, 
-                                     nx,
-                                     ny,
-                                     it)) {
-                CON("impact");
-                return (true);
-            } else {
-                return (false);
-            }
-
-
-if (0) {
-            if (!t->momentum) {
-                if (t->jump_speed) {
-//                    t->momentum = 0.05;
-//                t->momentum = gauss(0.0, 0.1);
-                }
-            }
-                
-//        }
-        }
-    } else {
-        t->fall_speed = 0;
-        return (true);
-    }
+    t->fall_speed = 0;
+    return (true);
 }
 
 /*
@@ -96,12 +71,6 @@ int thing_fall (levelp level, thingp t)
         }
     }
 
-    if (t->jump_speed) {
-        t->fall_speed = 0;
-        t->falling_too_fast = false;
-        return (false);
-    }
-
     if (thing_is_monst(t)  ||
         thing_is_player(t)) {
 
@@ -131,7 +100,7 @@ int thing_fall (levelp level, thingp t)
     }
 
     y = t->y + t->fall_speed;
-if (!thing_can_roll(t)) {
+
     it = thing_hit_fall_obstacle(level, t, x, y);
     if (it) {
         t->fall_speed /= 2;
@@ -158,7 +127,6 @@ if (!thing_can_roll(t)) {
             }
         }
     }
-}
 
     thing_wid_update(level, t, x, y, true, false /* is new */);
 

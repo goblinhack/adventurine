@@ -48,7 +48,6 @@ int thing_jump (levelp level, thingp t)
                                  it)) {
         }
 
-if (0)
         t->jump_speed = 0;
         thing_jump_end(level, t);
         return (true);
@@ -56,7 +55,6 @@ if (0)
 
     thing_wid_update(level, t, x, y, true, false /* is new */);
 
-if (1)
     t->jump_speed *= 0.95;
 
     if (fabs(t->jump_speed) < 0.0001) {

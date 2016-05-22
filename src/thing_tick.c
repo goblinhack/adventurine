@@ -63,33 +63,37 @@ static int thing_tick_all_things (levelp level)
         }
 
         if (thing_can_roll(t)) {
-            int impact = false;
             double nx;
             double ny;
             thingp it;
 
-                nx = t->x + t->momentum;
-                ny = t->y + t->fall_speed;
-                it = thing_hit_fall_obstacle(level, t, nx, ny);
+            nx = t->x + t->momentum;
+            ny = t->y + t->fall_speed;
+            it = thing_hit_fall_obstacle(level, t, nx, ny);
 
-                if (it) {
+            if (it) {
+                int dx;
+                if (t->momentum > 0) {
+                    dx = 1;
+                } else {
+                    dx = -1;
+                }
 
-                    int dx;
-                    if (t->momentum > 0) {
-                        dx = 1;
-                    } else {
-                        dx = -1;
-                    }
+                double theta = 0.8;
+                double friction = 1.0;
 
-                    double theta = 1.0;
-                    double friction = 0.8;
-
-                    if ((fabs(t->momentum) < 0.01) &&
-                        (fabs(t->fall_speed) < 0.01) &&
-                        !map_find_wall_at(level, t->x + dx, t->y, 0) &&
-                        map_find_wall_at(level, t->x + dx, t->y + 1, 0) &&
-                        map_find_wall_at(level, t->x, t->y + 1, 0)) {
-                    } else {
+                if ((fabs(t->momentum) < 0.01) &&
+                    (fabs(t->fall_speed) < 0.01) &&
+                    !map_find_wall_at(level, t->x + dx, t->y, 0) &&
+                    map_find_wall_at(level, t->x + dx, t->y + 1, 0) &&
+                    map_find_wall_at(level, t->x, t->y + 1, 0)) {
+                    /*
+                     * Come to a stop, we're on a level surface.
+                     */
+                } else {
+                    /*
+                     * Try to roll around the obstacle.
+                     */
                     {
                         fpoint p;
                         p.x = t->momentum * friction;
@@ -115,54 +119,48 @@ static int thing_tick_all_things (levelp level)
                             it = 0;
                         }
                     }
-                    }
+                }
 
-                    if (it) {
-                        if (things_handle_impact(level, t, nx, ny, it)) {
-                            continue;
-                        }
+                if (it) {
+                    if (things_handle_impact(level, t, nx, ny, it)) {
+
+                        thing_handle_collisions(level, t);
+                        continue;
                     }
                 }
+            }
 
             nx = t->x + t->momentum;
             ny = t->y + t->fall_speed;
 
-            if (impact) {
-                thing_wid_update(level, t, nx, ny, false, false /* is new */);
-
-                thing_handle_collisions(level, t);
-            } else {
-                thing_wid_update(level, t, nx, ny, false, false /* is new */);
-            }
+            thing_wid_update(level, t, nx, ny, false, false /* is new */);
 
             t->rot += t->momentum;
-
             t->fall_speed += 0.005;
 
             if (t->fall_speed > 0.5) {
                 t->fall_speed = 0;
             }
-        }
-
-#if 0
-
-        if (t->momentum) {
-            thing_slide(level, t);
-        }
-
-        if (t->jump_speed) {
-            thing_jump(level, t);
-        }
-
-        if (tp_can_fall(tp)) {
-            thing_fall(level, t);
-        }
-#endif
-
-        if (tp_can_drown(tp)) {
-            if (!thing_drown(level, t)) {
-                continue;
+        } else {
+            if (t->momentum) {
+                thing_slide(level, t);
             }
+
+            if (t->jump_speed) {
+                thing_jump(level, t);
+            }
+
+            if (tp_can_fall(tp)) {
+                thing_fall(level, t);
+            }
+        }
+
+        if (t->is_submerged || t->is_partially_submerged) {
+            t->momentum *= 0.75;
+        }
+
+        if (!thing_drown(level, t)) {
+            continue;
         }
 
         someone_is_inside_a_shop = false;
