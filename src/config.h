@@ -120,7 +120,7 @@
  * The number of tiles per screen.
  */
 #define TILES_SCREEN_WIDTH          21
-#define TILES_SCREEN_HEIGHT         12
+#define TILES_SCREEN_HEIGHT         14
 #define TILES_ANIM_MAX              10000
 
 /*
