@@ -18,8 +18,6 @@
  */
 static int thing_hit_ground (levelp level, 
                              thingp t, 
-                             double nx,
-                             double ny,
                              thingp it)
 {
     if (t->falling_too_fast) {
@@ -42,16 +40,8 @@ static int thing_hit_ground (levelp level,
 int thing_fall (levelp level, thingp t)
 {
     double x = t->x;
-    double y;
+    double y = t->y + 0.015;
     thingp it;
-
-    if (t->fall_speed == 0) {
-        y = t->y + 0.05;
-    } else if (t->fall_speed > 0) {
-        y = t->y + 0.05;
-    } else {
-        y = t->y - 0.05;
-    }
 
     if (thing_is_rope(t)) {
         if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y + 1.0)) {
@@ -66,9 +56,14 @@ int thing_fall (levelp level, thingp t)
 
         it = thing_overlaps(level, t, t->x, t->y, thing_is_ladder);
         if (it) {
-            thing_hit_ground(level, t, t->x, t->y, it);
+            thing_hit_ground(level, t, it);
             return (false);
         }
+    }
+
+    if (t->jump_speed) {
+        t->fall_speed = 0;
+        return (false);
     }
 
     if (thing_is_monst(t)  ||
@@ -84,12 +79,11 @@ int thing_fall (levelp level, thingp t)
 
     it = thing_hit_fall_obstacle(level, t, x, y);
     if (it) {
-        if (!thing_hit_ground(level, t, t->x, t->y, it)) {
-            t->fall_speed += 0.005;
-        }
-    } else {
-        t->fall_speed += 0.005;
+        thing_hit_ground(level, t, it);
+        return (false);
     }
+
+    t->fall_speed += 0.010;
 
     if (t->fall_speed > 0.4) {
         t->falling_too_fast = true;
@@ -118,10 +112,7 @@ int thing_fall (levelp level, thingp t)
                 y = t->y + t->fall_speed;
                 it = thing_hit_fall_obstacle(level, t, x, y);
                 if (it) {
-                    thing_hit_ground(level, t, 
-                                     t->x, 
-                                     t->y + t->fall_speed,
-                                     it);
+                    thing_hit_ground(level, t, it);
                     return (false);
                 }
             }
