@@ -7983,7 +7983,7 @@ static void wid_display_fast (widp w,
         }
     }
 
-    if (t && thing_can_roll(t)) {
+    if (0 && t && thing_can_roll(t)) {
         glcolor(YELLOW);
         char tmp[80];
         sprintf(tmp, "%.6f,%.6f",t->momentum, t->fall_speed);
@@ -8019,13 +8019,11 @@ static void wid_display_fast (widp w,
         glcolor(WHITE);
         gl_blitline(mx, my, mx + vx, my + vy);
 
-        if (0) {
         v = t->normal_velocity;
         vx = v.x * scale;
         vy = v.y * scale;
         glcolor(CYAN);
         gl_blitline(mx, my, mx + vx, my + vy);
-            }
 
         v = t->tangent_velocity;
         vx = v.x * scale;
@@ -8035,7 +8033,7 @@ static void wid_display_fast (widp w,
 
     }
 
-    if (unlikely(debug && t)) {
+    if (0 && unlikely(debug && t)) {
         double mx, my;
 
         thing_real_to_map(t, &mx, &my);

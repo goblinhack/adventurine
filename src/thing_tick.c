@@ -68,48 +68,46 @@ static int thing_tick_all_things (levelp level)
             double ny;
             thingp it;
 
-            t->fall_speed += 0.005;
-
-            if (t->fall_speed > 0.5) {
-                t->fall_speed = 0;
-            }
-
                 nx = t->x + t->momentum;
                 ny = t->y + t->fall_speed;
                 it = thing_hit_fall_obstacle(level, t, nx, ny);
+
                 if (it) {
 
-                    double theta = 0.5;
+                    double theta = 1.0;
+                    double friction = 0.8;
+
                     {
                         fpoint p;
-                        p.x = t->momentum;
-                        p.y = t->fall_speed;
+                        p.x = t->momentum * friction;
+                        p.y = t->fall_speed * friction;
                         p = fpoint_rotate(p, theta);
 
                         if (!thing_hit_fall_obstacle(level, t, t->x + p.x, t->y + p.y)) {
                             t->momentum = p.x;
                             t->fall_speed = p.y;
-                            continue;
+                            it = 0;
                         }
                     }
-                    {
+
+                    if (it) {
                         fpoint p;
-                        p.x = t->momentum;
-                        p.y = t->fall_speed;
+                        p.x = t->momentum * friction;
+                        p.y = t->fall_speed * friction;
                         p = fpoint_rotate(p, -theta);
 
                         if (!thing_hit_fall_obstacle(level, t, t->x + p.x, t->y + p.y)) {
                             t->momentum = p.x;
                             t->fall_speed = p.y;
-                            continue;
+                            it = 0;
                         }
                     }
 
-                    if (things_handle_impact(level, t, nx, ny, it)) {
-                        impact = true;
+                    if (it) {
+                        if (things_handle_impact(level, t, nx, ny, it)) {
+                            continue;
+                        }
                     }
-
-                    continue;
                 }
 
             nx = t->x + t->momentum;
@@ -124,6 +122,12 @@ static int thing_tick_all_things (levelp level)
             }
 
             t->rot += t->momentum;
+
+            t->fall_speed += 0.005;
+
+            if (t->fall_speed > 0.5) {
+                t->fall_speed = 0;
+            }
         }
 
 #if 0

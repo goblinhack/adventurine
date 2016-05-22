@@ -567,7 +567,7 @@ A->tangent_velocity = tangent_velocity_A;
     fpoint tangent_velocity_B = fmul(tangent_B_velocity, tangent_B_unit);
 
     static double COLLISION_ELASTICITY      = 0.5;
-    static double TANGENT_ELASTICITY        = 0.6;
+    static double TANGENT_ELASTICITY        = 0.5;
 
     normal_velocity_A = fmul(COLLISION_ELASTICITY, normal_velocity_A);
     normal_velocity_B = fmul(COLLISION_ELASTICITY, normal_velocity_B);
