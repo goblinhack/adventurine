@@ -110,7 +110,7 @@ static void demarshal_thing_tile (demarshal_p ctx, thing_tile *t)
         GET_OPT_NAMED_BITFIELD(ctx, "is_yyy13", t->is_yyy13);
         GET_OPT_NAMED_BITFIELD(ctx, "is_yyy14", t->is_yyy14);
         GET_OPT_NAMED_BITFIELD(ctx, "is_yyy15", t->is_yyy15);
-        GET_OPT_NAMED_BITFIELD(ctx, "is_yyy16", t->is_yyy16);
+        GET_OPT_NAMED_BITFIELD(ctx, "is_submerged", t->is_submerged);
         GET_OPT_NAMED_BITFIELD(ctx, "is_sleeping", t->is_sleeping);
         GET_OPT_NAMED_BITFIELD(ctx, "is_open", t->is_open);
         GET_OPT_NAMED_BITFIELD(ctx, "is_dead", t->is_dead);
@@ -216,7 +216,7 @@ static void marshal_thing_tile (marshal_p ctx, thing_tile *t)
     PUT_NAMED_BITFIELD(ctx, "is_yyy13", t->is_yyy13);
     PUT_NAMED_BITFIELD(ctx, "is_yyy14", t->is_yyy14);
     PUT_NAMED_BITFIELD(ctx, "is_yyy15", t->is_yyy15);
-    PUT_NAMED_BITFIELD(ctx, "is_yyy16", t->is_yyy16);
+    PUT_NAMED_BITFIELD(ctx, "is_submerged", t->is_submerged);
     PUT_NAMED_BITFIELD(ctx, "is_sleeping", t->is_sleeping);
     PUT_NAMED_BITFIELD(ctx, "is_open", t->is_open);
     PUT_NAMED_BITFIELD(ctx, "is_dead", t->is_dead);
@@ -296,6 +296,10 @@ void demarshal_thing_tiles (demarshal_p ctx, tpp t)
 
         if (tile->has_dir_anim) {
             t->has_dir_anim = true;
+        }
+
+        if (tile->is_submerged) {
+            t->has_submerged_anim = true;
         }
     }
 
@@ -696,9 +700,9 @@ uint8_t thing_tile_is_yyy15 (thing_tilep t)
     return (t->is_yyy15);
 }
 
-uint8_t thing_tile_is_yyy16 (thing_tilep t)
+uint8_t thing_tile_is_submerged (thing_tilep t)
 {
-    return (t->is_yyy16);
+    return (t->is_submerged);
 }
 
 uint8_t thing_tile_is_sleeping (thing_tilep t)

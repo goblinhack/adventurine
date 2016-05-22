@@ -7682,12 +7682,6 @@ static void wid_light_add (widp w, fpoint at, double strength, color c)
         return;
     }
 
-    if (t->is_submerged) {
-        if (thing_is_torch(t)) {
-            return;
-        }
-    }
-
     wid_lights[wid_light_count].at = at;
     wid_lights[wid_light_count].strength = strength;
     wid_lights[wid_light_count].ostrength = strength;

@@ -267,6 +267,7 @@ typedef struct tp_ {
     uint8_t can_fall:1;
     uint8_t can_walk_through:1;
     uint8_t has_dir_anim:1;
+    uint8_t has_submerged_anim:1;
     uint8_t is_acid:1;
     uint8_t is_acid_proof:1;
     uint8_t is_action:1;

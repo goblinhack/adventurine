@@ -89,7 +89,7 @@ typedef struct thing_tile_ {
     uint8_t is_yyy13:1;
     uint8_t is_yyy14:1;
     uint8_t is_yyy15:1;
-    uint8_t is_yyy16:1;
+    uint8_t is_submerged:1;
     uint8_t is_sleeping:1;
     uint8_t is_open:1;
     uint8_t is_dead:1;
@@ -181,7 +181,7 @@ uint8_t thing_tile_is_yyy12(thing_tilep);
 uint8_t thing_tile_is_yyy13(thing_tilep);
 uint8_t thing_tile_is_yyy14(thing_tilep);
 uint8_t thing_tile_is_yyy15(thing_tilep);
-uint8_t thing_tile_is_yyy16(thing_tilep);
+uint8_t thing_tile_is_submerged(thing_tilep);
 uint8_t thing_tile_is_sleeping(thing_tilep);
 uint8_t thing_tile_is_open(thing_tilep);
 uint8_t thing_tile_is_dead(thing_tilep);

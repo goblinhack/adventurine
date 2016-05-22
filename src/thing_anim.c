@@ -147,6 +147,20 @@ void thing_animate (levelp level, thingp t)
                 }
             }
 
+            if (tp->has_submerged_anim) {
+                if (t->is_submerged) {
+                    if (!thing_tile_is_submerged(tile)) {
+                        tile = thing_tile_next(tiles, tile);
+                        continue;
+                    }
+                } else {
+                    if (thing_tile_is_submerged(tile)) {
+                        tile = thing_tile_next(tiles, tile);
+                        continue;
+                    }
+                }
+            }
+
             if (thing_is_dead(t)) {
                 if (!thing_tile_is_dead(tile)) {
                     tile = thing_tile_next(tiles, tile);
