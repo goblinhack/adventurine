@@ -74,11 +74,10 @@ int thing_drown (levelp level, thingp t)
         t->timestamp_last_breath = 0;
         t->breath = 0;
 
-        if (t->is_submerged) {
-            t->jump_speed = 0.1;
-
-        } else if (t->is_partially_submerged) {
-            t->jump_speed = 0.05;
+        if (thing_is_player(t)) {
+            if (t->is_submerged) {
+                t->jump_speed = 0.1;
+            }
         }
 
         t->is_submerged = false;

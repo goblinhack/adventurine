@@ -1059,11 +1059,11 @@ static inline uint8_t thing_is_rrr25 (thingp t)
     return (tp_is_rrr25(thing_tp(t)));
 }
 
-static inline uint8_t thing_is_rrr26 (thingp t)
+static inline uint8_t thing_is_boulder (thingp t)
 {
     verify(t);
 
-    return (tp_is_rrr26(thing_tp(t)));
+    return (tp_is_boulder(thing_tp(t)));
 }
 
 static inline uint8_t thing_can_roll (thingp t)
@@ -1752,9 +1752,12 @@ void
 thingp_get_interpolated_position(const thingp t, double *x, double *y);
 
 int circle_box_collision(levelp,
-                         thingp C, thingp B,
-                         double nx,
-                         double ny,
+                         thingp C, 
+                         double bx,
+                         double by,
+                         thingp B,
+                         double cx,
+                         double cy,
                          fpoint *normal,
                          fpoint *intersect,
                          int check_only);

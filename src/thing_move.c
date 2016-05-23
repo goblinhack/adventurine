@@ -463,9 +463,11 @@ int things_handle_impact (levelp level,
     if (thing_can_roll(A) && !thing_can_roll(B)) {
         if (circle_box_collision(level,
                                  A, /* circle */
-                                 B, /* box */
                                  nx,
                                  ny,
+                                 B, /* box */
+                                 B->x,
+                                 B->y,
                                  &normal_A,
                                  &intersect,
                                  check_only)) {

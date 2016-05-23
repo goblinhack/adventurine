@@ -7691,6 +7691,12 @@ static void wid_light_add (widp w, fpoint at, double strength, color c)
 
     uint16_t max_light_rays;
 
+    if (thing_is_torch(t)) {
+        if (t->is_submerged) {
+            return;
+        }
+    }
+
     if (thing_is_explosion(t)) {
         /*
          * Too slow without this for large explosions.

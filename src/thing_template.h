@@ -368,7 +368,7 @@ typedef struct tp_ {
     uint8_t is_rrr23:1;
     uint8_t is_rrr24:1;
     uint8_t is_rrr25:1;
-    uint8_t is_rrr26:1;
+    uint8_t is_boulder:1;
     uint8_t can_roll:1;
     uint8_t is_bubbles:1;
     uint8_t can_drown:1;
@@ -770,9 +770,9 @@ static inline uint8_t tp_is_rrr25 (tpp t)
     return (t->is_rrr25);
 }
 
-static inline uint8_t tp_is_rrr26 (tpp t)
+static inline uint8_t tp_is_boulder (tpp t)
 {
-    return (t->is_rrr26);
+    return (t->is_boulder);
 }
 
 static inline uint8_t tp_can_roll (tpp t)

@@ -79,8 +79,8 @@ static int thing_tick_all_things (levelp level)
                     dx = -1;
                 }
 
-                double theta = 0.8;
-                double friction = 1.0;
+                double theta = 1.0;
+                double friction = 0.5;
 
                 if ((fabs(t->momentum) < 0.01) &&
                     (fabs(t->fall_speed) < 0.01) &&
@@ -123,7 +123,6 @@ static int thing_tick_all_things (levelp level)
 
                 if (it) {
                     if (things_handle_impact(level, t, nx, ny, it)) {
-
                         thing_handle_collisions(level, t);
                         continue;
                     }
@@ -134,6 +133,7 @@ static int thing_tick_all_things (levelp level)
             ny = t->y + t->fall_speed;
 
             thing_wid_update(level, t, nx, ny, true, false /* is new */);
+            thing_handle_collisions(level, t);
 
             t->rot += t->momentum;
             t->fall_speed += 0.005;

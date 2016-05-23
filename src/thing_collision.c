@@ -232,91 +232,116 @@ thing_to_coords (thingp t, fpoint *P0, fpoint *P1, fpoint *P2, fpoint *P3)
 }
 
 int circle_box_collision (levelp level,
-                          thingp C, thingp B,
-                          double nx,
-                          double ny,
+                          thingp C, 
+                          double cx,
+                          double cy,
+                          thingp B,
+                          double bx,
+                          double by,
                           fpoint *normal,
                           fpoint *intersect,
                           int check_only)
 {
+    double dx, dy;
+
     widp Cw = C->wid;
-    double Cx = wid_get_cx(Cw);
-    double Cy = wid_get_cy(Cw);
     double Cwid = wid_get_width(Cw);
     double Cheight = wid_get_height(Cw);
-    Cx += (nx - C->x) * Cwid;
-    Cy += (ny - C->y) * Cheight;
-
-    fpoint C_at = { Cx, Cy };
+    dx = (cx - C->x) * Cwid;
+    dy = (cy - C->y) * Cheight;
     fpoint C0, C1, C2, C3;
     thing_to_coords(C, &C0, &C1, &C2, &C3);
-
-    double radius = (C1.x - C0.x) / 2.0;
+    dx = (cx - C->x) * (C1.x - C0.x);
+    dy = (cy - C->y) * (C2.y - C0.y);
+    C0.x += dx;
+    C0.y += dy;
+    C1.x += dx;
+    C1.y += dy;
+    C2.x += dx;
+    C2.y += dy;
+    C3.x += dx;
+    C3.y += dy;
+    double Cx = (C0.x + C1.x) / 2.0;
+    double Cy = (C0.y + C2.y) / 2.0;
+    fpoint C_at = { Cx, Cy };
 
     widp Bw = B->wid;
-    double Bx = wid_get_cx(Bw);
-    double By = wid_get_cy(Bw);
-
-    fpoint P0, P1, P2, P3;
+    double Bwid = wid_get_width(Bw);
+    double Bheight = wid_get_height(Bw);
+    dx = (bx - B->x) * Bwid;
+    dy = (by - B->y) * Bheight;
+    fpoint B0, B1, B2, B3;
+    thing_to_coords(B, &B0, &B1, &B2, &B3);
+    dx = (bx - B->x) * (B1.x - B0.x);
+    dy = (by - B->y) * (B2.y - B0.y);
+    B0.x += dx;
+    B0.y += dy;
+    B1.x += dx;
+    B1.y += dy;
+    B2.x += dx;
+    B2.y += dy;
+    B3.x += dx;
+    B3.y += dy;
+    double Bx = (B0.x + B1.x) / 2.0;
+    double By = (B0.y + B2.y) / 2.0;
     fpoint B_at = { Bx, By };
-
-    thing_to_coords(B, &P0, &P1, &P2, &P3);
+    double radius = (C1.x - C0.x) / 2.0;
 
     /*
      * Corner collisions, normal is at 45 degrees.
      */
-    if (fdist(C_at, P0) < radius) {
+    if (fdist(C_at, B0) < radius) {
         if (!map_find_wall_at(level, B->x - 1, B->y, 0)) {
-            normal->x = C_at.x - P0.x;
-            normal->y = C_at.y - P0.y;
+            normal->x = C_at.x - B0.x;
+            normal->y = C_at.y - B0.y;
             return (true);
         }
     }
 
-    if (fdist(C_at, P1) < radius) {
+    if (fdist(C_at, B1) < radius) {
         if (!map_find_wall_at(level, B->x + 1, B->y, 0)) {
-            normal->x = C_at.x - P1.x;
-            normal->y = C_at.y - P1.y;
+            normal->x = C_at.x - B1.x;
+            normal->y = C_at.y - B1.y;
             return (true);
         }
     }
 
-    if (fdist(C_at, P2) < radius) {
+    if (fdist(C_at, B2) < radius) {
         if (!map_find_wall_at(level, B->x + 1, B->y, 0)) {
-            normal->x = C_at.x - P2.x;
-            normal->y = C_at.y - P2.y;
+            normal->x = C_at.x - B2.x;
+            normal->y = C_at.y - B2.y;
             return (true);
         }
     }
 
-    if (fdist(C_at, P3) < radius) {
+    if (fdist(C_at, B3) < radius) {
         if (!map_find_wall_at(level, B->x - 1, B->y, 0)) {
-            normal->x = C_at.x - P3.x;
-            normal->y = C_at.y - P3.y;
+            normal->x = C_at.x - B3.x;
+            normal->y = C_at.y - B3.y;
             return (true);
         }
     }
 
     double dist;
-    if (fpoint_dist_line2(C_at, P0, P1, &dist, 0)) {
+    if (fpoint_dist_line2(C_at, B0, B1, &dist, 0)) {
         if (dist < radius) {
             goto collided;
         }
     }
 
-    if (fpoint_dist_line2(C_at, P1, P2, &dist, 0)) {
+    if (fpoint_dist_line2(C_at, B1, B2, &dist, 0)) {
         if (dist < radius) {
             goto collided;
         }
     }
 
-    if (fpoint_dist_line2(C_at, P2, P3, &dist, 0)) {
+    if (fpoint_dist_line2(C_at, B2, B3, &dist, 0)) {
         if (dist < radius) {
             goto collided;
         }
     }
 
-    if (fpoint_dist_line2(C_at, P3, P0, &dist, 0)) {
+    if (fpoint_dist_line2(C_at, B3, B0, &dist, 0)) {
         if (dist < radius) {
             goto collided;
         }
@@ -332,33 +357,33 @@ collided:
 
     fpoint delta;
 
-    if (get_line_intersection(C_at, B_at, P0, P1, intersect)) {
-        delta.x = P0.x - P1.x;
-        delta.y = P0.y - P1.y;
+    if (get_line_intersection(C_at, B_at, B0, B1, intersect)) {
+        delta.x = B0.x - B1.x;
+        delta.y = B0.y - B1.y;
         normal->x = -delta.y;
         normal->y = delta.x;
         return (true);
     }
 
-    if (get_line_intersection(C_at, B_at, P1, P2, intersect)) {
-        delta.x = P1.x - P2.x;
-        delta.y = P1.y - P2.y;
+    if (get_line_intersection(C_at, B_at, B1, B2, intersect)) {
+        delta.x = B1.x - B2.x;
+        delta.y = B1.y - B2.y;
         normal->x = -delta.y;
         normal->y = delta.x;
         return (true);
     }
 
-    if (get_line_intersection(C_at, B_at, P2, P3, intersect)) {
-        delta.x = P2.x - P3.x;
-        delta.y = P2.y - P3.y;
+    if (get_line_intersection(C_at, B_at, B2, B3, intersect)) {
+        delta.x = B2.x - B3.x;
+        delta.y = B2.y - B3.y;
         normal->x = -delta.y;
         normal->y = delta.x;
         return (true);
     }
 
-    if (get_line_intersection(C_at, B_at, P3, P0, intersect)) {
-        delta.x = P3.x - P0.x;
-        delta.y = P3.y - P0.y;
+    if (get_line_intersection(C_at, B_at, B3, B0, intersect)) {
+        delta.x = B3.x - B0.x;
+        delta.y = B3.y - B0.y;
         normal->x = -delta.y;
         normal->y = delta.x;
         return (true);
@@ -681,9 +706,27 @@ static uint8_t things_overlap (levelp level,
     if (thing_can_roll(A) && !thing_can_roll(B)) {
         if (circle_box_collision(level,
                                  A, /* circle */
+                                 Ax,
+                                 Ay,
                                  B, /* box */
-                                 nx,
-                                 ny,
+                                 Bx,
+                                 By,
+                                 &normal_A,
+                                 &intersect,
+                                 check_only)) {
+            return (true);
+        }
+        return (false);
+    }
+
+    if (!thing_can_roll(A) && thing_can_roll(B)) {
+        if (circle_box_collision(level,
+                                 B, /* circle */
+                                 Bx,
+                                 By,
+                                 A, /* box */
+                                 Ax,
+                                 Ay,
                                  &normal_A,
                                  &intersect,
                                  check_only)) {
@@ -695,8 +738,8 @@ static uint8_t things_overlap (levelp level,
     if (thing_can_roll(A) && thing_can_roll(B)) {
         if (circle_circle_collision(A, /* circle */
                                     B, /* box */
-                                    nx,
-                                    ny,
+                                    Ax,
+                                    Ay,
                                     &intersect)) {
             return (true);
         }
@@ -1045,13 +1088,38 @@ LOG("add poss me %s hitter %s",thing_logname(me), thing_logname(it));
         }
     }
 
-    if (thing_is_smallrock(me) && 
-        ((me->momentum > 0.1) || (me->fall_speed > 0.1))) {
+    if (thing_is_boulder(me) &&
+        ((fabs(me->momentum) > 0.01) || (me->fall_speed > 0.01))) {
 
         /*
          * Rock bumped into something.
          */
         if (thing_is_player(it)                ||
+            thing_is_monst(it)                 ||
+            thing_is_cloud_effect(it)) {
+            /*
+             * I'm hit!
+             */
+#if 0
+if (debug) {
+LOG("add poss me %s hitter %s",thing_logname(me), thing_logname(it));
+}
+#endif
+//CON("%d %s %s",__LINE__,thing_logname(me), thing_logname(it));
+//CON("  %d",__LINE__);
+            thing_possible_hit_add(it, "rock hit thing");
+            return (true);
+        }
+    }
+
+    if (thing_is_smallrock(me) && 
+        ((fabs(me->momentum) > 0.1) || (me->fall_speed > 0.1))) {
+
+        /*
+         * Rock bumped into something.
+         */
+        if (thing_is_player(it)                ||
+            thing_is_monst(it)                 ||
             thing_is_cloud_effect(it)) {
             /*
              * I'm hit!
