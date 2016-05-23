@@ -205,15 +205,9 @@ thing_to_coords (thingp t, fpoint *P0, fpoint *P1, fpoint *P2, fpoint *P3)
     tl_y -= top_off   * pix_h;
     br_y += bot_off   * pix_h;
 
-    if (0) {
-    widp p = w->parent;
-    tl_x += p->offset.x;
-    tl_y += p->offset.y;
-    br_x += p->offset.x;
-    br_y += p->offset.y;
-    }
+    pix_w = br_x - tl_x;
+    pix_h = br_y - tl_y;
 
-#if 0
     double otl_x = tl_x;
     double otl_y = tl_y;
     tilep tile = wid_get_tile(w);
@@ -221,7 +215,6 @@ thing_to_coords (thingp t, fpoint *P0, fpoint *P1, fpoint *P2, fpoint *P3)
     br_x = otl_x + tile->px2 * pix_w;
     tl_y = otl_y + tile->py1 * pix_h;
     br_y = otl_y + tile->py2 * pix_h;
-#endif
 
     P0->x = tl_x;
     P0->y = tl_y;
