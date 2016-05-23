@@ -213,6 +213,7 @@ thing_to_coords (thingp t, fpoint *P0, fpoint *P1, fpoint *P2, fpoint *P3)
     br_y += p->offset.y;
     }
 
+#if 0
     double otl_x = tl_x;
     double otl_y = tl_y;
     tilep tile = wid_get_tile(w);
@@ -220,6 +221,7 @@ thing_to_coords (thingp t, fpoint *P0, fpoint *P1, fpoint *P2, fpoint *P3)
     br_x = otl_x + tile->px2 * pix_w;
     tl_y = otl_y + tile->py1 * pix_h;
     br_y = otl_y + tile->py2 * pix_h;
+#endif
 
     P0->x = tl_x;
     P0->y = tl_y;
@@ -244,11 +246,6 @@ int circle_box_collision (levelp level,
 {
     double dx, dy;
 
-    widp Cw = C->wid;
-    double Cwid = wid_get_width(Cw);
-    double Cheight = wid_get_height(Cw);
-    dx = (cx - C->x) * Cwid;
-    dy = (cy - C->y) * Cheight;
     fpoint C0, C1, C2, C3;
     thing_to_coords(C, &C0, &C1, &C2, &C3);
     dx = (cx - C->x) * (C1.x - C0.x);
@@ -265,11 +262,6 @@ int circle_box_collision (levelp level,
     double Cy = (C0.y + C2.y) / 2.0;
     fpoint C_at = { Cx, Cy };
 
-    widp Bw = B->wid;
-    double Bwid = wid_get_width(Bw);
-    double Bheight = wid_get_height(Bw);
-    dx = (bx - B->x) * Bwid;
-    dy = (by - B->y) * Bheight;
     fpoint B0, B1, B2, B3;
     thing_to_coords(B, &B0, &B1, &B2, &B3);
     dx = (bx - B->x) * (B1.x - B0.x);
@@ -285,6 +277,7 @@ int circle_box_collision (levelp level,
     double Bx = (B0.x + B1.x) / 2.0;
     double By = (B0.y + B2.y) / 2.0;
     fpoint B_at = { Bx, By };
+
     double radius = (C1.x - C0.x) / 2.0;
 
     /*
@@ -1706,7 +1699,6 @@ thingp thing_hit_solid_obstacle (levelp level,
     return (0);
 }
 
-extern thingp collision_ignore;
 /*
  * Have we hit anything?
  *
@@ -1750,9 +1742,6 @@ thingp thing_hit_fall_obstacle (levelp level,
             
             it = id_to_thing(cell->id[i]);
             if (it == t) {
-                continue;
-            }
-            if (it == collision_ignore) {
                 continue;
             }
 
