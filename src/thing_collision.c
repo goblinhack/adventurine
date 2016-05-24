@@ -20,6 +20,7 @@ typedef struct {
 
 #define MAX_THING_POSSIBLE_HIT 16
 
+static const double boulder_collision_hurt_speed = 0.05;
 static thing_possible_hit thing_possible_hits[MAX_THING_POSSIBLE_HIT];
 static uint32_t thing_possible_hit_size;
 static const int def_collision_radius = 4;
@@ -1075,7 +1076,8 @@ LOG("add poss me %s hitter %s",thing_logname(me), thing_logname(it));
     }
 
     if (thing_is_boulder(me) &&
-        ((fabs(me->momentum) > 0.01) || (me->fall_speed > 0.01))) {
+        ((fabs(me->momentum) > boulder_collision_hurt_speed) || 
+         (me->fall_speed > boulder_collision_hurt_speed))) {
 
         /*
          * Rock bumped into something.
@@ -1633,6 +1635,11 @@ thingp thing_hit_solid_obstacle (levelp level,
                 if (thing_is_player(it)) {
                     continue;
                 }
+
+                if (thing_is_boulder(it) &&
+                    (fabs(it->momentum) < boulder_collision_hurt_speed)) {
+                    continue;
+                }
             }
 
             if (thing_is_wall(me)     || 
@@ -1810,6 +1817,7 @@ thingp thing_hit_fall_obstacle (levelp level,
 
                 if (!thing_is_wall(it) && 
                     !thing_is_rock(it) && 
+                    !thing_is_boulder(it) && 
                     !thing_is_smallrock(it) && 
                     !thing_is_door(it)) {
                     continue;
@@ -1820,6 +1828,7 @@ thingp thing_hit_fall_obstacle (levelp level,
                  */
                 if (!thing_is_wall(it) && 
                     !thing_is_rock(it) && 
+                    !thing_is_boulder(it) && 
                     !thing_is_door(it)) {
                     continue;
                 }

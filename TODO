@@ -2,17 +2,12 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
-- collision with boulders not accurate for player
-- stretch tiles that do not need 0.5 pix border!
-- player can get totally stuck next to a boulder even with a rope
 - boulder sound on hit ground
-- boulder impact damage
 - exit can fall through bottom of level
 - side piston push blocks - that can be stacked
 - random gap in tall ropes
 - ropes get toooo tall
 - rocks moving too fast on explosion
-- light in water should fizzle out?
 - hp per level
 - sparks effect
 - miss effects
@@ -59,6 +54,11 @@ sep
 
 may
 ---
+- player can get totally stuck next to a boulder even with a rope
+- boulder impact damage
+- light in water should fizzle out?
+- collision with boulders not accurate for player
+- stretch tiles that do not need 0.5 pix border!
 - exit jumps at start and so does rope
 - player swims
 - collision detection off by 1 pix
