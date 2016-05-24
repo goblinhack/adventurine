@@ -107,6 +107,11 @@ void tile_load_arr (const char *tex_name,
             t->x2 = t->x1 + fw;
             t->y2 = t->y1 + fh;
 
+            t->ox1 = t->x1;
+            t->oy1 = t->y1;
+            t->ox2 = t->x2;
+            t->oy2 = t->y2;
+
             /*
              * Why? Texture atlas and GL_LINEAR will cause problems blending 
              * with tiles adjacent in the atlas, so we trim 0.5 of a pixel

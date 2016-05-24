@@ -24,6 +24,13 @@ typedef struct tile_ {
     double x2;
     double y2;
     /*
+     * As above but not clipped 0.5 pixels.
+     */
+    double ox1;
+    double oy1;
+    double ox2;
+    double oy2;
+    /*
      * Percentage points that indicate the start of the pixels within the tile 
      * texture for use in collisions.
      */
