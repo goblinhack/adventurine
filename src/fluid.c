@@ -608,6 +608,7 @@ void fluid_remove_water_radius (levelp level, int x, int y, int radius)
 {
     int ix = x * FLUID_RESOLUTION;
     int iy = y * FLUID_RESOLUTION;
+    radius *= FLUID_RESOLUTION;
 
     for (x = 0; x < FLUID_RESOLUTION * MAP_WIDTH; x++) {
         for (y = 0; y < FLUID_RESOLUTION * MAP_WIDTH; y++) {

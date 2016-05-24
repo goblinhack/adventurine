@@ -170,7 +170,6 @@ static void wid_editor_set_new_tp (int x, int y, int z,
     verify(ctx);
     verify(ctx->w);
 
-CON("%d %d %d %s",x,y,z,tp_name(tp));
     if (tp && tp_is_dungeon_floor(tp)) {
         int scale = TILE_FLOOR_SCALE;
         if (!(x % scale) && !(y % scale)) {
@@ -2366,6 +2365,9 @@ static void wid_editor_tile_fill_ (int x, int y)
         case MAP_DEPTH_FLOOR: 
             min_z = MAP_DEPTH_FLOOR; 
             break;
+        case MAP_DEPTH_FLOOR2: 
+            min_z = MAP_DEPTH_FLOOR2; 
+            break;
         case MAP_DEPTH_WALL: 
             min_z = MAP_DEPTH_WALL; 
             break;
@@ -2373,7 +2375,7 @@ static void wid_editor_tile_fill_ (int x, int y)
             min_z = MAP_DEPTH_OBJ; 
             break;
         default:
-            min_z = 0;
+            min_z = MAP_DEPTH_FLOOR2; 
             break;
     }
 
