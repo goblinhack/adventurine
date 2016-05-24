@@ -170,6 +170,7 @@ static void wid_editor_set_new_tp (int x, int y, int z,
     verify(ctx);
     verify(ctx->w);
 
+CON("%d %d %d %s",tp_name(tp), z);
     if (tp && tp_is_dungeon_floor(tp)) {
         int scale = TILE_FLOOR_SCALE;
         if (!(x % scale) && !(y % scale)) {

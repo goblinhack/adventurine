@@ -2,8 +2,9 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
+- sword wiggles on moving
+- map jigsaw boulder
 - boulder sound on hit ground
-- exit can fall through bottom of level
 - side piston push blocks - that can be stacked
 - random gap in tall ropes
 - ropes get toooo tall
@@ -11,13 +12,8 @@ may
 - hp per level
 - sparks effect
 - miss effects
-- ladders should fall when damaged
 - sparks on hitting
 - monster patrol left/right
-- wham / kpow
-- chains
-- rolling spike balls
-- dropping spikes
 
 june
 ----
@@ -30,6 +26,11 @@ june
 - massive blood splatter
 - moving spikes
 - dissolving floor
+- wham / kpow
+- rotating spike balls
+- dropping spikes
+- side spikes
+- chains
 
 aug
 ---
@@ -54,6 +55,9 @@ sep
 
 may
 ---
+- remove water in radius on explosion
+- dynamite doesn't push giant boulders
+- exit can fall through bottom of level
 - player can get totally stuck next to a boulder even with a rope
 - boulder impact damage
 - light in water should fizzle out?

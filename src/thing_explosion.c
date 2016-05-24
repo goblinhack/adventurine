@@ -82,6 +82,8 @@ void level_place_explosion_at (levelp level,
             for (i = 0; i < 100; i++) {
                 fluid_add_droplets(level);
             }
+
+            fluid_remove_water_radius(level, x, y, 3);
         }
     }
 }

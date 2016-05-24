@@ -1817,7 +1817,6 @@ thingp thing_hit_fall_obstacle (levelp level,
 
                 if (!thing_is_wall(it) && 
                     !thing_is_rock(it) && 
-                    !thing_is_boulder(it) && 
                     !thing_is_smallrock(it) && 
                     !thing_is_door(it)) {
                     continue;

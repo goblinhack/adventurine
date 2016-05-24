@@ -565,7 +565,7 @@ void fluid_add_droplets (levelp level)
     uint16_t y = (myrand() % (MAP_HEIGHT - 4)) + 1;
 
     if (x >= MAP_WIDTH) {
-        DIE("overflow on x");
+        DIE("overflow on x when adding droplets");
     }
 
     if (y >= MAP_HEIGHT) {
@@ -600,6 +600,21 @@ void fluid_add_droplets (levelp level)
 
             level->fluid[fx][fy].mass = FLUID_MAX_MASS;
             level->fluid[fx][fy].type = FLUID_IS_WATER;
+        }
+    }
+}
+
+void fluid_remove_water_radius (levelp level, int x, int y, int radius)
+{
+    int ix = x * FLUID_RESOLUTION;
+    int iy = y * FLUID_RESOLUTION;
+
+    for (x = 0; x < FLUID_RESOLUTION * MAP_WIDTH; x++) {
+        for (y = 0; y < FLUID_RESOLUTION * MAP_WIDTH; y++) {
+            if (DISTANCE(ix, iy, x, y) < radius) {
+                level->fluid[x][y].mass = 0;
+                level->fluid[x][y].type = 0;
+            }
         }
     }
 }
