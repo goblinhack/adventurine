@@ -272,7 +272,8 @@ int circle_box_collision (levelp level,
     double By = (B0.y + B2.y) / 2.0;
     fpoint B_at = { Bx, By };
 
-    double radius = (C1.x - C0.x) / 2.0;
+    double radius = min((C1.x - C0.x) / 2.0,
+                        (C2.y - C0.y) / 2.0);
 
     /*
      * Corner collisions, normal is at 45 degrees.
@@ -403,7 +404,8 @@ int circle_circle_collision (thingp A,
     fpoint A_at = { Ax, Ay };
     fpoint A0, A1, A2, A3;
     thing_to_coords(A, &A0, &A1, &A2, &A3);
-    double A_radius = (A1.x - A0.x) / 2.0;
+    double A_radius = min((A1.x - A0.x) / 2.0,
+                          (A2.y - A0.y) / 2.0);
 
     widp Bw = B->wid;
     double Bx = wid_get_cx(Bw);
@@ -412,7 +414,8 @@ int circle_circle_collision (thingp A,
     fpoint B_at = { Bx, By };
     fpoint B0, B1, B2, B3;
     thing_to_coords(B, &B0, &B1, &B2, &B3);
-    double B_radius = (B1.x - B0.x) / 2.0;
+    double B_radius = min((B1.x - B0.x) / 2.0,
+                          (B2.y - B0.y) / 2.0);
 
     fpoint n = fsub(B_at, A_at);
     double touching_dist = A_radius + B_radius;
