@@ -27,7 +27,7 @@ static widp thing_place__ (levelp level,
         /*
          * Try to place in front of the player.
          */
-        if (!thing_hit_any_obstacle(level, t, x, y)) {
+        if (!fn || !(*fn)(level, t, x, y)) {
             widp w = wid_game_map_replace_tile(level, x, y,
                                                0, /* thing */
                                                tp,
@@ -67,7 +67,7 @@ static widp thing_place__ (levelp level,
     /*
      * Try to place in front of the player.
      */
-    if (!(*fn)(level, t, x, y)) {
+    if (!fn || !(*fn)(level, t, x, y)) {
         widp w = wid_game_map_replace_tile(level, x, y,
                                            0, /* thing */
                                            tp,
@@ -85,7 +85,7 @@ static widp thing_place__ (levelp level,
     /*
      * Try to place in front of the player.
      */
-    if (!(*fn)(level, t, x, y)) {
+    if (!fn || !(*fn)(level, t, x, y)) {
         widp w = wid_game_map_replace_tile(level, x, y,
                                            0, /* thing */
                                            tp,
@@ -103,7 +103,7 @@ static widp thing_place__ (levelp level,
     /*
      * Try to place in front of the player.
      */
-    if (!(*fn)(level, t, x, y)) {
+    if (!fn || !(*fn)(level, t, x, y)) {
         widp w = wid_game_map_replace_tile(level, x, y,
                                            0, /* thing */
                                            tp,
@@ -121,7 +121,7 @@ static widp thing_place__ (levelp level,
     /*
      * Try to place in front of the player.
      */
-    if (!(*fn)(level, t, x, y)) {
+    if (!fn || !(*fn)(level, t, x, y)) {
         widp w = wid_game_map_replace_tile(level, x, y,
                                            0, /* thing */
                                            tp,
@@ -162,7 +162,7 @@ static widp thing_place__ (levelp level,
                 continue;
             }
 
-            if (!(*fn)(level, t, x, y)) {
+            if (!fn || !(*fn)(level, t, x, y)) {
                 widp w = wid_game_map_replace_tile(level, x, y, 
                                                    0, /* thing */
                                                    tp,
@@ -193,7 +193,7 @@ static widp thing_place_ (levelp level,
     thing_hit_obstacle_fn fn;
 
     if (tp_is_bomb(tp)) {
-        fn = thing_hit_solid_obstacle;
+        fn = 0;
     } else if (tp_is_torch(tp)) {
         fn = thing_hit_solid_obstacle;
     } else if (tp_is_rope(tp)) {

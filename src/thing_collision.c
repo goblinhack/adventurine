@@ -1637,11 +1637,6 @@ thingp thing_hit_solid_obstacle (levelp level,
                 if (thing_is_player(it)) {
                     continue;
                 }
-
-                if (thing_is_boulder(it) &&
-                    (fabs(it->momentum) < boulder_collision_hurt_speed)) {
-                    continue;
-                }
             }
 
             if (thing_is_wall(me)     || 
@@ -1660,6 +1655,23 @@ thingp thing_hit_solid_obstacle (levelp level,
 
             if (!things_overlap(level, me, nx, ny, it)) {
                 continue;
+            }
+
+            /*
+             * You can walk away from a boulder, but not closer...
+             */
+            if (thing_is_boulder(it)) {
+                double dist_now = DISTANCE(t->x, t->y, it->x, it->y);
+                double dist_then = DISTANCE(nx, ny, it->x, it->y);
+
+                /*
+                 * Else be sticky
+                 */
+                if (dist_then > dist_now) {
+                    continue;
+                } else {
+                    return (it);
+                }
             }
 
             /*

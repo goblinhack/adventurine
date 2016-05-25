@@ -9,6 +9,7 @@
 #include "level.h"
 #include "sound.h"
 #include "wid_game_map.h"
+#include "player.h"
 
 void thing_reached_exit (levelp level, thingp t)
 {
