@@ -109,7 +109,7 @@ enum {
     MAP_POTION          = 'p',
     MAP_WEAPON          = 'w',
     MAP_GENERATOR       = 'G',
-    MAP_BRAZIER         = 'b',
+    MAP_BRAZIER         = 'l',
     MAP_LADDER          = 'H',
     MAP_TRIGGER_HERO    = 'h',
     MAP_TRIGGER_MONST   = 'Q',
@@ -119,6 +119,8 @@ enum {
     MAP_ACTION_RIGHT    = '>',
     MAP_ACTION_SLEEP    = '!',
     MAP_ACTION_ZAP      = 'z',
+    MAP_BOULDER1        = 'b',
+    MAP_BOULDER2        = 'B',
     MAP_MAX             = 255,
 };
 

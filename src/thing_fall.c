@@ -26,6 +26,9 @@ static int thing_hit_ground (levelp level,
         if (thing_is_player(t) ||
             thing_is_monst(t) ||
             thing_is_bomb(t)) {
+
+            THING_LOG(t, "fell to fast (%f) and hit the ground", t->fall_speed);
+
             (void) thing_hit(level, t, it, 1);
         }
     }
@@ -72,6 +75,8 @@ int thing_fall (levelp level, thingp t)
         if (t->fall_speed > 0.1) {
             it = thing_overlaps(level, t, t->x, t->y, thing_is_spikes);
             if (it) {
+                THING_LOG(t, "fell onto spikes (%f)", t->fall_speed);
+
                 (void) thing_hit(level, t, it, 1);
             }
         }

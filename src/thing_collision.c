@@ -1084,6 +1084,7 @@ LOG("add poss me %s hitter %s",thing_logname(me), thing_logname(it));
          */
         if (thing_is_player(it)                ||
             thing_is_monst(it)                 ||
+            thing_is_bomb(it)                  ||
             thing_is_cloud_effect(it)) {
             /*
              * I'm hit!
@@ -1108,6 +1109,7 @@ LOG("add poss me %s hitter %s",thing_logname(me), thing_logname(it));
          */
         if (thing_is_player(it)                ||
             thing_is_monst(it)                 ||
+            thing_is_bomb(it)                  ||
             thing_is_cloud_effect(it)) {
             /*
              * I'm hit!

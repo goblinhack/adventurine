@@ -895,6 +895,8 @@ static int32_t jigpiece_char_is_passable (char c)
            (c == MAP_DOOR)              ||
            (c == MAP_WEAPON)            ||
            (c == MAP_BRAZIER)           ||
+           (c == MAP_BOULDER1)          ||
+           (c == MAP_BOULDER2)          ||
            (c == MAP_OBSTACLE)          ||
            (c == MAP_OBSTACLE_RANDOM)   ||
            (c == MAP_WALL_RANDOM)       ||
@@ -3352,6 +3354,8 @@ static void init (void)
     map_fg[MAP_WEAPON]         = TERM_COLOR_GREEN;
     map_fg[MAP_GENERATOR]      = TERM_COLOR_CYAN;
     map_fg[MAP_BRAZIER]        = TERM_COLOR_YELLOW;
+    map_fg[MAP_BOULDER1]       = TERM_COLOR_YELLOW;
+    map_fg[MAP_BOULDER2]       = TERM_COLOR_YELLOW;
     map_fg[MAP_TRIGGER_HERO]   = TERM_COLOR_RED;
     map_fg[MAP_LADDER]         = TERM_COLOR_BLUE;
     map_fg[MAP_TRIGGER_MONST]  = TERM_COLOR_RED;
@@ -3394,6 +3398,8 @@ static void init (void)
     map_bg[MAP_PADDING]        = TERM_COLOR_BLACK;
     map_bg[MAP_DOOR]           = TERM_COLOR_CYAN;
     map_bg[MAP_BRAZIER]        = TERM_COLOR_YELLOW;
+    map_bg[MAP_BOULDER1]       = TERM_COLOR_YELLOW;
+    map_bg[MAP_BOULDER2]       = TERM_COLOR_YELLOW;
     map_bg[MAP_TRIGGER_HERO]   = TERM_COLOR_BLACK;
     map_bg[MAP_LADDER]         = TERM_COLOR_BLACK;
     map_bg[MAP_TRIGGER_MONST]  = TERM_COLOR_BLACK;
@@ -3437,6 +3443,8 @@ static void init (void)
     valid_frag_char[MAP_WEAPON]         = true;
     valid_frag_char[MAP_GENERATOR]      = true;
     valid_frag_char[MAP_BRAZIER]        = true;
+    valid_frag_char[MAP_BOULDER1]       = true;
+    valid_frag_char[MAP_BOULDER2]       = true;
 
     valid_frag_alt_char[MAP_EMPTY]          = true;
     valid_frag_alt_char[MAP_SPACE]          = false;
@@ -3472,6 +3480,8 @@ static void init (void)
     valid_frag_alt_char[MAP_WEAPON]         = true;
     valid_frag_alt_char[MAP_GENERATOR]      = true;
     valid_frag_alt_char[MAP_BRAZIER]        = true;
+    valid_frag_alt_char[MAP_BOULDER1]       = true;
+    valid_frag_alt_char[MAP_BOULDER2]       = true;
 
     memset(map_jigsaw_buffer, 0, sizeof(map_jigsaw_buffer));
     memset(map_jigsaw_buffer_old, 0, sizeof(map_jigsaw_buffer_old));
@@ -3723,6 +3733,14 @@ static tpp map_char_to_tp (char c,
 
     case MAP_BRAZIER: 
         tp = tp_find("torch");
+        break;
+
+    case MAP_BOULDER1: 
+        tp = tp_find("boulder1");
+        break;
+
+    case MAP_BOULDER2: 
+        tp = tp_find("boulder2");
         break;
 
     case MAP_TREASURE: {
