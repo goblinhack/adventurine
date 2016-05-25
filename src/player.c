@@ -246,7 +246,7 @@ uint8_t player_move (levelp level)
 
     double max_momentum = 0.5;
     double move_momentum = 0.012;
-    double jump_speed = 0.1;
+    double jump_speed = 0.15;
     double wall_friction = 0.95;
 
     /*
@@ -255,7 +255,7 @@ uint8_t player_move (levelp level)
     if (sdl_shift_held) {
         max_momentum = 1.0;
         move_momentum = 0.020;
-        jump_speed = 0.15;
+        jump_speed = 0.20;
     }
 
     /*
@@ -279,8 +279,14 @@ uint8_t player_move (levelp level)
      * Don't allow too frequent jumps
      */
     if (jump) {
-        if (!time_have_x_hundredths_passed_since(15, level->last_jumped)) {
-            jump = 0;
+        if (submerged) {
+            if (!time_have_x_hundredths_passed_since(50, level->last_jumped)) {
+                jump = 0;
+            }
+        } else {
+            if (!time_have_x_hundredths_passed_since(15, level->last_jumped)) {
+                jump = 0;
+            }
         }
     }
 
@@ -295,7 +301,6 @@ uint8_t player_move (levelp level)
             if (player->fall_speed < 0.50) {
                 if (!player->jump_speed) {
                     player->jump_speed = jump_speed;
-                    level->last_jumped = time_get_time_ms();
                 }
             }
         }
@@ -306,7 +311,6 @@ uint8_t player_move (levelp level)
         if (!player->fall_speed) {
             if (!player->jump_speed) {
                 player->jump_speed = jump_speed;
-                level->last_jumped = time_get_time_ms();
             }
         }
     }
@@ -373,6 +377,10 @@ uint8_t player_move (levelp level)
     y += (double)down * ud_delta;
 
     thing_move(level, player, x, y, up, down, left, right, fire);
+
+    if (jump) {
+        level->last_jumped = time_get_time_ms();
+    }
 
     /*
      * If no key then we allow the console.

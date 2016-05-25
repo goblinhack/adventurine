@@ -27,7 +27,7 @@ static int thing_hit_ground (levelp level,
             thing_is_monst(t) ||
             thing_is_bomb(t)) {
 
-            THING_LOG(t, "fell to fast (%f) and hit the ground", t->fall_speed);
+            THING_LOG(t, "fell too fast (%f) and hit the ground", t->fall_speed);
 
             (void) thing_hit(level, t, it, 1);
         }
@@ -90,7 +90,8 @@ int thing_fall (levelp level, thingp t)
 
     t->fall_speed += 0.010;
 
-    if (t->fall_speed > 0.4) {
+    t->falling_too_fast = false;
+    if (t->fall_speed - t->jump_speed > 0.4) {
         t->falling_too_fast = true;
     }
 

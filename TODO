@@ -2,22 +2,19 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
-- boulder onto dynamite should explode
-- map jigsaw boulder
 - boulder sound on hit ground
-- sword wiggles on moving
 - random gap in tall ropes
 - ropes get toooo tall
-- hp per level
-- sparks effect
-- miss effects
-- sparks on hitting
-- side piston push blocks - that can be stacked
 - monster patrol left/right
+- snake
 
 june
 ----
-- snake
+- sparks effect
+- miss effects
+- sparks on hitting
+- rocks crumble on hit
+- side piston push blocks - that can be stacked
 - rope spikes should hit monsts for damage
 - spider
 - bat
@@ -55,6 +52,10 @@ sep
 
 may
 ---
+- hp per level
+- sword wiggles on moving
+- boulder onto dynamite should explode
+- map jigsaw boulder
 - remove water in radius on explosion
 - dynamite doesn't push giant boulders
 - exit can fall through bottom of level

@@ -19,10 +19,13 @@ void thing_reached_exit (levelp level, thingp t)
     verify(t);
 
     t->score += 1000 * level->level_no;
+    t->hp ++;
 
     thing_leave_level(level, t);
 
     level_finished(level, true /* keep player*/);
+
+    player_wid_update(level);
 
     /*
      * To allow the player to be centered in the new level if it is a
