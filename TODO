@@ -2,10 +2,7 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
-- push boulder
 - boulder sound on hit ground
-- random gap in tall ropes
-- ropes get toooo tall
 - monster patrol left/right
 - snake
 
@@ -52,6 +49,9 @@ sep
 
 may
 ---
+- random gap in tall ropes
+- ropes get toooo tall
+- push boulder
 - fall too fast, death
 - glowing gold
 - make small rocks round`

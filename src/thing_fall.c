@@ -46,13 +46,6 @@ int thing_fall (levelp level, thingp t)
     double y = t->y + 0.015;
     thingp it;
 
-    if (thing_is_rope(t)) {
-        if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y + 1.0)) {
-            thing_place_rope(level, t, t->x, (int) t->y + 1.0);
-            return (false);
-        }
-    }
-
     if (thing_is_monst(t)  ||
         thing_is_ladder(t) ||
         thing_is_player(t)) {

@@ -15,18 +15,6 @@
 static void thing_jump_end (levelp level, thingp t)
 {
     t->jump_speed = 0;
-
-    if (thing_is_ropetop(t)) {
-        if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y)) {
-            thing_place_rope(level, t, t->x, (int) t->y);
-        }
-    }
-
-    if (thing_is_rope(t)) {
-        if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y + 1.0)) {
-            thing_place_rope(level, t, t->x, (int) t->y + 1.0);
-        }
-    }
 }
 
 /*
@@ -46,6 +34,16 @@ int thing_jump (levelp level, thingp t)
     }
 
     thing_wid_update(level, t, x, y, true, false /* is new */);
+
+    if (thing_is_ropetop(t)) {
+        if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y + 1.0)) {
+            thing_place_rope(level, t, t->x, (int) t->y + 1.0);
+        }
+
+        if (!thing_hit_fall_obstacle(level, t,  t->x, (int) t->y + 2.0)) {
+            thing_place_rope(level, t, t->x, (int) t->y + 2.0);
+        }
+    }
 
     t->jump_speed *= 0.90;
 
