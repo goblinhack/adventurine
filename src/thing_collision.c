@@ -1673,6 +1673,12 @@ thingp thing_hit_solid_obstacle (levelp level,
                 if (dist_then > dist_now) {
                     continue;
                 } else {
+
+                    /*
+                     * Crappy physics.
+                     */
+                    it->momentum += t->momentum / 2;
+                    t->momentum = 0;
                     return (it);
                 }
             }
