@@ -29,15 +29,14 @@ june
 
 aug
 ---
-- lava
 - shopkeeper
-- push blocks
-- push boulders
-- push crates smash
+- crates smash
 - keys/doors
+- lava
 - lava rocks do double damage and steam effects
-- mine gold 
-- mine gems 
+- mining, block damage needed
+- game music
+- exit lights should glow
 - hiscores
 
 sep
@@ -49,6 +48,8 @@ sep
 
 may
 ---
+- push blocks
+- push boulders
 - random gap in tall ropes
 - ropes get toooo tall
 - push boulder

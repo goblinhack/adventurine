@@ -1661,6 +1661,27 @@ thingp thing_hit_solid_obstacle (levelp level,
             }
 
             /*
+             * Push obstacles?
+             */
+            if (thing_is_obstacle(it)) {
+                double dist_now = DISTANCE(t->x, t->y, it->x, it->y);
+                double dist_then = DISTANCE(nx, ny, it->x, it->y);
+
+                /*
+                 * If inside the obstacle, no pushing!
+                 */
+                if (dist_then > dist_now) {
+                    continue;
+                } else {
+                    /*
+                     * If moving towards it, crappy physics.
+                     */
+                    it->momentum += t->momentum / 2;
+                    t->momentum = 0;
+                }
+            }
+
+            /*
              * You can walk away from a boulder, but not closer...
              */
             if (thing_is_boulder(it)) {
@@ -1673,12 +1694,6 @@ thingp thing_hit_solid_obstacle (levelp level,
                 if (dist_then > dist_now) {
                     continue;
                 } else {
-
-                    /*
-                     * Crappy physics.
-                     */
-                    it->momentum += t->momentum / 2;
-                    t->momentum = 0;
                     return (it);
                 }
             }
