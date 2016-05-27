@@ -6611,14 +6611,16 @@ static uint8_t resource_init_last (void *context)
      * Wearable items that are used as weapons. Shown first on list of player 
      * items.
      */
-    tp_load(THING_CLUB1, "club1");
-    tp_load(THING_STICK1, "stick1");
     tp_load(THING_PELLETS, "pellets");
     tp_load(THING_SHOTGUN, "shotgun");
     tp_load(THING_SWORD1, "sword1");
+#if 0
+    tp_load(THING_CLUB1, "club1");
+    tp_load(THING_STICK1, "stick1");
     tp_load(THING_AXE1, "axe1");
     tp_load(THING_SCYTHE1, "scythe1");
     tp_load(THING_BOW1, "bow1");
+#endif
 
     tp_load(THING_FOOD_ANY, "food_any");
     tp_load(THING_MOB_ANY, "mob_any");
@@ -6653,6 +6655,8 @@ static uint8_t resource_init_last (void *context)
     /*
      * Monsters
      */
+    tp_load(THING_SNAKE1, "snake1");
+#if 0
     tp_load(THING_ZOMBIE1, "zombie1");
     tp_load(THING_ZOMBIE2, "zombie2");
     tp_load(THING_ZOMBIE3, "zombie3");
@@ -6673,7 +6677,6 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_ORC3, "orc3");
     tp_load(THING_ORC4, "orc4");
     tp_load(THING_ORC5, "orc5");
-    tp_load(THING_SHOPKEEPER, "shopkeeper");
     tp_load(THING_GHOST1, "ghost1");
     tp_load(THING_GHOST2, "ghost2");
     tp_load(THING_GHOST3, "ghost3");
@@ -6685,17 +6688,21 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_SQUIDLING1, "squidling1");
     tp_load(THING_SQUIDLING2, "squidling2");
     tp_load(THING_EYEBAWL, "eyebawl");
+    tp_load(THING_SHOPKEEPER, "shopkeeper");
+#endif
 
     /*
      * Weapon animations.
      */
-    tp_load(THING_CLUB1_ANIM, "club1_anim");
-    tp_load(THING_STICK1_ANIM, "stick1_anim");
     tp_load(THING_SHOTGUN_ANIM, "shotgun_anim");
     tp_load(THING_SWORD1_ANIM, "sword1_anim");
+#if 0
+    tp_load(THING_CLUB1_ANIM, "club1_anim");
+    tp_load(THING_STICK1_ANIM, "stick1_anim");
     tp_load(THING_AXE1_ANIM, "axe1_anim");
     tp_load(THING_BOW1_ANIM, "bow1_anim");
     tp_load(THING_SCYTHE1_ANIM, "scythe1_anim");
+#endif
 
     tp_load(THING_ACTION_LEFT, "action_left");
     tp_load(THING_ACTION_RIGHT, "action_right");

@@ -1406,7 +1406,7 @@ static void jigpiece_get_bounds (jigpiece_t *j)
  *
  * Replace a fragment of the maze to make it more interesting.
  */
-static void jigpiece_add_frag (dungeon_t *dg, frag_t *fragmap, int chance)
+static int jigpiece_add_frag (dungeon_t *dg, frag_t *fragmap, int chance)
 {
     int32_t i;
     int32_t c;
@@ -1421,7 +1421,7 @@ static void jigpiece_add_frag (dungeon_t *dg, frag_t *fragmap, int chance)
     int32_t frag;
     int32_t alt;
     int32_t map;
-
+    int placed = 0;
     int F;
 
     for (F = 0; F < fragmap->frag_cnt; F++) {
@@ -1546,6 +1546,8 @@ static void jigpiece_add_frag (dungeon_t *dg, frag_t *fragmap, int chance)
                         }
                     }
 
+                    placed++;
+
                     break;
 next:
                     continue;
@@ -1553,6 +1555,8 @@ next:
             }
         }
     }
+
+    return (placed);
 }
 
 /*
@@ -3232,15 +3236,22 @@ static int32_t generate_level (dungeon_t *dg,
 static int32_t generate_add_frags (dungeon_t *dg,
                                    frag_t *fragmap,
                                    int cnt, 
+                                   int want,
                                    int chance)
 {
     int i = 0;
+    int placed = 0;
+
     while (cnt--) {
         i++;
 
         jigpiece_add_triggers(dg, fragmap);
 
-        jigpiece_add_frag(dg, fragmap, chance);
+        placed += jigpiece_add_frag(dg, fragmap, chance);
+
+        if (placed >= want) {
+            return (0);
+        }
     }
 
     maze_convert_to_map(dg);
@@ -3925,8 +3936,16 @@ void map_jigsaw_generate (levelp level,
         }
 #endif
 
+        if (!finalize_level(dg)) {
+            maze_seed += myrand();
+            LOG("Maze: generate level %u, finalize level failed, seed %u", 
+                dg->depth, maze_seed);
+            continue;
+        }
+
         if (!generate_add_frags(dg, frag_monst,
-                                1, // repeat count
+                                1000, // repeat count
+                                10, // want this many
                                 1000// chance to place fragment
                                 )) {
             LOG("Maze: generate level %u, failed, add monst frags, seed %u", 
@@ -3936,13 +3955,6 @@ void map_jigsaw_generate (levelp level,
         }
 
         maze_add_final_borders();
-
-        if (!finalize_level(dg)) {
-            maze_seed += myrand();
-            LOG("Maze: generate level %u, finalize level failed, seed %u", 
-                dg->depth, maze_seed);
-            continue;
-        }
 
         break;
     }

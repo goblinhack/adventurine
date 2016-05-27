@@ -10,22 +10,20 @@ june
 ----
 - sparks effect
 - miss effects
+- wham / kpow
 - sparks on hitting
-- rocks crumble on hit
-- side piston push blocks - that can be stacked
 - rope spikes should hit monsts for damage
-- spider
 - bat
 - cobwebs
+- spider
 - zombies
 - massive blood splatter
-- moving spikes
 - dissolving floor
-- wham / kpow
 - rotating spike balls
+- side piston push blocks - that can be stacked
 - dropping spikes
 - side spikes
-- chains
+- balloon
 
 aug
 ---
@@ -34,6 +32,7 @@ aug
 - keys/doors
 - lava
 - lava rocks do double damage and steam effects
+- rocks crumble on hit
 - mining, block damage needed
 - game music
 - exit lights should glow
@@ -41,8 +40,11 @@ aug
 
 sep
 ---
+- chains
 - secret levels
 - GIANT treasure/diamonds
+- implement steam as upside down water
+- explosive gases and torches
 
 
 
