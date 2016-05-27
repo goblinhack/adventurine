@@ -265,7 +265,9 @@ void thing_wid_move (levelp level,
     /*
      * Player moves better in small increments.
      */
-    smooth = false;
+    if (thing_is_player_or_owned_by_player(level, t)) {
+        smooth = false;
+    }
 
     double ms = 1000;
     ms = ms / (1.0 / dist);

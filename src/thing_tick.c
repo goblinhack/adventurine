@@ -318,25 +318,6 @@ static int thing_tick_all_things (levelp level)
             }
         }
 
-        if (!wid_is_moving(w)) {
-            /*
-             * Only if it finished moving the last delta.
-             */
-            if ((t->dx != 0) || (t->dy != 0)) {
-                double fnexthop_x = t->x + t->dx;
-                double fnexthop_y = t->y + t->dy;
-
-                thing_move(level, t,
-                           fnexthop_x,
-                           fnexthop_y,
-                           fnexthop_y < t->y,
-                           fnexthop_y > t->y,
-                           fnexthop_x < t->x,
-                           fnexthop_x > t->x,
-                           false /* fire */);
-            }
-        }
-
         /*
          * If stopped moving, look for a next hop.
          */
