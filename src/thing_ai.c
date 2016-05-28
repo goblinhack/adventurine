@@ -885,6 +885,43 @@ thing_wander_in_straight_lines (levelp level,
     return (false);
 }
 
+static int 
+thing_wander_in_straight_lines_lr (levelp level,
+                                   thingp t, 
+                                   int32_t *nexthop_x, 
+                                   int32_t *nexthop_y)
+{
+    if ((t->dx < 0) && (t->dy == 0)) {
+        *nexthop_x = t->x + 1;
+        *nexthop_y = t->y;
+        if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
+
+    } else if ((t->dx > 0) && (t->dy == 0)) {
+
+        *nexthop_x = t->x - 1;
+        *nexthop_y = t->y;
+        if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
+
+    } else if ((t->dx == 0) && (t->dy < 0)) {
+
+        *nexthop_x = t->x + 1;
+        *nexthop_y = t->y;
+        if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
+
+    } else {
+
+        *nexthop_x = t->x - 1;
+        *nexthop_y = t->y;
+        if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
+
+        *nexthop_x = t->x + 1;
+        *nexthop_y = t->y;
+        if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
+    }
+
+    return (false);
+}
+
 uint8_t thing_find_nexthop (levelp level,
                             thingp t, 
                             int32_t *nexthop_x, 
@@ -896,18 +933,28 @@ uint8_t thing_find_nexthop (levelp level,
          */
         if (!t->dx && !t->dy) {
             static int dir;
-            switch (dir & 3) {
-            case 0: t->dx = -1; t->dy = 0;  break;
-            case 1: t->dx =  1; t->dy = 0;  break;
-            case 2: t->dx =  0; t->dy = -1; break;
-            case 3: t->dx =  0; t->dy =  1; break;
+
+            if (thing_is_wanderer_lr(t)) {
+                switch (dir & 3) {
+                    case 0: t->dx = -1; t->dy = 0; break;
+                    case 1: t->dx =  1; t->dy = 0; break;
+                    case 2: t->dx =  0; t->dy = 0; break;
+                    case 3: t->dx =  0; t->dy = 0; break;
+                }
+            } else {
+                switch (dir & 3) {
+                    case 0: t->dx = -1; t->dy = 0;  break;
+                    case 1: t->dx =  1; t->dy = 0;  break;
+                    case 2: t->dx =  0; t->dy = -1; break;
+                    case 3: t->dx =  0; t->dy =  1; break;
+                }
             }
 
             dir++;
         }
 
-        *nexthop_x = t->x + t->dx;
-        *nexthop_y = t->y + t->dy;
+        *nexthop_x = rintf(t->x + (double)t->dx);
+        *nexthop_y = rintf(t->y + (double)t->dy);
 
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) {
             return (true);
@@ -916,10 +963,18 @@ uint8_t thing_find_nexthop (levelp level,
         double tx = t->x;
         double ty = t->y;
 
-        if (thing_wander_in_straight_lines(level, t, nexthop_x, nexthop_y)) {
-            t->dx = *nexthop_x - tx;
-            t->dy = *nexthop_y - ty;
-            return (true);
+        if (thing_is_wanderer_lr(t)) {
+            if (thing_wander_in_straight_lines_lr(level, t, nexthop_x, nexthop_y)) {
+                t->dx = rintf(*nexthop_x - tx);
+                t->dy = rintf(*nexthop_y - ty);
+                return (true);
+            }
+        } else {
+            if (thing_wander_in_straight_lines(level, t, nexthop_x, nexthop_y)) {
+                t->dx = rintf(*nexthop_x - tx);
+                t->dy = rintf(*nexthop_y - ty);
+                return (true);
+            }
         }
 
         return (false);

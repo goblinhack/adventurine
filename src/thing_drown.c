@@ -102,6 +102,5 @@ int thing_drown (levelp level, thingp t)
 
     }
 
-
     return (true);
 }

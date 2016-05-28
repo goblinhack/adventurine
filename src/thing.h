@@ -1054,11 +1054,11 @@ static inline uint8_t thing_is_rrr24 (thingp t)
     return (tp_is_rrr24(thing_tp(t)));
 }
 
-static inline uint8_t thing_is_rrr25 (thingp t)
+static inline uint8_t thing_is_wanderer_lr (thingp t)
 {
     verify(t);
 
-    return (tp_is_rrr25(thing_tp(t)));
+    return (tp_is_wanderer_lr(thing_tp(t)));
 }
 
 static inline uint8_t thing_is_boulder (thingp t)
