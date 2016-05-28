@@ -491,20 +491,21 @@ static void level_set_walls (levelp level)
 
     int i;
     for (i = 0; i < DMAP_MAP_MAX; i++) {
-        memset(level->dmap[i].walls, ' ',
+        memset(level->dmap[i].walls, '+',
             sizeof(level->dmap[i].walls));
-        memset(level->dmap[i].walls, ' ',
+        memset(level->dmap[i].walls, '+',
             sizeof(level->dmap[i].walls));
     }
 
-    memset(level->walls.walls, ' ',
+    memset(level->walls.walls, '+',
            sizeof(level->walls.walls));
-    memset(level->doors.walls, ' ',
+    memset(level->doors.walls, '+',
            sizeof(level->doors.walls));
 
     for (z = MAP_DEPTH_WALL; z < MAP_DEPTH; z++) {
         for (x = 0; x < MAP_WIDTH; x++) {
             for (y = 0; y < MAP_HEIGHT; y++) {
+
                 tree_root **tree = 
                     w->grid->grid_of_trees[z] + (y * w->grid->width) + x;
                 widgridnode *node;
@@ -524,41 +525,48 @@ static void level_set_walls (levelp level)
                     /*
                      * Identify obstacles.
                      */
-                    if (thing_is_wall(t)        ||
-                        thing_is_rock(t)        ||
-                        thing_is_door(t)        ||
-                        thing_is_mob_spawner(t) ||
-                        thing_is_teleport(t)    ||
-                        thing_is_lava(t)        ||
-                        thing_is_water(t)       ||
-                        thing_is_acid(t)        ||
-                        thing_is_exit(t)) {
+                    if (thing_is_door(t)) {
                         level->dmap[DMAP_MAP_PLAYER_TARGET_TREAT_DOORS_AS_WALLS].walls[x][y] = '+';
+                        continue;
                     }
 
                     /*
                      * Same as above, but treat doors as passable.
                      */
-                    if (thing_is_wall(t)        ||
-                        thing_is_rock(t)        ||
-                        thing_is_mob_spawner(t) ||
-                        thing_is_teleport(t)    ||
-                        thing_is_lava(t)        ||
-                        thing_is_water(t)       ||
-                        thing_is_acid(t)        ||
-                        thing_is_exit(t)) {
-                        level->dmap[DMAP_MAP_PLAYER_TARGET_TREAT_DOORS_AS_PASSABLE].walls[x][y] = '+';
+                    if (thing_is_door(t)) {
+                        level->dmap[DMAP_MAP_PLAYER_TARGET_TREAT_DOORS_AS_PASSABLE].walls[x][y] = ' ';
+                        continue;
                     }
 
-                    if (thing_is_wall(t) ||
-                        thing_is_rock(t) ||
-                        thing_is_door(t)) {
-                        level->doors.walls[x][y] = '+';
+                    char c = 0;
+
+                    if (thing_is_wall(t)) {
+                        if (!map_is_wall_at(level, x, y - 1)) {
+                            c = ' ';
+                        }
+                    }
+
+                    if (thing_is_ladder(t)) {
+                        c = ' ';
+                    }
+
+                    if (c) {
+                        level->dmap[DMAP_MAP_PLAYER_TARGET_TREAT_DOORS_AS_WALLS].walls[x][y] = c;
+                        level->dmap[DMAP_MAP_PLAYER_TARGET_TREAT_DOORS_AS_PASSABLE].walls[x][y] = c;
+                        level->doors.walls[x][y] = c;
                     }
                 }
             }
         }
     }
+
+    for (y = 0; y < MAP_HEIGHT; y++) {
+        for (x = 0; x < MAP_WIDTH; x++) {
+            printf("%c", level->doors.walls[x][y]);
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
 
 /*

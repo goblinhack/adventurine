@@ -94,6 +94,10 @@ tpp random_obstacle (void)
 
         uint32_t id = myrand() % TP_MAX_ID;
 
+        if (id == THING_BOULDER2) {
+            continue;
+        }
+
         tpp tp = id_to_tp(id);
         if (!tp) {
             continue;
