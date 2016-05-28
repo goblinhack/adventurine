@@ -3548,12 +3548,6 @@ static tpp map_char_to_tp (char c,
                 "gem1",
                 "gem2",
                 "gem3",
-                "smallrock1",
-                "smallrock2",
-                "smallrock3",
-                "smallrock4",
-                "smallrock5",
-                "smallrock6",
             };
 
             const char *name = loot[myrand() % ARRAY_SIZE(loot)];
@@ -3564,6 +3558,12 @@ static tpp map_char_to_tp (char c,
 
             int r =  myrand() % 10000;
             if (r < tp_get_d10000_chance_of_appearing(tp)) {
+                map_tp[x][y][tp_get_z_depth(tp)] = tp;
+            }
+
+            r =  myrand() % 10000;
+            if (r < 100) {
+                tp = id_to_tp(THING_LIGHT2);
                 map_tp[x][y][tp_get_z_depth(tp)] = tp;
             }
         }

@@ -6633,6 +6633,7 @@ static uint8_t resource_init_last (void *context)
      */
     tp_load(THING_KEY, "key");
     tp_load(THING_LIGHT, "light");
+    tp_load(THING_LIGHT2, "light2");
     tp_load(THING_TORCH, "torch");
 
     /*
