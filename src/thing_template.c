@@ -546,7 +546,7 @@ void demarshal_thing_template (demarshal_p ctx, tpp t)
         GET_OPT_NAMED_INT32(ctx, "blit_left_off", t->blit_left_off);
         GET_OPT_NAMED_INT32(ctx, "blit_right_off", t->blit_right_off);
         GET_OPT_NAMED_UINT32(ctx, "ppp6", t->ppp6);
-        GET_OPT_NAMED_UINT32(ctx, "ppp7", t->ppp7);
+        GET_OPT_NAMED_UINT32(ctx, "drown_in_secs", t->drown_in_secs);
         GET_OPT_NAMED_UINT32(ctx, "min_appear_depth", t->min_appear_depth);
         GET_OPT_NAMED_UINT32(ctx, "max_appear_depth", t->max_appear_depth);
         GET_OPT_NAMED_UINT32(ctx, "jump_speed", t->jump_speed);
@@ -778,7 +778,7 @@ void marshal_thing_template (marshal_p ctx, tpp t)
     PUT_NAMED_INT32(ctx, "blit_left_off", t->blit_left_off);
     PUT_NAMED_INT32(ctx, "blit_right_off", t->blit_right_off);
     PUT_NAMED_INT32(ctx, "ppp6", t->ppp6);
-    PUT_NAMED_INT32(ctx, "ppp7", t->ppp7);
+    PUT_NAMED_INT32(ctx, "drown_in_secs", t->drown_in_secs);
     PUT_NAMED_INT32(ctx, "min_appear_depth", t->min_appear_depth);
     PUT_NAMED_INT32(ctx, "max_appear_depth", t->max_appear_depth);
     PUT_NAMED_INT32(ctx, "jump_speed", t->jump_speed);
@@ -1158,9 +1158,9 @@ uint32_t tp_get_ppp6 (tpp t)
     return (t->ppp6);
 }
 
-uint32_t tp_get_ppp7 (tpp t)
+uint32_t tp_get_drown_in_secs (tpp t)
 {
-    return (t->ppp7);
+    return (t->drown_in_secs);
 }
 
 uint32_t tp_get_min_appear_depth (tpp t)

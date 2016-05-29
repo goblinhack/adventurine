@@ -222,7 +222,7 @@ typedef struct tp_ {
     int32_t blit_right_off;
 
     uint32_t ppp6;
-    uint32_t ppp7;
+    uint32_t drown_in_secs;
     uint32_t min_appear_depth;
     uint32_t max_appear_depth;
     uint32_t jump_speed;
@@ -465,7 +465,7 @@ int32_t tp_get_blit_bot_off(tpp);
 int32_t tp_get_blit_left_off(tpp);
 int32_t tp_get_blit_right_off(tpp);
 uint32_t tp_get_ppp6(tpp);
-uint32_t tp_get_ppp7(tpp);
+uint32_t tp_get_drown_in_secs(tpp);
 uint32_t tp_get_min_appear_depth(tpp);
 uint32_t tp_get_max_appear_depth(tpp);
 uint32_t tp_get_jump_speed(tpp);

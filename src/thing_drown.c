@@ -18,6 +18,8 @@
  */
 int thing_drown (levelp level, thingp t)
 {
+    tpp tp = thing_tp(t);
+
     if (thing_is_submerged(level, t)) {
 
         if (tp_can_drown(thing_tp(t))) {
@@ -35,7 +37,8 @@ int thing_drown (levelp level, thingp t)
                     }
                 }
 
-                if (time_have_x_tenths_passed_since(50, t->timestamp_last_breath)) {
+                if (time_have_x_tenths_passed_since(tp_get_drown_in_secs(tp),
+                                                    t->timestamp_last_breath)) {
 
                     if (t->breath > 8) {
                         level_place_blood_crit(level, t, t->x, t->y);

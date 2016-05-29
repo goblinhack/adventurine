@@ -303,6 +303,7 @@ void thing_wid_move (levelp level,
     if (thing_is_player(t) || 
         thing_is_monst(t)) {
 
+        if (thing_is_player(t)) {
             if (t->is_submerged) {
                 if (thing_is_dir_left(t) ||
                     thing_is_dir_tl(t) ||
@@ -323,6 +324,7 @@ void thing_wid_move (levelp level,
             wid_effect_sways(t->wid);
             wid_set_animate(t->wid, false);
             wid_set_no_shape(t->wid);
+        }
 
         if (!t->fall_speed && !t->jump_speed) {
             if (!w->bouncing) {
