@@ -1674,7 +1674,7 @@ thingp thing_hit_solid_obstacle (levelp level,
                     continue;
                 } else {
                     /*
-                     * If moving towards it, crappy physics.
+                     * If moving towards it; crimes against physics.
                      */
                     it->momentum += t->momentum / 2;
                     t->momentum = 0;

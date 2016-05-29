@@ -2,11 +2,12 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
-- giant boulder gets stuck on ceiling
-- snakes jump like idiots
+- jump on snakes
+- snakes should not jump to death
+- no spawn in water for snakes
+- push should need more than a pixel overlap to work
+- snake falls like an idiot
 - boulder sound on hit ground
-- monster patrol left/right
-- snake
 
 june
 ----
@@ -52,6 +53,10 @@ sep
 
 may
 ---
+- snake
+- giant boulder gets stuck on ceiling
+- snakes jump like idiots
+- monster patrol left/right
 - push blocks
 - push boulders
 - random gap in tall ropes

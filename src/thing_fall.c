@@ -20,6 +20,12 @@ static int thing_hit_ground (levelp level,
                              thingp t, 
                              thingp it)
 {
+    if (thing_is_player(t)) {
+        if (thing_is_monst(it)) {
+            (void) thing_hit(level, it, t, 1);
+        }
+    }
+
     if (t->falling_too_fast) {
         t->falling_too_fast = 0;
 
