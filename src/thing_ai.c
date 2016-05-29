@@ -827,58 +827,58 @@ thing_wander_in_straight_lines (levelp level,
                                 int32_t *nexthop_y)
 {
     if ((t->dx < 0) && (t->dy == 0)) {
-        *nexthop_x = t->x;
-        *nexthop_y = t->y - 1;
+        *nexthop_x = rintf(t->x);
+        *nexthop_y = rintf(t->y - 1);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = t->x;
-        *nexthop_y = t->y + 1;
+        *nexthop_x = rintf(t->x);
+        *nexthop_y = rintf(t->y + 1);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = t->x + 1;
-        *nexthop_y = t->y;
+        *nexthop_x = rintf(t->x + 1);
+        *nexthop_y = rintf(t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
     } else if ((t->dx > 0) && (t->dy == 0)) {
 
-        *nexthop_x = t->x;
-        *nexthop_y = t->y + 1;
+        *nexthop_x = rintf(t->x);
+        *nexthop_y = rintf(t->y + 1);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = t->x;
-        *nexthop_y = t->y - 1;
+        *nexthop_x = rintf(t->x);
+        *nexthop_y = rintf(t->y - 1);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = t->x - 1;
-        *nexthop_y = t->y;
+        *nexthop_x = rintf(t->x - 1);
+        *nexthop_y = rintf(t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
     } else if ((t->dx == 0) && (t->dy < 0)) {
 
-        *nexthop_x = t->x + 1;
-        *nexthop_y = t->y;
+        *nexthop_x = rintf(t->x + 1);
+        *nexthop_y = rintf(t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = t->x - 1;
-        *nexthop_y = t->y;
+        *nexthop_x = rintf(t->x - 1);
+        *nexthop_y = rintf(t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = t->x;
-        *nexthop_y = t->y + 1;
+        *nexthop_x = rintf(t->x);
+        *nexthop_y = rintf(t->y + 1);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
     } else if ((t->dx == 0) && (t->dy > 0)) {
 
-        *nexthop_x = t->x - 1;
-        *nexthop_y = t->y;
+        *nexthop_x = rintf(t->x - 1);
+        *nexthop_y = rintf(t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = t->x + 1;
-        *nexthop_y = t->y;
+        *nexthop_x = rintf(t->x + 1);
+        *nexthop_y = rintf(t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = t->x;
-        *nexthop_y = t->y - 1;
+        *nexthop_x = rintf(t->x);
+        *nexthop_y = rintf(t->y - 1);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
     }
 
@@ -892,30 +892,30 @@ thing_wander_in_straight_lines_lr (levelp level,
                                    int32_t *nexthop_y)
 {
     if ((t->dx < 0) && (t->dy == 0)) {
-        *nexthop_x = t->x + 1;
-        *nexthop_y = t->y;
+        *nexthop_x = rintf(t->x + 1);
+        *nexthop_y = rintf(t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
     } else if ((t->dx > 0) && (t->dy == 0)) {
 
-        *nexthop_x = t->x - 1;
-        *nexthop_y = t->y;
+        *nexthop_x = rintf(t->x - 1);
+        *nexthop_y = rintf(t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
     } else if ((t->dx == 0) && (t->dy < 0)) {
 
-        *nexthop_x = t->x + 1;
-        *nexthop_y = t->y;
+        *nexthop_x = rintf(t->x + 1);
+        *nexthop_y = rintf(t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
     } else {
 
-        *nexthop_x = t->x - 1;
-        *nexthop_y = t->y;
+        *nexthop_x = rintf(t->x - 1);
+        *nexthop_y = rintf(t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = t->x + 1;
-        *nexthop_y = t->y;
+        *nexthop_x = rintf(t->x + 1);
+        *nexthop_y = rintf(t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
     }
 
@@ -935,14 +935,14 @@ uint8_t thing_find_nexthop (levelp level,
             static int dir;
 
             if (thing_is_wanderer_lr(t)) {
-                switch (dir & 3) {
+                switch (dir % 4) {
                     case 0: t->dx = -1; t->dy = 0; break;
                     case 1: t->dx =  1; t->dy = 0; break;
                     case 2: t->dx =  0; t->dy = 0; break;
                     case 3: t->dx =  0; t->dy = 0; break;
                 }
             } else {
-                switch (dir & 3) {
+                switch (dir % 4) {
                     case 0: t->dx = -1; t->dy = 0;  break;
                     case 1: t->dx =  1; t->dy = 0;  break;
                     case 2: t->dx =  0; t->dy = -1; break;
@@ -966,7 +966,7 @@ uint8_t thing_find_nexthop (levelp level,
         if (thing_is_wanderer_lr(t)) {
             if (thing_wander_in_straight_lines_lr(level, t, nexthop_x, nexthop_y)) {
                 t->dx = rintf(*nexthop_x - tx);
-                t->dy = rintf(*nexthop_y - ty);
+                t->dy = 0;
                 return (true);
             }
         } else {

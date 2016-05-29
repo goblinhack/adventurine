@@ -600,7 +600,7 @@ void thing_animate (levelp level, thingp t)
      */
     uint32_t delay = thing_tile_delay(tile);
     if (delay) {
-        delay = myrand() % delay;
+        delay = delay + (myrand() % delay) / 10;
     }
 
     t->timestamp_change_to_next_frame = time_get_time_ms() + delay;

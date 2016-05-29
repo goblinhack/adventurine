@@ -10,7 +10,6 @@
 #include "color.h"
 #include "wid_popup.h"
 #include "string_util.h"
-#include "name.h"
 #include "thing_template.h"
 #include "math_util.h"
 #include "thing.h"

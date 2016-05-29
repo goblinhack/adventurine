@@ -560,6 +560,7 @@ static void level_set_walls (levelp level)
         }
     }
 
+#if 0
     for (y = 0; y < MAP_HEIGHT; y++) {
         for (x = 0; x < MAP_WIDTH; x++) {
             printf("%c", level->doors.walls[x][y]);
@@ -567,6 +568,7 @@ static void level_set_walls (levelp level)
         printf("\n");
     }
     printf("\n");
+#endif
 }
 
 /*

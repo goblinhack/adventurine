@@ -32,7 +32,6 @@ GAME_OBJECTS=				\
     $(OBJDIR)/music.o 			\
     $(OBJDIR)/mzip_file.o 		\
     $(OBJDIR)/mzip_lib.o 		\
-    $(OBJDIR)/name.o 			\
     $(OBJDIR)/pcg_basic.o 		\
     $(OBJDIR)/pixel.o 			\
     $(OBJDIR)/player.o 			\

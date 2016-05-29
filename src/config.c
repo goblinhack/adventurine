@@ -9,7 +9,6 @@
 #include "main.h"
 #include "marshal.h"
 #include "string_util.h"
-#include "name.h"
 
 struct game_ game;
 
