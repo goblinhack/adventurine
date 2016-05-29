@@ -2,7 +2,9 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
+- snake collision map
 - jump on snakes
+- snakes on spikes jump around crazily
 - snakes should not jump to death
 - no spawn in water for snakes
 - push should need more than a pixel overlap to work

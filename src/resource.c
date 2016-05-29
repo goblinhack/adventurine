@@ -6567,7 +6567,6 @@ static uint8_t resource_init_last (void *context)
     tp_load(THING_ENTRANCE1, "entrance1");
     tp_load(THING_TELEPORT1, "teleport1");
     tp_load(THING_LAVA1, "lava1");
-    tp_load(THING_ACID1, "acid1");
     tp_load(THING_GHOSTMOB1, "bonepile1");
     tp_load(THING_GHOSTMOB2, "bonepile2");
     tp_load(THING_GHOSTMOB3, "bonepile3");

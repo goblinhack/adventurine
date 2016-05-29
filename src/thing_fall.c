@@ -20,7 +20,12 @@ static int thing_hit_ground (levelp level,
                              thingp t, 
                              thingp it)
 {
-    if (thing_is_player(t)) {
+if (thing_is_player(t)) {
+if (t->fall_speed > 0) {
+CON("%f it %s",t->fall_speed, thing_logname(it));
+}
+}
+    if (t->fall_speed > THING_FALL_SPEED_HIT_MONST) {
         if (thing_is_monst(it)) {
             (void) thing_hit(level, it, t, 1);
         }
@@ -71,7 +76,7 @@ int thing_fall (levelp level, thingp t)
     if (thing_is_monst(t)  ||
         thing_is_player(t)) {
 
-        if (t->fall_speed > 0.1) {
+        if (t->fall_speed > THING_FALL_SPEED_HIT_SPIKES) {
             it = thing_overlaps(level, t, t->x, t->y, thing_is_spikes);
             if (it) {
                 THING_LOG(t, "fell onto spikes (%f)", t->fall_speed);
@@ -87,10 +92,10 @@ int thing_fall (levelp level, thingp t)
         return (false);
     }
 
-    t->fall_speed += 0.010;
+    t->fall_speed += THING_FALL_SPEED_GRAVITY;
 
     t->falling_too_fast = false;
-    if (t->fall_speed - t->jump_speed > 0.4) {
+    if (t->fall_speed - t->jump_speed > THING_FALL_SPEED_TOO_FAST) {
         t->falling_too_fast = true;
     }
 

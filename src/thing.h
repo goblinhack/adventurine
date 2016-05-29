@@ -2043,3 +2043,11 @@ static void inline thing_set_velocity (thingp t, double x, double y)
     t->momentum = x;
     t->fall_speed = y;
 }
+
+#define THING_FALL_SPEED_HIT_MONST          0.008
+#define THING_FALL_SPEED_CLING_ONTO_WALLS   0.2
+#define THING_FALL_SPEED_TOO_FAST           0.3
+#define THING_FALL_SPEED_GRAVITY            0.008
+#define THING_FALL_SPEED_HIT_SPIKES         0.1
+#define THING_FALL_SPEED_BOULDER_HURTS      0.05
+#define THING_PUSH_SPEED_OBJ                0.1

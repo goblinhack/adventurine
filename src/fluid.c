@@ -110,7 +110,7 @@ void fluid_init (levelp level)
                 }
 
                 uint16_t r;
-                for (r = 0; r < 20; r++) {
+                for (r = 0; r < 2; r++) {
                     uint16_t fx;
                     uint16_t fy;
 

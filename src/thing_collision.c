@@ -20,7 +20,6 @@ typedef struct {
 
 #define MAX_THING_POSSIBLE_HIT 16
 
-static const double boulder_collision_hurt_speed = 0.05;
 static thing_possible_hit thing_possible_hits[MAX_THING_POSSIBLE_HIT];
 static uint32_t thing_possible_hit_size;
 static const int def_collision_radius = 4;
@@ -548,7 +547,9 @@ static uint8_t things_overlap (levelp level,
     widp Aw = thing_wid(A);
     widp Bw = thing_wid(B);
 
-    if (thing_is_wall(A) || thing_is_door(A)) {
+    if ((thing_is_player(A) && thing_is_monst(B)) ||
+        (thing_is_player(B) && thing_is_monst(A))) {
+
         tilep tileA = wid_get_tile(Aw);
         if (!tileA) {
             DIE("no tile for thing A %s", thing_logname(A));
@@ -560,51 +561,6 @@ static uint8_t things_overlap (levelp level,
         Apy1 = tileA->py1;
         Apy2 = tileA->py2;
 
-#if 0
-        double tile_width = (Apx2 - Apx1);
-        double tile_height = (Apy2 - Apy1);
-
-        Apy1 -= tile_height / 3.0;
-        Apx2 += tile_width / 3.0;
-#endif
-
-    } else if (thing_is_collision_map_large(A)) {
-        Apx1 = collision_map_large_x1;
-        Apx2 = collision_map_large_x2;
-        Apy1 = collision_map_large_y1;
-        Apy2 = collision_map_large_y2;
-    } else if (thing_is_collision_map_medium(A)) {
-        Apx1 = collision_map_medium_x1;
-        Apx2 = collision_map_medium_x2;
-        Apy1 = collision_map_medium_y1;
-        Apy2 = collision_map_medium_y2;
-    } else if (thing_is_collision_map_small(A)) {
-        Apx1 = collision_map_small_x1;
-        Apx2 = collision_map_small_x2;
-        Apy1 = collision_map_small_y1;
-        Apy2 = collision_map_small_y2;
-    } else if (thing_is_collision_map_tiny(A)) {
-        Apx1 = collision_map_tiny_x1;
-        Apx2 = collision_map_tiny_x2;
-        Apy1 = collision_map_tiny_y1;
-        Apy2 = collision_map_tiny_y2;
-    } else {
-        /*
-         * Just use pixel and alpha values.
-         */
-        tilep tileA = wid_get_tile(Aw);
-        if (!tileA) {
-            DIE("no tile for thing A %s", thing_logname(A));
-            return (false);
-        }
-
-        Apx1 = tileA->px1;
-        Apx2 = tileA->px2;
-        Apy1 = tileA->py1;
-        Apy2 = tileA->py2;
-    }
-
-    if (thing_is_wall(B) || thing_is_door(B)) {
         tilep tileB = wid_get_tile(Bw);
         if (!tileB) {
             DIE("no tile for thing B %s", thing_logname(B));
@@ -616,48 +572,118 @@ static uint8_t things_overlap (levelp level,
         Bpy1 = tileB->py1;
         Bpy2 = tileB->py2;
 
-#if 0
-        double tile_width = (Bpx2 - Bpx1);
-        double tile_height = (Bpy2 - Bpy1);
+    } else {
+        if (thing_is_wall(A) || thing_is_door(A)) {
+            tilep tileA = wid_get_tile(Aw);
+            if (!tileA) {
+                DIE("no tile for thing A %s", thing_logname(A));
+                return (false);
+            }
 
-        Bpy1 -= tile_height / 3.0;
-        Bpx2 += tile_width / 3.0;
+            Apx1 = tileA->px1;
+            Apx2 = tileA->px2;
+            Apy1 = tileA->py1;
+            Apy2 = tileA->py2;
+
+#if 0
+            double tile_width = (Apx2 - Apx1);
+            double tile_height = (Apy2 - Apy1);
+
+            Apy1 -= tile_height / 3.0;
+            Apx2 += tile_width / 3.0;
 #endif
 
-    } else if (thing_is_collision_map_large(B)) {
-        Bpx1 = collision_map_large_x1;
-        Bpx2 = collision_map_large_x2;
-        Bpy1 = collision_map_large_y1;
-        Bpy2 = collision_map_large_y2;
-    } else if (thing_is_collision_map_medium(B)) {
-        Bpx1 = collision_map_medium_x1;
-        Bpx2 = collision_map_medium_x2;
-        Bpy1 = collision_map_medium_y1;
-        Bpy2 = collision_map_medium_y2;
-    } else if (thing_is_collision_map_small(B)) {
-        Bpx1 = collision_map_small_x1;
-        Bpx2 = collision_map_small_x2;
-        Bpy1 = collision_map_small_y1;
-        Bpy2 = collision_map_small_y2;
-    } else if (thing_is_collision_map_medium(B)) {
-        Bpx1 = collision_map_medium_x1;
-        Bpx2 = collision_map_medium_x2;
-        Bpy1 = collision_map_medium_y1;
-        Bpy2 = collision_map_medium_y2;
-    } else {
-        /*
-         * Just use pixel and alpha values.
-         */
-        tilep tileB = wid_get_tile(Bw);
-        if (!tileB) {
-            DIE("no tile for thing B %s", thing_logname(B));
-            return (false);
+        } else if (thing_is_collision_map_large(A)) {
+            Apx1 = collision_map_large_x1;
+            Apx2 = collision_map_large_x2;
+            Apy1 = collision_map_large_y1;
+            Apy2 = collision_map_large_y2;
+        } else if (thing_is_collision_map_medium(A)) {
+            Apx1 = collision_map_medium_x1;
+            Apx2 = collision_map_medium_x2;
+            Apy1 = collision_map_medium_y1;
+            Apy2 = collision_map_medium_y2;
+        } else if (thing_is_collision_map_small(A)) {
+            Apx1 = collision_map_small_x1;
+            Apx2 = collision_map_small_x2;
+            Apy1 = collision_map_small_y1;
+            Apy2 = collision_map_small_y2;
+        } else if (thing_is_collision_map_tiny(A)) {
+            Apx1 = collision_map_tiny_x1;
+            Apx2 = collision_map_tiny_x2;
+            Apy1 = collision_map_tiny_y1;
+            Apy2 = collision_map_tiny_y2;
+        } else {
+            /*
+            * Just use pixel and alpha values.
+            */
+            tilep tileA = wid_get_tile(Aw);
+            if (!tileA) {
+                DIE("no tile for thing A %s", thing_logname(A));
+                return (false);
+            }
+
+            Apx1 = tileA->px1;
+            Apx2 = tileA->px2;
+            Apy1 = tileA->py1;
+            Apy2 = tileA->py2;
         }
 
-        Bpx1 = tileB->px1;
-        Bpx2 = tileB->px2;
-        Bpy1 = tileB->py1;
-        Bpy2 = tileB->py2;
+        if (thing_is_wall(B) || thing_is_door(B)) {
+            tilep tileB = wid_get_tile(Bw);
+            if (!tileB) {
+                DIE("no tile for thing B %s", thing_logname(B));
+                return (false);
+            }
+
+            Bpx1 = tileB->px1;
+            Bpx2 = tileB->px2;
+            Bpy1 = tileB->py1;
+            Bpy2 = tileB->py2;
+
+#if 0
+            double tile_width = (Bpx2 - Bpx1);
+            double tile_height = (Bpy2 - Bpy1);
+
+            Bpy1 -= tile_height / 3.0;
+            Bpx2 += tile_width / 3.0;
+#endif
+
+        } else if (thing_is_collision_map_large(B)) {
+            Bpx1 = collision_map_large_x1;
+            Bpx2 = collision_map_large_x2;
+            Bpy1 = collision_map_large_y1;
+            Bpy2 = collision_map_large_y2;
+        } else if (thing_is_collision_map_medium(B)) {
+            Bpx1 = collision_map_medium_x1;
+            Bpx2 = collision_map_medium_x2;
+            Bpy1 = collision_map_medium_y1;
+            Bpy2 = collision_map_medium_y2;
+        } else if (thing_is_collision_map_small(B)) {
+            Bpx1 = collision_map_small_x1;
+            Bpx2 = collision_map_small_x2;
+            Bpy1 = collision_map_small_y1;
+            Bpy2 = collision_map_small_y2;
+        } else if (thing_is_collision_map_medium(B)) {
+            Bpx1 = collision_map_medium_x1;
+            Bpx2 = collision_map_medium_x2;
+            Bpy1 = collision_map_medium_y1;
+            Bpy2 = collision_map_medium_y2;
+        } else {
+            /*
+            * Just use pixel and alpha values.
+            */
+            tilep tileB = wid_get_tile(Bw);
+            if (!tileB) {
+                DIE("no tile for thing B %s", thing_logname(B));
+                return (false);
+            }
+
+            Bpx1 = tileB->px1;
+            Bpx2 = tileB->px2;
+            Bpy1 = tileB->py1;
+            Bpy2 = tileB->py2;
+        }
     }
 
     /*
@@ -1079,8 +1105,8 @@ LOG("add poss me %s hitter %s",thing_logname(me), thing_logname(it));
     }
 
     if (thing_is_boulder(me) &&
-        ((fabs(me->momentum) > boulder_collision_hurt_speed) || 
-         (me->fall_speed > boulder_collision_hurt_speed))) {
+        ((fabs(me->momentum) > THING_FALL_SPEED_BOULDER_HURTS) || 
+         (me->fall_speed > THING_FALL_SPEED_BOULDER_HURTS))) {
 
         /*
          * Rock bumped into something.
@@ -1105,7 +1131,8 @@ LOG("add poss me %s hitter %s",thing_logname(me), thing_logname(it));
     }
 
     if (thing_is_smallrock(me) && 
-        ((fabs(me->momentum) > 0.1) || (me->fall_speed > 0.1))) {
+        ((fabs(me->momentum) > THING_PUSH_SPEED_OBJ) || 
+         (me->fall_speed >  THING_PUSH_SPEED_OBJ))) {
 
         /*
          * Rock bumped into something.
@@ -1816,6 +1843,12 @@ thingp thing_hit_fall_obstacle (levelp level,
                     !thing_is_cobweb(it) && 
                     !thing_is_door(it)) {
                     continue;
+                }
+
+                if (t->fall_speed < THING_FALL_SPEED_HIT_MONST) {
+                    if (thing_is_monst(it)) {
+                        continue;
+                    }
                 }
             } else if (thing_is_monst(me) ||
                        thing_is_rope(me)) {

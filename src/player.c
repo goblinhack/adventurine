@@ -279,12 +279,16 @@ uint8_t player_move (levelp level)
      * Don't allow too frequent jumps
      */
     if (jump) {
-        if (submerged) {
+        if (player->is_submerged) {
             if (!time_have_x_hundredths_passed_since(50, level->last_jumped)) {
                 jump = 0;
             }
+        } else if (player->is_partially_submerged) {
+            if (!time_have_x_hundredths_passed_since(25, level->last_jumped)) {
+                jump = 0;
+            }
         } else {
-            if (!time_have_x_hundredths_passed_since(15, level->last_jumped)) {
+            if (!time_have_x_hundredths_passed_since(10, level->last_jumped)) {
                 jump = 0;
             }
         }
@@ -298,7 +302,7 @@ uint8_t player_move (levelp level)
              * Allow the player to cling onto and jump when they hit a ledge 
              * as long as not falling too fast
              */
-            if (player->fall_speed < 0.50) {
+            if (player->fall_speed < THING_FALL_SPEED_CLING_ONTO_WALLS) {
                 if (!player->jump_speed) {
                     player->jump_speed = jump_speed;
                 }
