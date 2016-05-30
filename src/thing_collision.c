@@ -1581,6 +1581,27 @@ thingp thing_hit_solid_obstacle (levelp level,
             }
 
             if (thing_is_monst(me)) {
+                if (thing_is_monst(it)) {
+                    /*
+                     * Allow them to walk apart.
+                     */
+                    if ((me->x < it->x) && (me->dx < 0) && (it->dx > 0)) {
+                        continue;
+                    }
+
+                    if ((me->x < it->x) && (me->dx < 0) && (it->dx < 0)) {
+                        continue;
+                    }
+
+                    if ((me->x > it->x) && (me->dx > 0) && (it->dx < 0)) {
+                        continue;
+                    }
+
+                    if ((me->x > it->x) && (me->dx > 0) && (it->dx > 0)) {
+                        continue;
+                    }
+                }
+
                 if (thing_is_player(it) &&
                     thing_get_weapon_carry_anim_wid(level, me)) {
                     /*

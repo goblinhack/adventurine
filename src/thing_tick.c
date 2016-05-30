@@ -371,11 +371,6 @@ static int thing_tick_all_things (levelp level)
                 if (t->one_shot_move) {
                     t->one_shot_move = false;
                 }
-
-                /*
-                 * Add some jitter.
-                 */
-                t->timestamp_ai = time_get_time_ms() + (myrand() % 100);
             }
         }
 

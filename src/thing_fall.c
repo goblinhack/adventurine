@@ -22,6 +22,7 @@ static int thing_hit_ground (levelp level,
 {
     if (t->fall_speed > THING_FALL_SPEED_HIT_MONST) {
         if (thing_is_monst(it)) {
+            THING_LOG(t, "fell (%f) and landed on monst", t->fall_speed);
             (void) thing_hit(level, it, t, 1);
         }
     }
