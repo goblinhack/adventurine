@@ -153,12 +153,12 @@ uint8_t thing_use(thingp t, uint32_t id);
  */
 int thing_run_from(levelp level,
                    thingp t, 
-                   int32_t *nexthop_x, 
-                   int32_t *nexthop_y, 
+                   double *nexthop_x, 
+                   double *nexthop_y, 
                    tpp tp);
 int dmap_distance_to_player(int source_x, int source_y);
 int dmap_distance_between_points(int target_x, int target_y, int source_x, int source_y);
-uint8_t thing_find_nexthop(levelp, thingp t, int32_t *x, int32_t *y);
+uint8_t thing_find_nexthop(levelp, thingp t, double *x, double *y);
 void dmap_process_init(void);
 void dmap_process_fini(void);
 void dmap_generate_map(double x, double y);
@@ -2046,8 +2046,8 @@ static void inline thing_set_velocity (thingp t, double x, double y)
 
 #define THING_FALL_SPEED_HIT_MONST          0.008
 #define THING_FALL_SPEED_CLING_ONTO_WALLS   0.2
-#define THING_FALL_SPEED_TOO_FAST           0.3
-#define THING_FALL_SPEED_GRAVITY            0.008
+#define THING_FALL_SPEED_TOO_FAST           0.45
+#define THING_FALL_SPEED_GRAVITY            0.012
 #define THING_FALL_SPEED_HIT_SPIKES         0.1
 #define THING_FALL_SPEED_BOULDER_HURTS      0.05
 #define THING_PUSH_SPEED_OBJ                0.1

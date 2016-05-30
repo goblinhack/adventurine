@@ -1038,6 +1038,19 @@ int thing_submerged_depth (levelp level, thingp t)
     int dy = FLUID_RESOLUTION / 2;
     int water = 0;
 
+    if (t->x >= MAP_WIDTH) {
+        return (false);
+    }
+    if (t->y >= MAP_HEIGHT) {
+        return (false);
+    }
+    if (t->x < 0) {
+        return (false);
+    }
+    if (t->y < 0) {
+        return (false);
+    }
+
     while (y > 0) {
         if (level->fluid[x + dx][y + dy].mass > 0) {
             water++;
@@ -1055,6 +1068,19 @@ int thing_is_submerged (levelp level, thingp t)
     int x = t->x * FLUID_RESOLUTION;
     int y = t->y * FLUID_RESOLUTION;
     int water = 0;
+
+    if (t->x >= MAP_WIDTH) {
+        return (false);
+    }
+    if (t->y >= MAP_HEIGHT) {
+        return (false);
+    }
+    if (t->x < 0) {
+        return (false);
+    }
+    if (t->y < 0) {
+        return (false);
+    }
 
     for (dy = 0; dy < FLUID_RESOLUTION; dy++) {
         for (dx = 0; dx < FLUID_RESOLUTION; dx++) {
@@ -1078,6 +1104,19 @@ int thing_is_partially_or_fully_submerged (levelp level, thingp t)
     int y = t->y * FLUID_RESOLUTION;
     int water = 0;
 
+    if (t->x >= MAP_WIDTH) {
+        return (false);
+    }
+    if (t->y >= MAP_HEIGHT) {
+        return (false);
+    }
+    if (t->x < 0) {
+        return (false);
+    }
+    if (t->y < 0) {
+        return (false);
+    }
+    
     for (dy = 0; dy < FLUID_RESOLUTION; dy++) {
         for (dx = 0; dx < FLUID_RESOLUTION; dx++) {
             if (level->fluid[x + dx][y + dy].mass > 0) {

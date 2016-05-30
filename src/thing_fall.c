@@ -20,11 +20,6 @@ static int thing_hit_ground (levelp level,
                              thingp t, 
                              thingp it)
 {
-if (thing_is_player(t)) {
-if (t->fall_speed > 0) {
-CON("%f it %s",t->fall_speed, thing_logname(it));
-}
-}
     if (t->fall_speed > THING_FALL_SPEED_HIT_MONST) {
         if (thing_is_monst(it)) {
             (void) thing_hit(level, it, t, 1);
@@ -104,22 +99,15 @@ int thing_fall (levelp level, thingp t)
     }
 
     y = t->y + t->fall_speed;
-
     it = thing_hit_fall_obstacle(level, t, x, y);
     if (it) {
-        t->fall_speed /= 2;
-
-        y = t->y + t->fall_speed;
+        y = t->y + t->fall_speed / 2;
         it = thing_hit_fall_obstacle(level, t, x, y);
         if (it) {
-            t->fall_speed /= 2;
-
-            y = t->y + t->fall_speed;
+            y = t->y + t->fall_speed / 4;
             it = thing_hit_fall_obstacle(level, t, x, y);
             if (it) {
-                t->fall_speed /= 2;
-
-                y = t->y + t->fall_speed;
+                y = t->y + t->fall_speed / 4;
                 it = thing_hit_fall_obstacle(level, t, x, y);
                 if (it) {
                     thing_hit_ground(level, t, it);

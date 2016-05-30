@@ -44,6 +44,14 @@ static int thing_tick_all_things (levelp level)
             continue;
         }
 
+        if ((t->x >= MAP_WIDTH) ||
+            (t->y >= MAP_HEIGHT) ||
+            (t->x < 0) ||
+            (t->y < 0)) {
+            THING_ERR(t, "if off the map %f,%f", t->x, t->y);
+            continue;
+        }
+
 //    count++;
         w = t->wid;
         if (likely(w != 0)) {
@@ -350,8 +358,8 @@ static int thing_tick_all_things (levelp level)
         }
 
         if (look_for_new_hop) {
-            int32_t nexthop_x = -1;
-            int32_t nexthop_y = -1;
+            double nexthop_x = -1;
+            double nexthop_y = -1;
 
             if (thing_find_nexthop(level,
                                    t, 

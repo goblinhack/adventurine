@@ -3726,10 +3726,8 @@ static tpp map_char_to_tp (char c,
         {
             int r = myrand() % 100;
 
-            if (r < 95) {
+            if (r < 30) {
                 tp = random_trap(depth); 
-            } else {
-                tp = random_lava();
             }
         }
         break;
@@ -3759,7 +3757,7 @@ static tpp map_char_to_tp (char c,
 
         if (shop_floor) {
             tp = random_treasure(shop_floor);
-        } else if (r < 25) {
+        } else if (r < 10) {
             tp = random_treasure(shop_floor);
 
             if (map_jigsaw_buffer_getchar(x, y+1) == MAP_FLOOR) {
@@ -3945,7 +3943,7 @@ void map_jigsaw_generate (levelp level,
 
         if (!generate_add_frags(dg, frag_monst,
                                 1000, // repeat count
-                                10, // want this many
+                                100, // want this many
                                 1000// chance to place fragment
                                 )) {
             LOG("Maze: generate level %u, failed, add monst frags, seed %u", 

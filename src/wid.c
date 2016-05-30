@@ -10290,23 +10290,34 @@ void wid_get_move_interpolated_progress (widp w, double *dx, double *dy)
     double x = wid_get_tl_x(w);
     double y = wid_get_tl_y(w);
       
-    x -= w->moving_start.x;
-    y -= w->moving_start.y;
-
+    double mx = (double)(x - w->moving_start.x);
+    double my = (double)(y - w->moving_start.y);
     double wx = (double)(w->moving_end.x - w->moving_start.x);
     double wy = (double)(w->moving_end.y - w->moving_start.y);
 
-    if (wx == 0.0) {
-        *dx = x;
+    if (fabs(wx) <= 0.0001) {
+        *dx = 0;
     } else {
-        *dx = x / wx;
+        *dx = mx / wx;
     }
 
-    if (wy == 0.0) {
-        *dy = y;
+    if (fabs(wy) <= 0.0001) {
+        *dy = 0;
     } else {
-        *dy = y / wy;
+        *dy = my / wy;
     }
+#if 0
+thingp t = wid_get_thing(w);
+if (thing_is_monst(t)) {
+    CON("  start %f,%f end %f,%f dx %f dy %f",
+    w->moving_start.x,
+    w->moving_start.y,
+    w->moving_end.x,
+    w->moving_end.y,
+    *dx,
+    *dy);
+}
+#endif
 }
 
 void wid_move_to_abs_in (widp w, double x, double y, uint32_t ms)

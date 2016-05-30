@@ -279,6 +279,13 @@ void thing_wid_move (levelp level,
     double ms = 1000;
     ms = ms / (1.0 / dist);
 
+    /*
+     * Add a bit of jumpiness to confuse the player.
+     */
+    if (thing_is_monst(t)) {
+        ms -= 10.0 * gauss(tp_get_speed(thing_tp(t)), 10);
+    }
+
     if (smooth) {
         if (t->is_jumping) {
             if (wid_is_moving(w)) {

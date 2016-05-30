@@ -110,6 +110,23 @@ static void thing_possible_hit_do (levelp level, thingp hitter)
             continue;
         }
 
+        /*
+         * If you fall and land behind something, it's safe.
+         */
+        if (cand->target->fall_speed) {
+            if (hitter->dx > 0) {
+                if (cand->target->x < hitter->x) {
+                    continue;
+                }
+            }
+
+            if (hitter->dx < 0) {
+                if (cand->target->x > hitter->x) {
+                    continue;
+                }
+            }
+        }
+
         if (!best) {
             best = cand;
             continue;
@@ -133,14 +150,19 @@ static void thing_possible_hit_do (levelp level, thingp hitter)
                 best = cand;
             }
         }
-//CON("hitter %s target 
-//%s",thing_logname(hitter),thing_logname(cand->target));
+if (0) {
+CON("hitter %s dx %f x %f target %s x %f",
+    thing_logname(hitter),
+    hitter->dx, hitter->x,
+    thing_logname(cand->target),
+    cand->target->x);
+}
     }
 
     if (best) {
-//CON("hitter %s best %s and hitter_killed_on_hitting 
-//%d",thing_logname(hitter),thing_logname(best->target), 
-//best->hitter_killed_on_hitting);
+if (0) {
+CON("hitter %s best %s and hitter_killed_on_hitting %d",thing_logname(hitter),thing_logname(best->target), best->hitter_killed_on_hitting);
+}
         if (thing_hit(level, best->target, hitter, 0)) {
             if (best->hitter_killed_on_hitting) {
                 thing_dead(level, hitter, 0, "hitter killed on hitting");
@@ -547,8 +569,9 @@ static uint8_t things_overlap (levelp level,
     widp Aw = thing_wid(A);
     widp Bw = thing_wid(B);
 
-    if ((thing_is_player(A) && thing_is_monst(B)) ||
-        (thing_is_player(B) && thing_is_monst(A))) {
+    if (0 &&
+        ((thing_is_player(A) && thing_is_monst(B)) ||
+         (thing_is_player(B) && thing_is_monst(A)))) {
 
         tilep tileA = wid_get_tile(Aw);
         if (!tileA) {
@@ -1774,6 +1797,7 @@ thingp thing_hit_fall_obstacle (levelp level,
                                 double nx, 
                                 double ny)
 {
+    thingp candidate = 0;
     thingp me;
     widp wid_me;
 
@@ -1933,11 +1957,19 @@ thingp thing_hit_fall_obstacle (levelp level,
                 }
             }
 
+            /*
+             * To allow you to land on dead monsters, but prefer live ones.
+             */
+            if (thing_is_dead(it)) {
+                candidate = it;
+                continue;
+            }
+
             return (it);
         }
     }
 
-    return (0);
+    return (candidate);
 }
 
 /*

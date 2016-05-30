@@ -23,6 +23,7 @@ static level_walls dmap[DMAP_MAP_MAX];
 static level_walls dmap_scratchpad[DMAP_MAP_MAX];
 
 static int update_player_dmap;
+static double move_delta = 0.1;
 
 /*
  * Djkstra maps so we can quickly tell the next hop.
@@ -543,8 +544,8 @@ void dmap_generate (levelp level, int force)
 
 static uint8_t thing_find_nexthop_dmap (thingp t, 
                                         level_walls *dmap,
-                                        int32_t *nexthop_x, 
-                                        int32_t *nexthop_y)
+                                        double *nexthop_x, 
+                                        double *nexthop_y)
 {
     double fx;
     double fy;
@@ -661,12 +662,41 @@ static uint8_t thing_find_nexthop_dmap (thingp t,
 
 static uint8_t thing_try_nexthop (levelp level,
                                   thingp t,
-                                  const int32_t *nexthop_x, 
-                                  const int32_t *nexthop_y)
+                                  const double *nexthop_x, 
+                                  const double *nexthop_y)
 {
     if (thing_hit_solid_obstacle(level, t,
                                  *nexthop_x, *nexthop_y)) {
         return (false);
+    }
+
+    if (!thing_hit_fall_obstacle(level, t,
+                                 *nexthop_x, *nexthop_y + 1)) {
+        /*
+         * If the player is below us, try to drop down.
+         */
+        if (player && (player->y > t->y)) {
+            if (thing_hit_fall_obstacle(level, t,
+                                        *nexthop_x, *nexthop_y + 2)) {
+                /*
+                 * A small drop is ok
+                 */
+            } else {
+                if (thing_hit_fall_obstacle(level, t,
+                                            *nexthop_x, *nexthop_y + 3)) {
+                    /*
+                     * A small drop is ok
+                     */
+                } else {
+                    /*
+                     * Too large a drop.
+                     */
+                    return (false);
+                }
+            }
+        } else {
+            return (false);
+        }
     }
 
     if (thing_move(level,
@@ -686,8 +716,8 @@ static uint8_t thing_dmap_try_nexthop (levelp level,
                                        thingp t,
                                        int dmap_id,
                                        level_walls *dmap_in,
-                                       int32_t *nexthop_x, 
-                                       int32_t *nexthop_y,
+                                       double *nexthop_x, 
+                                       double *nexthop_y,
                                        uint8_t can_change_dir_without_moving)
 {
     level_walls *d;
@@ -722,7 +752,7 @@ static uint8_t thing_dmap_try_nexthop (levelp level,
     return (false);
 }
 
-static int thing_chase_closest_player (thingp t, int32_t *nexthop_x, int32_t *nexthop_y)
+static int thing_chase_closest_player (thingp t, double *nexthop_x, double *nexthop_y)
 {
     double distance = 9999;
     thingp best = 0;
@@ -748,25 +778,25 @@ static int thing_chase_closest_player (thingp t, int32_t *nexthop_x, int32_t *ne
     *nexthop_y = t->y;
 
     if (best->x > t->x) {
-        *nexthop_x = t->x + 1.0;
+        *nexthop_x = t->x + move_delta;
     }
 
     if (best->x < t->x) {
-        *nexthop_x = t->x - 1.0;
+        *nexthop_x = t->x - move_delta;
     }
 
     if (best->y > t->y) {
-        *nexthop_y = t->y + 1.0;
+        *nexthop_y = t->y + move_delta;
     }
 
     if (best->y < t->y) {
-        *nexthop_y = t->y - 1.0;
+        *nexthop_y = t->y - move_delta;
     }
 
     return (true);
 }
 
-int thing_run_from (levelp level, thingp t, int32_t *nexthop_x, int32_t *nexthop_y, tpp tp)
+int thing_run_from (levelp level, thingp t, double *nexthop_x, double *nexthop_y, tpp tp)
 {
     double distance = 9999;
     thingp best = 0;
@@ -802,19 +832,19 @@ int thing_run_from (levelp level, thingp t, int32_t *nexthop_x, int32_t *nexthop
     *nexthop_y = t->y;
 
     if (best->x > t->x) {
-        *nexthop_x = t->x - 1.0;
+        *nexthop_x = t->x - move_delta;
     }
 
     if (best->x < t->x) {
-        *nexthop_x = t->x + 1.0;
+        *nexthop_x = t->x + move_delta;
     }
 
     if (best->y > t->y) {
-        *nexthop_y = t->y - 1.0;
+        *nexthop_y = t->y - move_delta;
     }
 
     if (best->y < t->y) {
-        *nexthop_y = t->y + 1.0;
+        *nexthop_y = t->y + move_delta;
     }
 
     return (true);
@@ -823,62 +853,62 @@ int thing_run_from (levelp level, thingp t, int32_t *nexthop_x, int32_t *nexthop
 static int 
 thing_wander_in_straight_lines (levelp level,
                                 thingp t, 
-                                int32_t *nexthop_x, 
-                                int32_t *nexthop_y)
+                                double *nexthop_x, 
+                                double *nexthop_y)
 {
     if ((t->dx < 0) && (t->dy == 0)) {
-        *nexthop_x = rintf(t->x);
-        *nexthop_y = rintf(t->y - 1);
+        *nexthop_x = (t->x);
+        *nexthop_y = (t->y - move_delta);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = rintf(t->x);
-        *nexthop_y = rintf(t->y + 1);
+        *nexthop_x = (t->x);
+        *nexthop_y = (t->y + move_delta);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = rintf(t->x + 1);
-        *nexthop_y = rintf(t->y);
+        *nexthop_x = (t->x + move_delta);
+        *nexthop_y = (t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
     } else if ((t->dx > 0) && (t->dy == 0)) {
 
-        *nexthop_x = rintf(t->x);
-        *nexthop_y = rintf(t->y + 1);
+        *nexthop_x = (t->x);
+        *nexthop_y = (t->y + move_delta);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = rintf(t->x);
-        *nexthop_y = rintf(t->y - 1);
+        *nexthop_x = (t->x);
+        *nexthop_y = (t->y - move_delta);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = rintf(t->x - 1);
-        *nexthop_y = rintf(t->y);
+        *nexthop_x = (t->x - move_delta);
+        *nexthop_y = (t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
     } else if ((t->dx == 0) && (t->dy < 0)) {
 
-        *nexthop_x = rintf(t->x + 1);
-        *nexthop_y = rintf(t->y);
+        *nexthop_x = (t->x + move_delta);
+        *nexthop_y = (t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = rintf(t->x - 1);
-        *nexthop_y = rintf(t->y);
+        *nexthop_x = (t->x - move_delta);
+        *nexthop_y = (t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = rintf(t->x);
-        *nexthop_y = rintf(t->y + 1);
+        *nexthop_x = (t->x);
+        *nexthop_y = (t->y + move_delta);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
     } else if ((t->dx == 0) && (t->dy > 0)) {
 
-        *nexthop_x = rintf(t->x - 1);
-        *nexthop_y = rintf(t->y);
+        *nexthop_x = (t->x - move_delta);
+        *nexthop_y = (t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = rintf(t->x + 1);
-        *nexthop_y = rintf(t->y);
+        *nexthop_x = (t->x + move_delta);
+        *nexthop_y = (t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = rintf(t->x);
-        *nexthop_y = rintf(t->y - 1);
+        *nexthop_x = (t->x);
+        *nexthop_y = (t->y - move_delta);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
     }
 
@@ -888,34 +918,34 @@ thing_wander_in_straight_lines (levelp level,
 static int 
 thing_wander_in_straight_lines_lr (levelp level,
                                    thingp t, 
-                                   int32_t *nexthop_x, 
-                                   int32_t *nexthop_y)
+                                   double *nexthop_x, 
+                                   double *nexthop_y)
 {
     if ((t->dx < 0) && (t->dy == 0)) {
-        *nexthop_x = rintf(t->x + 1);
-        *nexthop_y = rintf(t->y);
+        *nexthop_x = (t->x + move_delta);
+        *nexthop_y = (t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
     } else if ((t->dx > 0) && (t->dy == 0)) {
 
-        *nexthop_x = rintf(t->x - 1);
-        *nexthop_y = rintf(t->y);
+        *nexthop_x = (t->x - move_delta);
+        *nexthop_y = (t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
     } else if ((t->dx == 0) && (t->dy < 0)) {
 
-        *nexthop_x = rintf(t->x + 1);
-        *nexthop_y = rintf(t->y);
+        *nexthop_x = (t->x + move_delta);
+        *nexthop_y = (t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
     } else {
 
-        *nexthop_x = rintf(t->x - 1);
-        *nexthop_y = rintf(t->y);
+        *nexthop_x = (t->x - move_delta);
+        *nexthop_y = (t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
 
-        *nexthop_x = rintf(t->x + 1);
-        *nexthop_y = rintf(t->y);
+        *nexthop_x = (t->x + move_delta);
+        *nexthop_y = (t->y);
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) { return (true); }
     }
 
@@ -924,8 +954,8 @@ thing_wander_in_straight_lines_lr (levelp level,
 
 uint8_t thing_find_nexthop (levelp level,
                             thingp t, 
-                            int32_t *nexthop_x, 
-                            int32_t *nexthop_y)
+                            double *nexthop_x, 
+                            double *nexthop_y)
 {
     if (thing_is_wanderer(t)) {
         /*
@@ -936,25 +966,25 @@ uint8_t thing_find_nexthop (levelp level,
 
             if (thing_is_wanderer_lr(t)) {
                 switch (dir % 4) {
-                    case 0: t->dx = -1; t->dy = 0; break;
-                    case 1: t->dx =  1; t->dy = 0; break;
+                    case 0: t->dx = -move_delta; t->dy = 0; break;
+                    case 1: t->dx =  move_delta; t->dy = 0; break;
                     case 2: t->dx =  0; t->dy = 0; break;
                     case 3: t->dx =  0; t->dy = 0; break;
                 }
             } else {
                 switch (dir % 4) {
-                    case 0: t->dx = -1; t->dy = 0;  break;
-                    case 1: t->dx =  1; t->dy = 0;  break;
-                    case 2: t->dx =  0; t->dy = -1; break;
-                    case 3: t->dx =  0; t->dy =  1; break;
+                    case 0: t->dx = -move_delta; t->dy = 0;  break;
+                    case 1: t->dx =  move_delta; t->dy = 0;  break;
+                    case 2: t->dx =  0; t->dy = -move_delta; break;
+                    case 3: t->dx =  0; t->dy =  move_delta; break;
                 }
             }
 
             dir++;
         }
 
-        *nexthop_x = rintf(t->x + (double)t->dx);
-        *nexthop_y = rintf(t->y + (double)t->dy);
+        *nexthop_x = t->x + (double)t->dx;
+        *nexthop_y = t->y + (double)t->dy;
 
         if (thing_try_nexthop(level, t, nexthop_x, nexthop_y)) {
             return (true);
@@ -965,14 +995,14 @@ uint8_t thing_find_nexthop (levelp level,
 
         if (thing_is_wanderer_lr(t)) {
             if (thing_wander_in_straight_lines_lr(level, t, nexthop_x, nexthop_y)) {
-                t->dx = rintf(*nexthop_x - tx);
+                t->dx = (*nexthop_x - tx);
                 t->dy = 0;
                 return (true);
             }
         } else {
             if (thing_wander_in_straight_lines(level, t, nexthop_x, nexthop_y)) {
-                t->dx = rintf(*nexthop_x - tx);
-                t->dy = rintf(*nexthop_y - ty);
+                t->dx = (*nexthop_x - tx);
+                t->dy = (*nexthop_y - ty);
                 return (true);
             }
         }
