@@ -2,10 +2,9 @@ theme - The evil hashtag has captured princeess asterisk? 8)
 
 may
 ---
-- snakes should not jump to death
-- no spawn in water for snakes
+- need xp/score over snake on death
+- need snake squish sound
 - push should need more than a pixel overlap to work
-- snake falls like an idiot
 - boulder sound on hit ground
 
 june
@@ -52,6 +51,9 @@ sep
 
 may
 ---
+- snake falls like an idiot
+- snakes should not jump to death
+- no spawn in water for snakes
 - snake collision map
 - jump on snakes
 - snakes on spikes jump around crazily
